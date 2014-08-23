@@ -21,4 +21,7 @@ obj/
 *.out
 *.app
 
+.cproject
+.project
 .DS_Store
+.settings/
