@@ -8,8 +8,8 @@
 #ifndef es_jc_LONGPOINTER_HPP_
 #define es_jc_LONGPOINTER_HPP_
 
-#include    "jointconnector.hpp"
 #include    "es/eglibrary.hpp"
+#include    <memory>
 
 namespace es {
 
@@ -25,18 +25,18 @@ typedef int64_t long_shared_pointer;
 class LongShraredPtr {
 public:
     template<typename T>
-    static long_shared_pointer create(const ::std::shared_ptr<T> p) {
-        ::std::shared_ptr<T> *ptr = new ::std::shared_ptr<T>(p);
+    static long_shared_pointer create(const std_shared_ptr<T> p) {
+        std_shared_ptr<T> *ptr = new std_shared_ptr<T>(p);
         return reinterpret_cast<long_shared_pointer>(ptr);
     }
 
     template<typename T>
-    static ::std::shared_ptr<T> get(const long_shared_pointer lp) {
-        ::std::shared_ptr<T> *ptr = reinterpret_cast< ::std::shared_ptr<T>* >(lp);
+    static std_shared_ptr<T> get(const long_shared_pointer lp) {
+        std_shared_ptr<T> *ptr = reinterpret_cast< std_shared_ptr<T>*>(lp);
         if (ptr) {
             return *ptr;
         } else {
-            return ::std::shared_ptr<T>(nullptr);
+            return std_shared_ptr < T > (nullptr);
         }
     }
 
@@ -45,7 +45,7 @@ public:
      */
     template<typename T>
     static long_shared_pointer copy(const long_shared_pointer lp) {
-        ::std::shared_ptr<T> p = get<T>(lp);
+        std_shared_ptr<T> p = get<T>(lp);
         return create<T>(p);
     }
 
@@ -55,7 +55,7 @@ public:
             return;
         }
 
-        ::std::shared_ptr<T> *ptr = reinterpret_cast< ::std::shared_ptr<T>* >(lp);
+        std_shared_ptr<T> *ptr = reinterpret_cast<std_shared_ptr<T>*>(lp);
         SAFE_DELETE(ptr);
     }
 };
@@ -64,21 +64,6 @@ public:
  * ポインタを取得する
  */
 #define es_longpointer(type, ptr)   ::es::LongShraredPtr::get< type >(ptr)
-
-#if 0
-/**
- * ポインタを取得する
- */
-#define jc_pointer_get(field_name, type) ::es::jc::LongShraredPtr::get< type >(field_##field_name())
-
-/**
- * long pointerをセットする
- */
-#define jc_pointer_set(field_name, type, ptr) { \
-                ::es::LongShraredPtr::dispose<type>( field_##field_name() );    \
-                field_##field_name( ptr ? ::es::jc::LongShraredPtr::create< type >(ptr) : 0 ); \
-            }
-#endif
 
 }
 

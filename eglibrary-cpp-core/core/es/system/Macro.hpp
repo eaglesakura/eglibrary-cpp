@@ -52,6 +52,18 @@
 #endif /* DEBUG CHECK */
 
 /**
+ * for IDE(Eclipse)
+ */
+
+/**
+ * ::std::shared_ptrを認識しないIDE対策
+ */
+#ifndef std_shared_ptr
+#define std_shared_ptr  ::std::shared_ptr
+#endif
+
+
+/**
  * 安全にdeleteを行う
  */
 #ifndef SAFE_DELETE

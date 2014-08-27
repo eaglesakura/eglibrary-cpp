@@ -8,6 +8,17 @@
 #ifndef EGLIBRARY_HPP_
 #define EGLIBRARY_HPP_
 
+#include    <stddef.h>
+#include    <stdlib.h>
+#include    <assert.h>
+#include    <string.h>
+#include    <string>
+
+#include    <cstddef>
+#include    <cstdio>
+
+#include    <memory>
+
 #include	"es/system/Macro.hpp"
 #include	"es/system/Log.h"
 #include    "es/system/Object.hpp"

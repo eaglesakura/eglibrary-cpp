@@ -59,17 +59,17 @@ void __logDebugF(const LogType_e type, const char* __file, const char* fmt, ...)
 /**
  * フォーマット付きログ
  */
-#define eslog(... )       { ::es::__logDebugF(::es::LogType_Info, ::es::__getFileName(__FILE__), "L " es_num_to_str(__LINE__) " | " __VA_ARGS__); }
+#define eslog(... )       ::es::__logDebugF(::es::LogType_Info, ::es::__getFileName(__FILE__), "L " es_num_to_str(__LINE__) " | " __VA_ARGS__)
 
 /**
  * フォーマット付きログ
  */
-#define esdebug(... )       { ::es::__logDebugF(::es::LogType_Debug, ::es::__getFileName(__FILE__), "L " es_num_to_str(__LINE__) " | " __VA_ARGS__); }
+#define esdebug(... )       ::es::__logDebugF(::es::LogType_Debug, ::es::__getFileName(__FILE__), "L " es_num_to_str(__LINE__) " | " __VA_ARGS__)
 
 /**
  * アラート表示
  */
-#define esalert( ... )      { ::es::__logDebugF(::es::LogType_Alert, ::es::__getFileName(__FILE__), "L %d | " __VA_ARGS__); }
+#define esalert( ... )      ::es::__logDebugF(::es::LogType_Alert, ::es::__getFileName(__FILE__), "L %d | " __VA_ARGS__)
 
 #else
 

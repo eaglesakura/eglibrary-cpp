@@ -18,7 +18,6 @@
 
 #ifdef BUILD_Android
 
-#define __gl_h_ /* include guard */
 #define __gl2_h_    /* include guard */
 #include    <GLES3/gl3.h>
 #include    <GLES2/gl2ext.h>
@@ -30,6 +29,8 @@
 #import     <OpenGLES/ES2/glext.h>
 #endif // BUILD_iOS
 #endif
+
+#include    "es/graphics/gl/context/GLContextUtil.hpp"
 
 //#if defined(DEBUG) && !defined(NO_GL_ASSERT)
 //#define     assert_gl(...)    { assert(::es::gl::GLState::printGLHasError(__FILE__, __LINE__) == jcfalse); }
