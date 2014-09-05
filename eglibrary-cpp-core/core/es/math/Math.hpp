@@ -56,6 +56,20 @@ inline uint toPowerOfTwo(const uint size) {
     return result;
 }
 
+/**
+ * 特定値に近づくように値を移動する
+ */
+template<typename T>
+inline T targetMove(const T now, const T target, const T _offset) {
+    const T offset = abs(_offset);
+    if (abs(target - now) <= offset) {
+        return target;
+    } else if (target > now) {
+        return now + offset;
+    } else {
+        return now - offset;
+    }
+}
 }
 
 #endif /* MATH_HPP_ */

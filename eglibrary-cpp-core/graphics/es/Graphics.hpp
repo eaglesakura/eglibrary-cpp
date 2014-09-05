@@ -30,6 +30,7 @@
 #endif // BUILD_iOS
 #endif
 
+#include    "es/math/Math.hpp"
 #include    "es/graphics/gl/context/GLContextUtil.hpp"
 
 //#if defined(DEBUG) && !defined(NO_GL_ASSERT)

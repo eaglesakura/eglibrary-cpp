@@ -439,6 +439,11 @@ struct RectT {
 typedef RectT<int32_t> RectI;
 
 /**
+ * 16bit rect
+ */
+typedef RectT<int16_t> RectI16;
+
+/**
  * float型の矩形構造体
  */
 typedef RectT<float> RectF;
