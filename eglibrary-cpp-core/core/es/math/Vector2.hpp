@@ -150,6 +150,11 @@ struct _Vector2 {
 typedef _Vector2<int32_t> Vector2i;
 
 /**
+ * signed int16のベクトル
+ */
+typedef _Vector2<int16_t> Vector2i16;
+
+/**
  * 浮動小数のベクトル
  */
 typedef _Vector2<float> Vector2f;

@@ -16,6 +16,7 @@
 
 #include    <cstddef>
 #include    <cstdio>
+#include    <mutex>
 #include    <thread>
 
 #include    <memory>
@@ -25,6 +26,8 @@
 #include    "es/system/Object.hpp"
 
 namespace es {
+typedef std::recursive_mutex es_mutex;
+typedef std::unique_lock<es_mutex> es_mutex_lock;
 
 }
 

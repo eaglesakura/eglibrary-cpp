@@ -1,12 +1,16 @@
 #include    "es/graphics/gl/context/RenderState.h"
 #include    <map>
+#include    <thread>
 
 using namespace std;
 
 namespace es {
 
 RenderState::RenderState() {
-
+    // 必ず一つは生成されるようにする
+    states.push_back(glstates());
+    // Stateと同期を行う
+    sync();
 }
 
 RenderState::~RenderState() {
@@ -17,76 +21,170 @@ RenderState::~RenderState() {
  * 現在のEGLContext状態に合わせて更新する
  */
 void RenderState::sync() {
+    glstates *cur = get();
+    cur->flags = 0;
 
+    GLint temp;
+    // depth check
+    if (glIsEnabled(GL_DEPTH_TEST)) {
+        cur->flags |= GLStates_DepthTest_Enable;
+    }
+    // cull
+    if (glIsEnabled(GL_CULL_FACE)) {
+        glGetIntegerv(GL_CULL_FACE_MODE, &temp);
+        if (temp == GL_FRONT) {
+            cur->flags |= GLStates_Cull_Front;
+        } else {
+            cur->flags |= GLStates_Cull_Back;
+        }
+    }
+    // stencil
+    if (glIsEnabled(GL_STENCIL_TEST)) {
+        cur->flags |= GLStates_StencilTest_Enable;
+    }
 }
 
 /**
  * Viewport値を更新する
  */
 void RenderState::viewport(int x, int y, int width, int heidht) {
-
+    glstates *cur = get();
+    cur->viewport.setXYWH(x, y, width, heidht);
+    glViewport(x, y, width, heidht);
 }
 
 /**
  * 現在のステートを保存し、新たなステートで上書きする
  */
 void RenderState::push(const glstates &state) {
-
+    // 一つ積み上げる
+    push();
+    // ステートを更新する
+    set(state);
 }
 
 /**
  * 現在のステートを保存する。
  */
 void RenderState::push() {
-
+    states.push_back(getCurrent());
 }
 
 /**
  * 現在のステートを廃棄し、ステートを以前の状態に戻す
  */
 void RenderState::pop() {
+    states.pop_back();
+    assert(!states.empty());
+}
 
+/**
+ * GLのブレンドタイプを指定する
+ */
+void RenderState::setBlendType(const GLBlendType_e type) {
+    glstates *cur = get();
+
+    if (cur->blendType == type) {
+        // 差分がないなら何もしない
+        return;
+    }
+
+    static const GLenum sfactor[] = { GL_SRC_ALPHA, GL_SRC_ALPHA, };
+    static const GLenum dfactor[] = { GL_ONE_MINUS_SRC_ALPHA, GL_ONE };
+
+    if (type == GLBlendType_None) {
+        // no blend
+        glDisable(GL_BLEND);
+    } else {
+        glEnable(GL_BLEND);
+        glBlendFunc(sfactor[type], dfactor[type]);
+    }
+}
+
+/**
+ * レンダリングステートを更新する
+ */
+void RenderState::setFlags(const glstates_flags flags) {
+    const glstates_flags oldFlags = get()->flags;
+
+    // 差分をチェックする
+    const glstates_flags diffFlags = oldFlags ^ flags;
+    if (!diffFlags) {
+        // 差分がないなら何もしない
+        return;
+    }
+
+    if (diffFlags & GLStates_DepthTest_Enable) {
+        // 深度チェックが切り替わった
+        if (flags & GLStates_DepthTest_Enable) {
+            glEnable(GL_DEPTH_TEST);
+        } else {
+            glDisable(GL_DEPTH_TEST);
+        }
+    }
+
+    // back cullingを切り替える
+    if (diffFlags & GLStates_Cull_Back) {
+        if (flags & GLStates_Cull_Back) {
+            glEnable(GL_CULL_FACE);
+            glCullFace(GL_BACK);
+        } else {
+            glDisable(GL_CULL_FACE);
+        }
+    } else if (diffFlags & GLStates_Cull_Front) {
+        // frontが切り替わった
+        if (flags & GLStates_Cull_Front) {
+            glEnable(GL_CULL_FACE);
+            glCullFace(GL_FRONT);
+        } else {
+            glDisable(GL_CULL_FACE);
+        }
+    }
+
+    // stencil test
+    if (diffFlags & GLStates_StencilTest_Enable) {
+        // ステンシルチェックが切り替わった
+        if (flags & GLStates_StencilTest_Enable) {
+            glEnable(GL_STENCIL_TEST);
+        } else {
+            glDisable(GL_STENCIL_TEST);
+        }
+    }
+
+    // フラグの上書き
+    get()->flags = flags;
 }
 
 /**
  * ステートを更新する
  */
 void RenderState::set(const glstates &state) {
+    glstates *cur = get();
+    setFlags(state.flags);
+    setBlendType(state.blendType);
 
+    // viewport check
+    if (cur->viewport != state.viewport) {
+        glViewport(state.viewport.left, state.viewport.top, state.viewport.width(), state.viewport.height());
+        cur->viewport = state.viewport;
+    }
+
+    // scissor check
+    if (cur->scissor != state.scissor) {
+        if (state.isDisableScissor()) {
+            glDisable(GL_SCISSOR_TEST);
+        } else {
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(state.scissor.left, state.scissor.top, state.scissor.width(), state.scissor.height());
+        }
+        cur->scissor = state.scissor;
+    }
+
+    // clear color
+    if (cur->clear != state.clear) {
+        glClearColor(state.clear.rf(), state.clear.gf(), state.clear.bf(), state.clear.af());
+        cur->clear = state.clear;
+    }
 }
 
-/**
- * 2Dレンダリングのデフォルトステートを取得する
- */
-glstates RenderState::default2D() {
-    glstates states = { 0 };
-    return states;
-}
-
-/**
- * 3Dレンダリングのデフォルトステートを取得する
- */
-glstates RenderState::default3D() {
-    glstates states = { 0 };
-    states.flags |= (1 << GLStates_Cull_Back); // 背面カリング
-    states.flags |= (1 << GLStates_DepthTest_Enable); // 深度テスト
-    return states;
-}
-
-namespace {
-}
-
-/**
- * 現在のThreadに紐付いたStateを取得する
- */
-std_shared_ptr<RenderState> RenderState::current() {
-
-}
-
-/**
- * 現在のスレッドで使用しなくなった
- */
-void RenderState::unuseThisThread() {
-
-}
 }

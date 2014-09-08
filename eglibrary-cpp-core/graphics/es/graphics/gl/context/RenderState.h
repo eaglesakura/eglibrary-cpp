@@ -15,53 +15,60 @@ enum GLStates_e {
     /**
      * カリング ON / Front
      */
-    GLStates_Cull_Front,
+    GLStates_Cull_Front = 0x1 << 0,
 
     /**
      * カリング ON / Back
      */
-    GLStates_Cull_Back,
+    GLStates_Cull_Back = 0x1 << 1,
 
     /**
      * 深度テストを有効化
      */
-    GLStates_DepthTest_Enable,
+    GLStates_DepthTest_Enable = 0x1 << 2,
 
     /**
      * ステンシルテスト有効化
      */
-    GLStates_StencilTest_Enable,
+    GLStates_StencilTest_Enable = 0x1 << 3,
 
+#if 0 /* TODO! */
     /**
      * Redへ書き込まない
      */
-    GLStates_Mask_Red_Disable,
+    GLStates_Mask_Red_Disable = 0x1 << 4,
 
     /**
      * Greenへ書き込まない
      */
-    GLStates_Mask_Green_Disable,
+    GLStates_Mask_Green_Disable = 0x1 << 5,
 
     /**
      * Blueへ書き込まない
      */
-    GLStates_Mask_Blue_Disable,
+    GLStates_Mask_Blue_Disable = 0x1 << 6,
 
     /**
      * Alphaへ書き込まない
      */
-    GLStates_Mask_Alpha_Disable,
+    GLStates_Mask_Alpha_Disable = 0x1 << 7,
 
     /**
      * 深度へ書き込まない
      */
-    GLStates_Mask_Depth_Disable,
+    GLStates_Mask_Depth_Disable = 0x1 << 8,
 
     /**
      * ステンシルへ書き込まない
      */
-    GLStates_Mask_Stencil_Disable,
+    GLStates_Mask_Stencil_Disable = 0x1 << 9,
+#endif
 };
+
+/**
+ * states
+ */
+typedef uint32_t glstates_flags;
 
 enum GLBlendType_e {
     /**
@@ -89,7 +96,7 @@ struct glstates {
     /**
      * state flags
      */
-    uint64_t flags;
+    glstates_flags flags;
 
     /**
      * シザーエリア
@@ -107,6 +114,11 @@ struct glstates {
     color clear;
 
     /**
+     * レンダリング対象のフレームバッファ
+     */
+    GLuint framebuffer;
+
+    /**
      * GLBlendType_e
      */
     GLBlendType_e blendType :8;
@@ -121,7 +133,7 @@ struct glstates {
     /**
      * シザーボックスが0であればシザーを使用しない
      */
-    bool isDisableScissor() {
+    bool isDisableScissor() const {
         return scissor.getAreaSize() == 0;
     }
 };
@@ -129,8 +141,16 @@ struct glstates {
 class RenderState: public Object {
 protected:
     std::vector<glstates> states;
-    RenderState();
+
+    /**
+     * 現在のステートを取得する
+     */
+    glstates* get() {
+        return &states[states.size() - 1];
+    }
+
 public:
+    RenderState();
     virtual ~RenderState();
 
     /**
@@ -146,7 +166,7 @@ public:
     /**
      * 現在のステートを取得する
      */
-    const glstates& get() const {
+    const glstates& getCurrent() const {
         return states[states.size() - 1];
     }
 
@@ -166,32 +186,22 @@ public:
     void pop();
 
     /**
+     * GLのブレンドタイプを指定する
+     */
+    void setBlendType(const GLBlendType_e type);
+
+    /**
+     * レンダリングステートを更新する
+     */
+    void setFlags(const glstates_flags flags);
+
+    /**
      * ステートを更新する
      */
     void set(const glstates &state);
-
-    /**
-     * 2Dレンダリングのデフォルトステートを取得する
-     */
-    static glstates default2D();
-
-    /**
-     * 3Dレンダリングのデフォルトステートを取得する
-     */
-    static glstates default3D();
-
-    /**
-     * 現在のThreadに紐付いたStateを取得する
-     */
-    static std_shared_ptr<RenderState> current();
-
-    /**
-     * 現在のスレッドで使用しなくなった
-     */
-    static void unuseThisThread();
 };
 
-typedef std_shared_ptr<RenderState> MStateController;
+typedef std_shared_ptr<RenderState> MRenderState;
 
 }
 
