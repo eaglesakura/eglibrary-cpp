@@ -33,11 +33,4 @@
 #include    "es/math/Math.hpp"
 #include    "es/graphics/gl/context/GLContextUtil.hpp"
 
-//#if defined(DEBUG) && !defined(NO_GL_ASSERT)
-//#define     assert_gl(...)    { assert(::es::gl::GLState::printGLHasError(__FILE__, __LINE__) == jcfalse); }
-//#else
-//// release
-//#define     assert_gl(...)    { }
-//#endif
-
 #endif /* GRAPHICS_HPP_ */

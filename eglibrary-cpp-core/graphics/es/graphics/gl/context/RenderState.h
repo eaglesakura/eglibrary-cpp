@@ -1,7 +1,9 @@
-#ifndef es_grahpics_gl_STATECONTROLLER_H_
-#define es_grahpics_gl_STATECONTROLLER_H_
+#ifndef es_graphics_gl_RENDERSTATE_H_
+#define es_graphics_gl_RENDERSTATE_H_
 
 #include    "es/Graphics.hpp"
+#include    "es/math/Rect.hpp"
+#include    "es/graphics/Color.hpp"
 #include    <vector>
 
 namespace es {
@@ -10,21 +12,15 @@ namespace es {
  * キャッシュコントロールするステート情報
  */
 enum GLStates_e {
-
     /**
-     * カリングON / CCW
-     */
-    GLStates_Cull_CCW,
-
-    /**
-     * カリングON / CW
-     */
-    GLStates_Cull_CC,
-
-    /**
-     * カリング / Front
+     * カリング ON / Front
      */
     GLStates_Cull_Front,
+
+    /**
+     * カリング ON / Back
+     */
+    GLStates_Cull_Back,
 
     /**
      * 深度テストを有効化
@@ -37,26 +33,41 @@ enum GLStates_e {
     GLStates_StencilTest_Enable,
 
     /**
-     * カラーマスク設定
+     * Redへ書き込まない
      */
-    GLStates_Mask_Red,
+    GLStates_Mask_Red_Disable,
 
-    GLStates_Mask_Green,
+    /**
+     * Greenへ書き込まない
+     */
+    GLStates_Mask_Green_Disable,
 
-    GLStates_Mask_Blue,
+    /**
+     * Blueへ書き込まない
+     */
+    GLStates_Mask_Blue_Disable,
 
-    GLStates_Mask_Alpha,
+    /**
+     * Alphaへ書き込まない
+     */
+    GLStates_Mask_Alpha_Disable,
 
-    GLStates_Mask_Depth,
+    /**
+     * 深度へ書き込まない
+     */
+    GLStates_Mask_Depth_Disable,
 
-    GLStates_Mask_Stencil,
+    /**
+     * ステンシルへ書き込まない
+     */
+    GLStates_Mask_Stencil_Disable,
 };
 
 enum GLBlendType_e {
     /**
      * 一般的なαブレンドを行う
      */
-    GLBlendType_Alpha,
+    GLBlendType_Alpha = 0,
 
     /**
      * 加算ブレンディングを行う
@@ -115,11 +126,12 @@ struct glstates {
     }
 };
 
-class StateController: public Object {
+class RenderState: public Object {
+protected:
     std::vector<glstates> states;
+    RenderState();
 public:
-    StateController();
-    virtual ~StateController();
+    virtual ~RenderState();
 
     /**
      * 現在のEGLContext状態に合わせて更新する
@@ -144,6 +156,11 @@ public:
     void push(const glstates &state);
 
     /**
+     * 現在のステートを保存する。
+     */
+    void push();
+
+    /**
      * 現在のステートを廃棄し、ステートを以前の状態に戻す
      */
     void pop();
@@ -166,7 +183,7 @@ public:
     /**
      * 現在のThreadに紐付いたStateを取得する
      */
-    static std_shared_ptr<StateController> current();
+    static std_shared_ptr<RenderState> current();
 
     /**
      * 現在のスレッドで使用しなくなった
@@ -174,8 +191,8 @@ public:
     static void unuseThisThread();
 };
 
-typedef std_shared_ptr<StateController> MStateController;
+typedef std_shared_ptr<RenderState> MStateController;
 
 }
 
-#endif /* STATECONTROLLER_H_ */
+#endif /* RENDERSTATE_H_ */
