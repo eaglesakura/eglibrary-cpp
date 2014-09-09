@@ -4,6 +4,7 @@
 #include    "es/Graphics.hpp"
 #include    "es/math/Vector2.hpp"
 #include    "es/graphics/gl/context/RenderState.h"
+#include    "es/graphics/gl/context/ShaderState.h"
 
 namespace es {
 
@@ -20,6 +21,11 @@ class ThreadDevice: public Object {
      * レンダリング用ステート
      */
     MRenderState renderState;
+
+    /**
+     * シェーダー用ステート
+     */
+    MShaderState shaderState;
 protected:
     ThreadDevice();
 public:
@@ -31,6 +37,14 @@ public:
     void setSurfaceSize(int x, int y) {
         assert(x >= 0 && y >= 0);
         surfaceSize.set((int16_t) x, (int16_t) y);
+    }
+
+    MRenderState getRenderState() const {
+        return renderState;
+    }
+
+    MShaderState getShaderState() const {
+        return shaderState;
     }
 
     /**

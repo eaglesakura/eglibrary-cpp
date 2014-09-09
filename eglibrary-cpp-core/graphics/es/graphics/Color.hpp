@@ -20,7 +20,7 @@ typedef uint32_t argb32;
  * 色情報は一貫してRGBAの順番とする。
  * ライブラリ内部でnativeへ変換する。
  */
-union color {
+union Color{
     /**
      * 1要素ごとの情報
      * リトルエンディアン格納のため、並びは反転する
@@ -37,15 +37,15 @@ union color {
      */
     rgba32 rgba;
 
-    color() {
+    Color() {
         RGBAi(255, 255, 255, 255);
     }
 
-    color(const color &origin) {
+    Color(const Color &origin) {
         rgba = origin.rgba;
     }
 
-    color(const rgba32 color) {
+    Color(const rgba32 color) {
         rgba = color;
     }
 
@@ -127,7 +127,7 @@ union color {
     /**
      * 色の加算を行う
      */
-    inline color operator+(const color &col) const {
+    inline Color operator+(const Color &col) const {
         const uint8_t R = (uint8_t) std::min<uint32_t>(255, (int32_t) tag.r + (int32_t) col.tag.r);
         const uint8_t G = (uint8_t) std::min<uint32_t>(255, (int32_t) tag.g + (int32_t) col.tag.g);
         const uint8_t B = (uint8_t) std::min<uint32_t>(255, (int32_t) tag.b + (int32_t) col.tag.b);
@@ -138,7 +138,7 @@ union color {
     /**
      * 色の加算を行う
      */
-    inline color& operator+=(const color &col) {
+    inline Color& operator+=(const Color &col) {
         tag.r = (uint8_t) std::min<uint32_t>(255, (int32_t) tag.r + (int32_t) col.tag.r);
         tag.g = (uint8_t) std::min<uint32_t>(255, (int32_t) tag.g + (int32_t) col.tag.g);
         tag.b = (uint8_t) std::min<uint32_t>(255, (int32_t) tag.b + (int32_t) col.tag.b);
@@ -149,7 +149,7 @@ union color {
     /**
      * 色の減算を行う
      */
-    inline color operator-(const color &col) const {
+    inline Color operator-(const Color &col) const {
         const uint8_t R = (uint8_t) std::max<uint32_t>(0, (int32_t) tag.r - (int32_t) col.tag.r);
         const uint8_t G = (uint8_t) std::max<uint32_t>(0, (int32_t) tag.g - (int32_t) col.tag.g);
         const uint8_t B = (uint8_t) std::max<uint32_t>(0, (int32_t) tag.b - (int32_t) col.tag.b);
@@ -160,7 +160,7 @@ union color {
     /**
      * 色の減算を行う
      */
-    inline color& operator-=(const color &col) {
+    inline Color& operator-=(const Color &col) {
         tag.r = (uint8_t) std::max<uint32_t>(0, (int32_t) tag.r - (int32_t) col.tag.r);
         tag.g = (uint8_t) std::max<uint32_t>(0, (int32_t) tag.g - (int32_t) col.tag.g);
         tag.b = (uint8_t) std::max<uint32_t>(0, (int32_t) tag.b - (int32_t) col.tag.b);
@@ -171,14 +171,14 @@ union color {
      * 同一ならtrue
      */
     inline
-    bool operator==(const color &col) const {
+    bool operator==(const Color &col) const {
         return rgba == col.rgba;
     }
     /**
      * 同一以外ならtrue
      */
     inline
-    bool operator!=(const color &col) const {
+    bool operator!=(const Color &col) const {
         return rgba != col.rgba;
     }
 
@@ -189,14 +189,14 @@ union color {
         return rgba;
     }
 
-    inline static color fromRGBAf(float r, float g, float b, float a) {
-        color result;
+    inline static Color fromRGBAf(float r, float g, float b, float a) {
+        Color result;
         result.RGBAf(r, g, b, a);
         return result;
     }
 
-    inline static color fromRGBAi(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a) {
-        color result;
+    inline static Color fromRGBAi(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a) {
+        Color result;
         result.RGBAi(r, g, b, a);
         return result;
     }
@@ -204,8 +204,8 @@ union color {
     /**
      * intから色情報へ変換する
      */
-    inline static color fromRGBAi(const rgba32 rgba) {
-        color result;
+    inline static Color fromRGBAi(const rgba32 rgba) {
+        Color result;
         result.rgba = rgba;
         return result;
     }
@@ -214,7 +214,7 @@ union color {
      * 色計算を行う。
      * dstColor * (1.0 - srcAlpha) + srcColor * srcAlpha
      */
-    static color blendColorSrcAlpha(const color dstColor, const color srcColor) {
+    static Color blendColorSrcAlpha(const Color dstColor, const Color srcColor) {
         const float src_alpha = srcColor.af();
         const float dst_alpha = 1.0f - src_alpha;
 
@@ -229,7 +229,7 @@ union color {
      * 色計算を行う。
      * dstColor * (1.0 - srcAlpha) + srcColor * srcAlpha
      */
-    static color blendColorSrcAlpha(const color dstColor, const color srcColor, const float srcAlpha) {
+    static Color blendColorSrcAlpha(const Color dstColor, const Color srcColor, const float srcAlpha) {
         const float dst_alpha = 1.0f - srcAlpha;
 
         const float R = (dstColor.rf() * dst_alpha) + (srcColor.rf() * srcAlpha);
@@ -249,8 +249,8 @@ union color {
      * @param blend
      * @return
      */
-    static color blendColor(const color rgba0, const color rgba1, float blend) {
-        color result;
+    static Color blendColor(const Color rgba0, const Color rgba1, float blend) {
+        Color result;
         blend = es::minmax<float>(0, 1.0f, blend);
 
         result.tag.r = (uint8_t) ((((float) rgba1.tag.r) * blend) + (((float) rgba0.tag.r) * (1.0f - blend)));
@@ -267,8 +267,8 @@ union color {
      * @param blend
      * @return
      */
-    static color moveColor(const color now, const color target, const uint8_t offset) {
-        color result;
+    static Color moveColor(const Color now, const Color target, const uint8_t offset) {
+        Color result;
 
         result.tag.r = targetMove(now.tag.r, target.tag.r, offset);
         result.tag.g = targetMove(now.tag.g, target.tag.g, offset);
@@ -280,21 +280,21 @@ union color {
     /**
      * α値を乗算する
      */
-    inline color multAlpha(const float a) const {
-        return color::fromRGBAi(tag.r, tag.g, tag.b, (uint8_t) ((af() * a) * 255));
+    inline Color multAlpha(const float a) const {
+        return Color::fromRGBAi(tag.r, tag.g, tag.b, (uint8_t) ((af() * a) * 255));
     }
 
     /**
      * 白を生成する
      */
-    static color white() {
+    static Color white() {
         return fromRGBAi(0xFFFFFFFF);
     }
 
     /**
      * 黒を生成する
      */
-    static color black() {
+    static Color black() {
         return fromRGBAi(0x000000FF);
     }
 };

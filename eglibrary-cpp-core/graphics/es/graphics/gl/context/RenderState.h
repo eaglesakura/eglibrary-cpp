@@ -111,7 +111,7 @@ struct glstates {
     /**
      * glClear color
      */
-    color clear;
+    Color clear;
 
     /**
      * レンダリング対象のフレームバッファ
@@ -164,6 +164,11 @@ public:
     void viewport(int x, int y, int width, int heidht);
 
     /**
+     * フレームバッファを使用する
+     */
+    void bindFramebuffer(GLuint framebuffer);
+
+    /**
      * 現在のステートを取得する
      */
     const glstates& getCurrent() const {
@@ -199,6 +204,11 @@ public:
      * ステートを更新する
      */
     void set(const glstates &state);
+
+    /**
+     * バッファを全てアンバインドしてクリアーな状態にする
+     */
+    void unbindBuffers();
 };
 
 typedef std_shared_ptr<RenderState> MRenderState;

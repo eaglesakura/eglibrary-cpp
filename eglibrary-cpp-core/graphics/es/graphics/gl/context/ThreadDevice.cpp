@@ -8,6 +8,7 @@ ThreadDevice::ThreadDevice() {
     eslog("new ThreadDevice::ThreadDevice(%x)", this);
 
     renderState.reset(new RenderState());
+    shaderState.reset(new ShaderState());
 }
 ThreadDevice::~ThreadDevice() {
     eslog("delete ThreadDevice::~ThreadDevice(%x)", this);

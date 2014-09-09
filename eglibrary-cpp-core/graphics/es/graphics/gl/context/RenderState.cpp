@@ -29,6 +29,8 @@ void RenderState::sync() {
     if (glIsEnabled(GL_DEPTH_TEST)) {
         cur->flags |= GLStates_DepthTest_Enable;
     }
+    assert_gl();
+
     // cull
     if (glIsEnabled(GL_CULL_FACE)) {
         glGetIntegerv(GL_CULL_FACE_MODE, &temp);
@@ -38,9 +40,33 @@ void RenderState::sync() {
             cur->flags |= GLStates_Cull_Back;
         }
     }
+    assert_gl();
+
     // stencil
     if (glIsEnabled(GL_STENCIL_TEST)) {
         cur->flags |= GLStates_StencilTest_Enable;
+    }
+    assert_gl();
+
+    // viewport
+    {
+        GLint xywh[4] = { 0 };
+        glGetIntegerv(GL_VIEWPORT, xywh);
+        assert_gl();
+        cur->viewport.setXYWH((int16_t) xywh[0], (int16_t) xywh[1], (int16_t) xywh[2], (int16_t) xywh[3]);
+    }
+    // scissor
+    {
+        GLint xywh[4] = { 0 };
+        glGetIntegerv(GL_SCISSOR_BOX, xywh);
+        assert_gl();
+        cur->scissor.setXYWH((int16_t) xywh[0], (int16_t) xywh[1], (int16_t) xywh[2], (int16_t) xywh[3]);
+    }
+
+    // framebuffer
+    {
+        glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint*) &cur->framebuffer);
+        assert_gl();
     }
 }
 
@@ -51,6 +77,17 @@ void RenderState::viewport(int x, int y, int width, int heidht) {
     glstates *cur = get();
     cur->viewport.setXYWH(x, y, width, heidht);
     glViewport(x, y, width, heidht);
+}
+
+/**
+ * フレームバッファを使用する
+ */
+void RenderState::bindFramebuffer(GLuint framebuffer) {
+    glstates *cur = get();
+    if (cur->framebuffer != framebuffer) {
+        cur->framebuffer = framebuffer;
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    }
 }
 
 /**
@@ -162,6 +199,7 @@ void RenderState::set(const glstates &state) {
     glstates *cur = get();
     setFlags(state.flags);
     setBlendType(state.blendType);
+    bindFramebuffer(state.framebuffer);
 
     // viewport check
     if (cur->viewport != state.viewport) {
@@ -185,6 +223,16 @@ void RenderState::set(const glstates &state) {
         glClearColor(state.clear.rf(), state.clear.gf(), state.clear.bf(), state.clear.af());
         cur->clear = state.clear;
     }
+}
+
+/**
+ * バッファを全てアンバインドしてクリアーな状態にする
+ */
+void RenderState::unbindBuffers() {
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    bindFramebuffer(0);
 }
 
 }

@@ -51,6 +51,8 @@ public:
     }
 };
 
+typedef std_shared_ptr<AssetManager> MAssetManager;
+
 }
 
 #endif /* ASSETMANAGER_H_ */
