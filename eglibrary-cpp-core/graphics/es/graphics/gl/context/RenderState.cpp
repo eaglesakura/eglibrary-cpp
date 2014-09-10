@@ -77,8 +77,10 @@ void RenderState::sync() {
  */
 void RenderState::viewport(int x, int y, int width, int heidht) {
     glstates *cur = get();
-    cur->viewport.setXYWH(x, y, width, heidht);
-    glViewport(x, y, width, heidht);
+    if (cur->viewport.left != (int16_t) x || cur->viewport.top != (int16_t) y || cur->viewport.width() != (int16_t) width || cur->viewport.height() != (int16_t) heidht) {
+        cur->viewport.setXYWH(x, y, width, heidht);
+        glViewport(x, y, width, heidht);
+    }
 }
 
 /**
@@ -125,8 +127,18 @@ void RenderState::push() {
  * 現在のステートを廃棄し、ステートを以前の状態に戻す
  */
 void RenderState::pop() {
+    // 1つ以上pushされていなければならない。
+    assert(states.size() >= 2);
+
+    // 一つ古いステートに直す
+    {
+        const glstates &old = states[states.size() - 2];
+        set(old);
+    }
+    // ステートを一つ外す
     states.pop_back();
     assert(!states.empty());
+
 }
 
 /**

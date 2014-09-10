@@ -68,11 +68,20 @@ void Texture::genMipmaps() {
 }
 
 /**
- * テクスチャピクセル用のメモリを確保する
- * @param pixelFormat 確保するピクセルのビット配置(RGB565、RGBA5551、RGB8、RGBA8、BGRA8）
+ * テクスチャ用メモリを確保する
  */
-void Texture::allocPixelMemory(const PixelFormat_e pixelFormat, const int miplevel, MShaderState state) {
+void Texture::allocPixelMemory(const PixelFormat_e pixelFormat, const int miplevel, const int width, const int height) {
+    if (getTextureWidth() == width && getTextureHeight() == height) {
+        // リサイズが不要
+        return;
+    }
 
+    const GLenum format = Pixel::toGLPixelFormat(pixelFormat);
+    const GLenum type = Pixel::toGLPixelDataType(pixelFormat);
+    glTexImage2D(GL_TEXTURE_2D, miplevel, format, width, height, 0, format, type, NULL);
+    size.img_width = size.tex_width = width;
+    size.img_height = size.tex_height = height;
+    allocated = true;
 }
 
 /**
@@ -115,12 +124,10 @@ bool Texture::isBinded(int *resultIndex, MShaderState state) const {
  *
  * @return バインドしたテクスチャユニット番号
  */
-uint Texture::bind(MShaderState state) {
-    state = get_state(state);
-
-    int index = state->getFreeTextureUnitIndex(true);
+uint Texture::bind(MDeviceContext context) {
+    int index = get_state(context)->getFreeTextureUnitIndex(true);
     assert(index >= 0);
-    bind((uint) index, state);
+    bind((uint) index, context);
 
     return (uint) index;
 }
@@ -128,8 +135,8 @@ uint Texture::bind(MShaderState state) {
 /**
  * テクスチャをindex番のユニットに関連付ける
  */
-void Texture::bind(const uint index, MShaderState state) {
-    state = get_state(state);
+void Texture::bind(const uint index, MDeviceContext context) {
+    MShaderState state = get_state(context);
 
     if (state->isBindedTexture(index, target, handle)) {
         // 指定したIndexに既にバインドされていたら、activeだけを切り替えて何もしない
@@ -145,12 +152,12 @@ void Texture::bind(const uint index, MShaderState state) {
 /**
  * バインドを解除する
  */
-void Texture::unbind(MShaderState state) {
+void Texture::unbind(MDeviceContext context) {
     if (!handle) {
         return;
     }
 
-    state = get_state(state);
+    MShaderState state = get_state(context);
 
     state->unbindTexture(handle);
 }
@@ -160,7 +167,7 @@ void Texture::unbind(MShaderState state) {
  */
 void Texture::dispose() {
     if (handle) {
-        MShaderState state = get_state();
+        MShaderState state = get_device()->getShaderState();
         assert(state);
 
         // 既存のステートをアンバインドする

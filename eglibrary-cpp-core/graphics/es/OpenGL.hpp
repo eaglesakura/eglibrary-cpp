@@ -11,6 +11,7 @@
 
 // base
 #include    "es/graphics/gl/surface/VirtualDisplay.hpp"
+#include    "es/graphics/gl/surface/IRenderingSurface.hpp"
 #include    "es/graphics/gl/GLObject.h"
 #include    "es/graphics/Color.hpp"
 #include    "es/graphics/PixelFormat.hpp"
@@ -19,6 +20,8 @@
 
 // resources
 #include    "es/graphics/gl/resource/Texture.h"
+#include    "es/graphics/gl/surface/RenderBufferObject.hpp"
+#include    "es/graphics/gl/surface/FrameBufferObject.hpp"
 #include    "es/graphics/gl/resource/ShaderProgram.h"
 #include    "es/graphics/gl/resource/VertexBufferObject.hpp"
 #include    "es/graphics/gl/resource/IndexBufferObject.hpp"

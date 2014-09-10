@@ -113,7 +113,7 @@ void SpriteManager::rendering(const float x, const float y, const float width, c
 void SpriteManager::renderingImage(MTexture image, const float srcX, const float srcY, const float srcW, const float srcH, const float dstX, const float dstY, const float dstWidth, const float dstHeight, const float degree, const rgba32 rgba) {
     // テクスチャを転送する
     if (image) {
-        uniform.texture.upload(context, image);
+        uniform.texture.upload(image, context);
     }
     // ブレンド色を設定する
     uniform.color.upload(rgba);

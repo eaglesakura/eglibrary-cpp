@@ -31,7 +31,7 @@ public:
     /**
      * GPUにアップロードを行う
      */
-    bool upload(MDeviceContext context, MTexture tex) {
+    bool upload(MTexture tex, MDeviceContext context) {
         assert(tex);
 
         if (!valid()) {
@@ -42,7 +42,7 @@ public:
         int texUnit = -1;
         // バインドされていなければ、テクスチャをバインドする
         if (!tex->isBinded(&texUnit, state)) {
-            texUnit = tex->bind(state);
+            texUnit = tex->bind(context);
         }
 
         if (bindUnit != texUnit) {
@@ -83,7 +83,7 @@ public:
     /**
      * アップロードを行う
      */
-    bool upload(MDeviceContext context, MTexture *textures, const uint num) {
+    bool upload(MTexture *textures, const uint num, MDeviceContext context) {
         if (!valid()) {
             return false;
         }
@@ -91,7 +91,7 @@ public:
         assert(textures);
 
         for (int i = 0; i < num; ++i) {
-            textures[i]->bind(i, context->getShaderState());
+            textures[i]->bind(i, context);
         }
 
         glUniform1iv(getLocation(), num, bindUnits.ptr);

@@ -186,10 +186,9 @@ public:
     }
 
     /**
-     * テクスチャピクセル用のメモリを確保する
-     * @param pixelFormat 確保するピクセルのビット配置(RGB565、RGBA5551、RGB8、RGBA8、BGRA8）
+     * テクスチャ用メモリを確保する
      */
-    virtual void allocPixelMemory(const PixelFormat_e pixelFormat, const int miplevel, MShaderState state);
+    virtual void allocPixelMemory(const PixelFormat_e pixelFormat, const int miplevel, const int width, const int height);
 
     /**
      * 外部要因でallocを行った（拡張機能とか）場合に呼び出す
@@ -211,22 +210,22 @@ public:
      *
      * @return バインドしたテクスチャユニット番号
      */
-    virtual uint bind(MShaderState state);
+    virtual uint bind(MDeviceContext context);
 
     /**
      * テクスチャをindex番のユニットに関連付ける
      */
-    virtual void bind(const uint index, MShaderState state);
+    virtual void bind(const uint index, MDeviceContext context);
 
     /**
      * バインドを解除する
      */
-    virtual void unbind(MShaderState state);
+    virtual void unbind(MDeviceContext context);
 
     /**
      * テクスチャ操作ハンドルを取得する
      */
-    virtual GLuint getHandle() const {
+    virtual GLuint getTexture() const {
         return handle;
     }
 

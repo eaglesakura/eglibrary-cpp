@@ -60,6 +60,12 @@ enum PixelFormat_e {
     PixelFormat_A8,
 
     /**
+     * 2byte
+     * Depth
+     */
+    PixelFormat_Depth,
+
+    /**
      * RGBA各要素を含み、プラットフォームに最適化した状態でロードする
      * 各1byteは保証するが、RGBA並び順は保証しない。
      *
@@ -332,14 +338,18 @@ static void copyBGRA8888Pixels(const uint8_t *src_bgra8888, const PixelFormat_e 
 static inline GLenum toGLPixelFormat(const PixelFormat_e format) {
     static const GLenum PIXEL_FORMATS[] = {
     //
-            GL_RGB, GL_RGBA, GL_RGB, GL_RGBA,
+            GL_RGB,//   RGB565
+            GL_RGBA,  //    RGBA5551
+            GL_RGB,  // RGB888
+            GL_RGBA, // RGBA8888
 #ifdef GL_BGRA_EXT
-            GL_BGRA_EXT, // support RGBA
+            GL_BGRA_EXT, // BGRA8888
 #else
-            GL_RGBA, // not suppport BGRA
+            GL_RGBA, // RGBA8888
 #endif
             GL_LUMINANCE, GL_RGBA, // RGBA F16
             GL_ALPHA, // A8
+            GL_DEPTH_COMPONENT, // Depth
             //
             };
     return PIXEL_FORMATS[format];
@@ -353,7 +363,7 @@ static inline GLenum toGLPixelFormat(const PixelFormat_e format) {
 static inline GLenum toGLPixelDataType(const PixelFormat_e format) {
     constexpr const GLenum PIXEL_TYPES[] = {
     //
-            GL_UNSIGNED_SHORT_5_6_5, // RGB565
+            GL_UNSIGNED_SHORT_5_6_5,// RGB565
             GL_UNSIGNED_SHORT_5_5_5_1, // RGBA5551
             GL_UNSIGNED_BYTE, // RGB888
             GL_UNSIGNED_BYTE, // RGBA8888
@@ -361,6 +371,7 @@ static inline GLenum toGLPixelDataType(const PixelFormat_e format) {
             GL_HALF_FLOAT_OES, // LuminanceF16
             GL_HALF_FLOAT_OES, // RGBA F16
             GL_UNSIGNED_BYTE, // A8
+            GL_UNSIGNED_SHORT, // Depth
             //
             };
     return PIXEL_TYPES[format];

@@ -65,11 +65,12 @@ MTexture GraphicAssets::loadTextureFromAssets(const std::string &path, const Tex
     JNIEnv *env = jc::jni::getThreadJniEnv();
     void *pPixelBuffer = env->GetDirectBufferAddress(pixels.getJobject());
 
+    MDeviceContext context = DeviceContext::current();
     MShaderState state = DeviceContext::current()->getShaderState();
     MTexture result(new Texture());
     assert_gl();
 
-    result->bind(state);
+    result->bind(context);
     assert_gl();
 
     if (Pixel::getPixelBytes(opt->format) == 4) {
@@ -89,7 +90,7 @@ MTexture GraphicAssets::loadTextureFromAssets(const std::string &path, const Tex
         Pixel::copyBGRA8888Pixels((uint8_t*) pPixelBuffer, opt->format, buffer.get(), imageWidth * imageHeight);
 
         // 転送を行う
-        glTexImage2D(GL_TEXTURE_2D, 0, Pixel::toGLPixelFormat(opt->format), imageWidth, imageHeight, 0, Pixel::toGLPixelFormat(opt->format), Pixel::toGLPixelFormat(opt->format), buffer.get());
+        glTexImage2D(GL_TEXTURE_2D, 0, Pixel::toGLPixelFormat(opt->format), imageWidth, imageHeight, 0, Pixel::toGLPixelFormat(opt->format), Pixel::toGLPixelDataType(opt->format), buffer.get());
     }
     assert_gl();
 
@@ -102,7 +103,7 @@ MTexture GraphicAssets::loadTextureFromAssets(const std::string &path, const Tex
         result->genMipmaps();
         assert_gl();
     }
-    result->unbind(state);
+    result->unbind(context);
     assert_gl();
 
     // サイズ補正
