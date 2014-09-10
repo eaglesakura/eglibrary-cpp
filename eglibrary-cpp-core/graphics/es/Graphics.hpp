@@ -21,6 +21,8 @@
 #define __gl2_h_    /* include guard */
 #include    <GLES3/gl3.h>
 #include    <GLES2/gl2ext.h>
+#include    <EGL/egl.h>
+#include    <EGL/eglext.h>
 
 #endif // BUILD_Android
 

@@ -7,6 +7,7 @@
 #include    "AssetManager.h"
 
 #include    "es/OpenGL.hpp"
+#include    "es/Sprite.hpp"
 
 namespace es {
 
@@ -54,6 +55,11 @@ public:
      * assets配下からシェーダーを読み出す
      */
     virtual MShaderProgram loadShaderFromAssets(const std::string &vertShaderFile, const std::string &fragShaderFile);
+
+    /**
+     * SpriteManagerを生成する
+     */
+    virtual MSpriteManager createSpriteManager(const std::string &vertShaderFile, const std::string &fragShaderFile);
 };
 
 typedef std_shared_ptr<GraphicAssets> MGraphicAssets;

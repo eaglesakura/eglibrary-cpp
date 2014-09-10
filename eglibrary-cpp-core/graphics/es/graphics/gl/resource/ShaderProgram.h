@@ -2,7 +2,7 @@
 #define es_graphics_gl_SHADERPROGRAM_H_
 
 #include    "es/Graphics.hpp"
-#include    "es/graphics/gl/context/ThreadDevice.h"
+#include    "es/graphics/gl/context/DeviceContext.h"
 #include    "es/graphics/gl/GLObject.h"
 
 namespace es {
@@ -32,12 +32,12 @@ public:
     /**
      * GLと関連付ける
      */
-    virtual void bind(MThreadDevice state = MThreadDevice());
+    virtual void bind();
 
     /**
      * ビルドを行う
      */
-    static std_shared_ptr<ShaderProgram> build(const char* vertex_shader, const char* frament_shader, MThreadDevice state = MThreadDevice());
+    static std_shared_ptr<ShaderProgram> build(const char* vertex_shader, const char* frament_shader, MDeviceContext state = MDeviceContext());
 };
 
 /**

@@ -86,6 +86,7 @@ public:
 
         glDeleteBuffers(1, &indices);
         indices = 0;
+        length = 0;
     }
 };
 

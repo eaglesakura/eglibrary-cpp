@@ -85,6 +85,12 @@ enum GLBlendType_e {
      * ブレンドを行わない
      */
     GLBlendType_None,
+
+    /**
+     * 不明なブレンド
+     * 初回set時に必ず反応するようにしておく
+     */
+    GLBlendType_Unknown,
 };
 
 /**
@@ -119,6 +125,11 @@ struct glstates {
     GLuint framebuffer;
 
     /**
+     * 描画するラインの太さ
+     */
+    uint8_t    lineWidth;
+
+    /**
      * GLBlendType_e
      */
     GLBlendType_e blendType :8;
@@ -148,6 +159,12 @@ protected:
     glstates* get() {
         return &states[states.size() - 1];
     }
+    /**
+     * 現在のステートを取得する
+     */
+    const glstates* get() const {
+        return &states[states.size() - 1];
+    }
 
 public:
     RenderState();
@@ -164,9 +181,24 @@ public:
     void viewport(int x, int y, int width, int heidht);
 
     /**
+     *
+     */
+    float getViewportAspect() const {
+        const glstates *cur = get();
+        float width = cur->viewport.width();
+        float height = cur->viewport.height();
+        return width / height;
+    }
+
+    /**
      * フレームバッファを使用する
      */
     void bindFramebuffer(GLuint framebuffer);
+
+    /**
+     * ライン描画の太さを指定する
+     */
+    void lineWidth(const float width);
 
     /**
      * 現在のステートを取得する

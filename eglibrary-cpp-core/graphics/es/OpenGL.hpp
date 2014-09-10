@@ -10,11 +10,12 @@
 #include    "es/math/Vector4.hpp"
 
 // base
+#include    "es/graphics/gl/surface/VirtualDisplay.hpp"
 #include    "es/graphics/gl/GLObject.h"
 #include    "es/graphics/Color.hpp"
 #include    "es/graphics/PixelFormat.hpp"
 #include    "es/graphics/gl/gpu/GPUCapacity.h"
-#include    "es/graphics/gl/context/ThreadDevice.h"
+#include    "es/graphics/gl/context/DeviceContext.h"
 
 // resources
 #include    "es/graphics/gl/resource/Texture.h"
@@ -26,6 +27,7 @@
 #include    "es/graphics/gl/shader/UniformBase.hpp"
 #include    "es/graphics/gl/shader/VectorUniform.hpp"
 #include    "es/graphics/gl/shader/ColorUniform.hpp"
+#include    "es/graphics/gl/shader/TextureUniform.hpp"
 #include    "es/graphics/gl/shader/VertexAttribute.hpp"
 
 #endif /* OPENGL_HPP_ */

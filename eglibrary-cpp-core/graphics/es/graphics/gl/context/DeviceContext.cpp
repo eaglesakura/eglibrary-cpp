@@ -1,23 +1,42 @@
-#include    "ThreadDevice.h"
+#include    "DeviceContext.h"
 #include    <map>
 #include    "es/graphics/gl/gpu/GPUCapacity.h"
 
 namespace es {
 
-ThreadDevice::ThreadDevice() {
+DeviceContext::DeviceContext() {
     eslog("new ThreadDevice::ThreadDevice(%x)", this);
 
+#ifdef  BUILD_Android
+    {
+        EGLDisplay display = eglGetCurrentDisplay();
+        EGLSurface surface = eglGetCurrentSurface(EGL_READ);
+        assert(surface);
+        assert(display);
+        EGLint temp = 0;
+        eglQuerySurface(display, surface, EGL_WIDTH, &temp);
+        surfaceSize.x = temp;
+        eglQuerySurface(display, surface, EGL_HEIGHT, &temp);
+        surfaceSize.y = temp;
+
+        assert(eglGetError() == EGL_SUCCESS);
+    }
+#endif
+
     renderState.reset(new RenderState());
+    renderState->set(createDefaultState2D());
     shaderState.reset(new ShaderState());
+
+    eslog("current thread surface size(%d x %d)", surfaceSize.x, surfaceSize.y);
 }
-ThreadDevice::~ThreadDevice() {
+DeviceContext::~DeviceContext() {
     eslog("delete ThreadDevice::~ThreadDevice(%x)", this);
 }
 
 /**
  * 2Dレンダリングのデフォルトステートを取得する
  */
-glstates ThreadDevice::createDefaultState2D() const {
+glstates DeviceContext::createDefaultState2D() const {
     glstates states = { 0 };
 
     // viewport
@@ -29,7 +48,7 @@ glstates ThreadDevice::createDefaultState2D() const {
 /**
  * 3Dレンダリングのデフォルトステートを取得する
  */
-glstates ThreadDevice::createDefaultState3D() const {
+glstates DeviceContext::createDefaultState3D() const {
     glstates states = { 0 };
     states.flags |= (GLStates_Cull_Back | GLStates_DepthTest_Enable); // 背面カリング & 深度テスト
 
@@ -44,7 +63,7 @@ namespace {
 /**
  * グローバルなデバイス設定
  */
-std::map<std::thread::id, MThreadDevice> g_devices;
+std::map<std::thread::id, MDeviceContext> g_devices;
 
 /**
  * mutex
@@ -56,7 +75,7 @@ es_mutex g_devicesMutex;
 /**
  * 現在のThreadに関連付けられたデバイスを取得する
  */
-std_shared_ptr<ThreadDevice> ThreadDevice::current() {
+std_shared_ptr<DeviceContext> DeviceContext::current() {
     // 制御ロックをかける
     es_mutex_lock lock(g_devicesMutex);
 
@@ -70,7 +89,7 @@ std_shared_ptr<ThreadDevice> ThreadDevice::current() {
 
     if (itr == g_devices.end()) {
         // 現在のThreadに対応するデバイスが無いなら新規生成する
-        MThreadDevice result(new ThreadDevice());
+        MDeviceContext result(new DeviceContext());
         g_devices.insert(std::make_pair(currentThreadId, result));
 
         return result;
@@ -83,7 +102,7 @@ std_shared_ptr<ThreadDevice> ThreadDevice::current() {
 /**
  * 現在のスレッドで使用しなくなった
  */
-void ThreadDevice::unuseThisThread() {
+void DeviceContext::unuseThisThread() {
     // 制御ロックをかける
     es_mutex_lock lock(g_devicesMutex);
 

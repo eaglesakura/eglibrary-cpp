@@ -4,7 +4,7 @@
 #include    "es/Graphics.hpp"
 #include    "es/graphics/PixelFormat.hpp"
 #include    "es/graphics/gl/context/ShaderState.h"
-#include    "es/graphics/gl/context/ThreadDevice.h"
+#include    "es/graphics/gl/context/DeviceContext.h"
 #include    "es/graphics/gl/GLObject.h"
 
 namespace es {
@@ -41,6 +41,8 @@ struct TextureLoadOption {
 };
 
 class Texture: public GLObject {
+    friend class GraphicAssets;
+
     struct {
         /**
          * テクスチャサイズとしての幅

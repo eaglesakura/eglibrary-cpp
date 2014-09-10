@@ -48,7 +48,40 @@ public:
      */
     bool setLocation(const MShaderProgram program, const char* name) {
         location = program->getUniformLocation(name);
+        eslog("uniform location name(%s) -> %d", name, location);
         return valid();
+    }
+};
+
+/**
+ * boolean型の指定を行うuniform
+ */
+class BooleanUniform: public UniformBase {
+    bool value;
+public:
+    BooleanUniform() {
+        value = false;
+    }
+
+    BooleanUniform(MShaderProgram program, const char* name) {
+        value = false;
+        setLocation(program, name);
+    }
+    /**
+     * 情報を転送する
+     */
+    bool upload(const bool set) {
+        if (!valid()) {
+            return false;
+        }
+
+        if (value != set) {
+            glUniform1i(location, set ? 1 : 0);
+            assert_gl();
+            this->value = set;
+            return true;
+        }
+        return false;
     }
 };
 

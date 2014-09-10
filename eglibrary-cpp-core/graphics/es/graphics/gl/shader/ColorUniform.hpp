@@ -34,6 +34,7 @@ public:
         }
 
         if (color != c.rgba) {
+//            eslog("upload loc(%d) r(%f) g(%f) b(%f), a(%f)", location, c.rf(), c.gf(), c.bf(), c.af());
             glUniform4f(location, c.rf(), c.gf(), c.bf(), c.af());
             assert_gl();
             color = c.rgba;

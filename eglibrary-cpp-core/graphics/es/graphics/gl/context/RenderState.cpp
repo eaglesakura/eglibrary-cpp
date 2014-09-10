@@ -68,6 +68,8 @@ void RenderState::sync() {
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint*) &cur->framebuffer);
         assert_gl();
     }
+    // ブレンドタイプは不明にしておく
+    cur->blendType = GLBlendType_Unknown;
 }
 
 /**
@@ -87,6 +89,18 @@ void RenderState::bindFramebuffer(GLuint framebuffer) {
     if (cur->framebuffer != framebuffer) {
         cur->framebuffer = framebuffer;
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    }
+}
+
+/**
+ * ライン描画の太さを指定する
+ */
+void RenderState::lineWidth(const float width) {
+    uint8_t newWidth = (uint8_t) width;
+    glstates *cur = get();
+    if (cur->lineWidth != newWidth) {
+        glLineWidth(width);
+        cur->lineWidth = newWidth;
     }
 }
 

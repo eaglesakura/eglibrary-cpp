@@ -62,6 +62,16 @@ public:
     }
 
     /**
+     * レンダリングを行う
+     *
+     * @param mode GL_TRIANGLE_FAN等
+     * @param vertices_length 利用する頂点数
+     */
+    void rendering(GLenum mode, GLuint vertices_length) {
+        glDrawArrays(mode, 0, vertices_length);
+    }
+
+    /**
      *
      */
     void dispose() {

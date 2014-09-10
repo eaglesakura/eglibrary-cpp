@@ -128,7 +128,7 @@ enum GPUFamily_e {
  * 実行環境で変動するステータスを格納する。
  */
 class GPUCapacity {
-    friend class ThreadDevice;
+    friend class DeviceContext;
 
     /**
      * 通常、newはできない。

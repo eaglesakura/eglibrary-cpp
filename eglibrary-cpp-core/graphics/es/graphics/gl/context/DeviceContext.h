@@ -11,7 +11,7 @@ namespace es {
 /**
  * Threadに関連付けられたデバイスを管理する
  */
-class ThreadDevice: public Object {
+class DeviceContext: public Object {
     /**
      * 大本のサーフェイスのデフォルトサイズ
      */
@@ -27,9 +27,9 @@ class ThreadDevice: public Object {
      */
     MShaderState shaderState;
 protected:
-    ThreadDevice();
+    DeviceContext();
 public:
-    virtual ~ThreadDevice();
+    virtual ~DeviceContext();
 
     /**
      * サーフェイズのサイズを設定する
@@ -37,6 +37,10 @@ public:
     void setSurfaceSize(int x, int y) {
         assert(x >= 0 && y >= 0);
         surfaceSize.set((int16_t) x, (int16_t) y);
+    }
+
+    const Vector2i16& getSurfaceSize() const {
+        return surfaceSize;
     }
 
     MRenderState getRenderState() const {
@@ -60,7 +64,7 @@ public:
     /**
      * 現在のThreadに関連付けられたデバイスを取得する
      */
-    static std_shared_ptr<ThreadDevice> current();
+    static std_shared_ptr<DeviceContext> current();
 
     /**
      * 現在のスレッドで使用しなくなった
@@ -71,7 +75,7 @@ public:
 /**
  * Managed
  */
-typedef std_shared_ptr<ThreadDevice> MThreadDevice;
+typedef std_shared_ptr<DeviceContext> MDeviceContext;
 
 }
 

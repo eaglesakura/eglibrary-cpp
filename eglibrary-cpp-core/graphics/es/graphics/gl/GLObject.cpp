@@ -1,5 +1,5 @@
 #include    "GLObject.h"
-#include    "es/graphics/gl/context/ThreadDevice.h"
+#include    "es/graphics/gl/context/DeviceContext.h"
 
 namespace es {
 
@@ -7,14 +7,14 @@ MShaderState GLObject::get_state(MShaderState state) {
     if (state) {
         return state;
     } else {
-        return ThreadDevice::current()->getShaderState();
+        return DeviceContext::current()->getShaderState();
     }
 }
-MThreadDevice GLObject::get_device(MThreadDevice device) {
+MDeviceContext GLObject::get_device(MDeviceContext device) {
     if (device) {
         return device;
     } else {
-        return ThreadDevice::current();
+        return DeviceContext::current();
     }
 }
 
@@ -22,7 +22,7 @@ MRenderState GLObject::get_render(MRenderState state) {
     if (state) {
         return state;
     } else {
-        return ThreadDevice::current()->getRenderState();
+        return DeviceContext::current()->getRenderState();
     }
 }
 

@@ -63,7 +63,7 @@ public:
      * 指定したテクスチャがバインド済みのユニットを取得する
      */
     inline int getBindedTextureUnit(const GLenum target, const GLuint texture) const {
-        for (int i = 0; i < GPUCapacity::getMaxTextureSize(); ++i) {
+        for (int i = 0; i < GPUCapacity::getMaxTextureUnits(); ++i) {
             if (textureContext.textures[i] == texture && textureContext.targets[i] == target) {
                 return i;
             }

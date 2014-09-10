@@ -195,6 +195,20 @@ inline T radian2degree(const T radian) {
     return (radian * 180) / PI;
 }
 
+/**
+ * 四捨五入を行う
+ */
+inline const int32_t round(const float value) {
+    return (int) (value + 0.5f);
+}
+
+/**
+ * 四捨五入を行う
+ */
+inline const int64_t round(const double value) {
+    return (int64_t) (value + 0.5);
+}
+
 }
 
 #endif /* MATH_HPP_ */

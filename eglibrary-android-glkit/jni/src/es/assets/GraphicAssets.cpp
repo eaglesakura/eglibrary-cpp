@@ -65,7 +65,7 @@ MTexture GraphicAssets::loadTextureFromAssets(const std::string &path, const Tex
     JNIEnv *env = jc::jni::getThreadJniEnv();
     void *pPixelBuffer = env->GetDirectBufferAddress(pixels.getJobject());
 
-    MShaderState state = ThreadDevice::current()->getShaderState();
+    MShaderState state = DeviceContext::current()->getShaderState();
     MTexture result(new Texture());
     assert_gl();
 
@@ -105,6 +105,10 @@ MTexture GraphicAssets::loadTextureFromAssets(const std::string &path, const Tex
     result->unbind(state);
     assert_gl();
 
+    // サイズ補正
+    result->size.img_width = result->size.tex_width = imageWidth;
+    result->size.img_height = result->size.tex_height = imageHeight;
+
     // alloc成功通知
     result->onAllocated();
 
@@ -133,6 +137,25 @@ MShaderProgram GraphicAssets::loadShaderFromAssets(const std::string &vertShader
 
     eslog("build vsh(%s) fsh(%s)", vertShaderFile.c_str(), fragShaderFile.c_str());
     return ShaderProgram::build(vertShader.c_str(), fragShader.c_str());
+}
+
+/**
+ * SpriteManagerを生成する
+ */
+MSpriteManager GraphicAssets::createSpriteManager(const std::string &vertShaderFile, const std::string &fragShaderFile) {
+    MShaderProgram spriteShader = loadShaderFromAssets(vertShaderFile, fragShaderFile);
+    if (!spriteShader) {
+        return MSpriteManager();
+    }
+
+    assert(spriteShader);
+    MSpriteManager spriteManager(new SpriteManager());
+    spriteManager->bind();
+    spriteManager->setShader(spriteShader);
+    spriteManager->unbind();
+    assert_gl();
+
+    return spriteManager;
 }
 
 }

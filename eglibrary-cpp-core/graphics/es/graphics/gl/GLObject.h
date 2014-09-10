@@ -1,7 +1,7 @@
 #ifndef gl_graphics_gl_GLOBJECT_H_
 #define gl_graphics_gl_GLOBJECT_H_
 
-#include    "es/graphics/gl/context/ThreadDevice.h"
+#include    "es/graphics/gl/context/DeviceContext.h"
 
 namespace es {
 
@@ -10,7 +10,7 @@ protected:
     GLObject() {
     }
 
-    static MThreadDevice get_device(MThreadDevice device = MThreadDevice());
+    static MDeviceContext get_device(MDeviceContext device = MDeviceContext());
     static MRenderState get_render(MRenderState state = MRenderState());
     static MShaderState get_state(MShaderState state = MShaderState());
 public:

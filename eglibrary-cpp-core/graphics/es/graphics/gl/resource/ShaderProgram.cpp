@@ -56,7 +56,7 @@ GLint ShaderProgram::getUniformLocation(const char *name) const {
 /**
  * GLと関連付ける
  */
-void ShaderProgram::bind(MThreadDevice state) {
+void ShaderProgram::bind() {
     glUseProgram(program);
 }
 
@@ -168,7 +168,7 @@ static GLuint buildProgram(const char* vertex_shader_source, const char* fragmen
 /**
  * ビルドを行う
  */
-std_shared_ptr<ShaderProgram> ShaderProgram::build(const char* vertex_shader, const char* frament_shader, MThreadDevice state) {
+std_shared_ptr<ShaderProgram> ShaderProgram::build(const char* vertex_shader, const char* frament_shader, MDeviceContext state) {
     GLuint program = buildProgram(vertex_shader, frament_shader);
     if (!program) {
         eslog("error vert shader\n%s", vertex_shader);
