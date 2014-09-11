@@ -33,6 +33,11 @@ static const Vector2i16 DISPLAYSIZE_720p(1280, 720);
 static const Vector2i16 DISPLAYSIZE_1080p(1920, 1020);
 
 /**
+ * Google Glass
+ */
+static const Vector2i16 DISPLAYSIZE_GoogleGlass(640, 360);
+
+/**
  * レンダリング用サーフェイスを定義する
  */
 class IRenderingSurface {

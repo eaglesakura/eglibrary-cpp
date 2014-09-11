@@ -20,7 +20,7 @@ typedef uint32_t argb32;
  * 色情報は一貫してRGBAの順番とする。
  * ライブラリ内部でnativeへ変換する。
  */
-union Color{
+union Color {
     /**
      * 1要素ごとの情報
      * リトルエンディアン格納のため、並びは反転する

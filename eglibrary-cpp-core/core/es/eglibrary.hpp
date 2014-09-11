@@ -24,6 +24,7 @@
 #include	"es/system/Macro.hpp"
 #include	"es/system/Log.h"
 #include    "es/system/Object.hpp"
+#include    "es/memory/SelectionPtr.hpp"
 
 namespace es {
 typedef std::recursive_mutex es_mutex;

@@ -62,6 +62,15 @@ public:
     virtual int getHeight() const {
         return size.y;
     }
+
+    virtual MTexture getColorTexture() const {
+        return color.tex;
+    }
+
+    virtual MTexture getDepthTexture() const {
+        return depth.tex;
+    }
+
     /**
      * オフスクリーンテクスチャを生成する
      */
@@ -99,6 +108,7 @@ public:
         MRenderState state = get_render(context);
         state->push();
         state->bindFramebuffer(framebuffer);
+        state->viewport(0, 0, getWidth(), getHeight());
     }
 
     /**
@@ -195,6 +205,8 @@ public:
         MTexture texture(new Texture());
         texture->bind(context);
         texture->allocPixelMemory(fmt, 0, getWidth(), getHeight());
+        texture->setFilter(GL_NEAREST, GL_NEAREST);
+        texture->setWrapMode(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
         texture->unbind(context);
         attach(GL_COLOR_ATTACHMENT0, texture);
     }

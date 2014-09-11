@@ -9,7 +9,7 @@
 #define es_system_MACRO_HPP_
 
 #ifdef __ANDROID__
-    #undef  __APPLE__   // guard IDE
+#undef  __APPLE__   // guard IDE
 #endif
 
 /**
@@ -20,17 +20,17 @@
  * BUILD_MacOSX
  */
 #ifndef BUILD_MacOSX
-    // 定数設定
-    #ifdef  __APPLE__
-        #define BUILD_iOS 1
-    #endif
+// 定数設定
+#ifdef  __APPLE__
+#define BUILD_iOS 1
+#endif
 
-    // ANDROIDモード
-    #ifdef  __ANDROID__
-        #ifndef BUILD_Android
-            #define BUILD_Android 1
-        #endif
-    #endif
+// ANDROIDモード
+#ifdef  __ANDROID__
+#ifndef BUILD_Android
+#define BUILD_Android 1
+#endif
+#endif
 #endif
 
 #ifndef BUILD_Android /* DEBUG CHECK */
@@ -39,7 +39,7 @@
  */
 #ifndef NDEBUG
 #ifndef DEBUG
-    #define DEBUG
+#define DEBUG
 #endif
 #endif
 
@@ -62,6 +62,12 @@
 #define std_shared_ptr  ::std::shared_ptr
 #endif
 
+/**
+ * ::std::weak_ptrを認識しないIDE対策
+ */
+#ifndef std_weak_ptr
+#define std_weak_ptr    ::std::weak_ptr
+#endif
 
 /**
  * 安全にdeleteを行う
