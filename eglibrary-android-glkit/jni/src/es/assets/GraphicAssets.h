@@ -9,6 +9,8 @@
 #include    "es/OpenGL.hpp"
 #include    "es/Sprite.hpp"
 
+#include    "es/assets/camera/CameraDeviceManager.h"
+
 namespace es {
 
 /**
@@ -60,6 +62,11 @@ public:
      * SpriteManagerを生成する
      */
     virtual MSpriteManager createSpriteManager(const std::string &vertShaderFile, const std::string &fragShaderFile);
+
+    /**
+     * カメラを取得する
+     */
+    virtual MCameraDeviceManager connectCameraDevice(const CameraDeviceMode_e deviceType);
 };
 
 typedef std_shared_ptr<GraphicAssets> MGraphicAssets;

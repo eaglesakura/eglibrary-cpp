@@ -42,7 +42,7 @@ struct TextureLoadOption {
 
 class Texture: public GLObject {
     friend class GraphicAssets;
-
+protected:
     struct {
         /**
          * テクスチャサイズとしての幅

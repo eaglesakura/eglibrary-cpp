@@ -159,4 +159,21 @@ MSpriteManager GraphicAssets::createSpriteManager(const std::string &vertShaderF
     return spriteManager;
 }
 
+/**
+ * カメラを取得する
+ */
+MCameraDeviceManager GraphicAssets::connectCameraDevice(const CameraDeviceMode_e deviceType) {
+
+    auto jCameraTextureRenderer = glkit::GraphicAssets::connectCamera(jApplicationContext, deviceType);
+    if (!jCameraTextureRenderer.hasObject()) {
+        eslog("camera connect failed");
+        return MCameraDeviceManager();
+    }
+
+    std_shared_ptr<glkit::CameraTextureRenderer> camera(new glkit::CameraTextureRenderer(jCameraTextureRenderer.globalRef()));
+    MCameraDeviceManager result(new CameraDeviceManager(camera));
+
+    return result;
+}
+
 }
