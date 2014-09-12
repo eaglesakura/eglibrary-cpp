@@ -2,7 +2,7 @@
 #define es_graphics_gl_SPRITEMANAGER_H_
 
 #include    "es/OpenGL.hpp"
-#include    "es/Sprite.hpp"
+#include    "es/graphics/gl/sprite/Quad.h"
 
 namespace es {
 

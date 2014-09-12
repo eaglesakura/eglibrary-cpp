@@ -80,7 +80,7 @@ enum PixelFormat_e {
      * GL_UNSIGNED_BYTE
      */
 #ifdef  BUILD_Android
-    PixelFormat_NativeRGBA = PixelFormat_RGBA8888,
+    PixelFormat_NativeRGBA = PixelFormat_BGRA8888,
 #else
 PixelFormat_NativeRGBA = PixelFormat_RGBA8888,
 #endif

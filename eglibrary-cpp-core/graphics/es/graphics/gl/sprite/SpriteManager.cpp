@@ -65,6 +65,11 @@ void SpriteManager::bind() {
         display->setVirtualDisplaySize(surfaceSize.x, surfaceSize.y);
         display->updateViewport(VirtualDisplay::FitType_Auto);
     }
+    MRenderState state = context->getRenderState();
+    {
+        const RectF &vp = display->getDisplayViewport();
+        state->viewport((int) vp.left, (int) vp.top, (int)vp.width(), (int)vp.height());
+    }
 
     if (shader) {
         shader->bind();
@@ -79,7 +84,9 @@ void SpriteManager::bind() {
  * レンダリング終了を宣言する
  */
 void SpriteManager::unbind() {
-    context.reset();
+    if (context) {
+        context.reset();
+    }
 }
 
 /**
@@ -103,7 +110,7 @@ void SpriteManager::rendering(const float x, const float y, const float width, c
 //        eslog("translateX(%f) translateY(%f) sizeX(%f) sizeY(%f)", translateX, translateY, sizeX, sizeY);
     }
 
-    // レンダリングを行う
+// レンダリングを行う
     quad->rendering();
 }
 
@@ -111,15 +118,15 @@ void SpriteManager::rendering(const float x, const float y, const float width, c
  * レンダリングを行う
  */
 void SpriteManager::renderingImage(MTexture image, const float srcX, const float srcY, const float srcW, const float srcH, const float dstX, const float dstY, const float dstWidth, const float dstHeight, const float degree, const rgba32 rgba) {
-    // テクスチャを転送する
+// テクスチャを転送する
     if (image) {
         uniform.texture.upload(image, context);
     }
-    // ブレンド色を設定する
+// ブレンド色を設定する
     uniform.color.upload(rgba);
-    // ポリゴン回転を設定する
+// ポリゴン回転を設定する
     uniform.rotate.upload(es::degree2radian(degree));
-    // アスペクト比を転送する
+// アスペクト比を転送する
     uniform.aspect.upload(getSurfaceAspect());
 
     if (image) {

@@ -14,6 +14,8 @@ class NanoTimer {
 
 public:
     NanoTimer() {
+        start();
+        end();
     }
     ~NanoTimer() {
     }
@@ -26,6 +28,13 @@ public:
     NanoTimer& end() {
         endTime = std::chrono::high_resolution_clock::now();
         return *this;
+    }
+
+    /**
+     * 秒単位で取得する
+     */
+    double second() {
+        return ((double) std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count()) / 1000.0 / 1000.0 / 1000.0;
     }
 
     /**
