@@ -118,6 +118,11 @@ public:
     void unbindTextures(const uint num, const GLuint* textures);
 
     /**
+     * 全てのテクスチャを一括で外す
+     */
+    void unbindTextures();
+
+    /**
      * 引数のテクスチャがどれかにバインドされている場合、バインドを解除する。
      */
     inline void unbindTexture(const GLuint texture) {

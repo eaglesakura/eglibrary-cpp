@@ -67,6 +67,18 @@ void ShaderState::unbindTextures(const uint num, const GLuint* textures) {
     activeTexture(active);
 }
 
+/**
+ * 全てのテクスチャを一括で外す
+ */
+void ShaderState::unbindTextures() {
+    const uint active = toTextureIndex(textureContext.active);
+    for (int i = 0; i < GPUCapacity::getMaxTextureUnits(); ++i) {
+        activeTexture(i);
+        bindTexture(GL_TEXTURE_2D, 0);
+    }
+    activeTexture(active);
+}
+
 int ShaderState::getFreeTextureUnitIndex(const bool overrride) {
     for (int i = 0; i < GPUCapacity::getMaxTextureUnits(); ++i) {
         if (textureContext.textures[i] == 0) {

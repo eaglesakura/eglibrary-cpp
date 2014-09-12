@@ -54,7 +54,7 @@ enum PixelFormat_e {
     PixelFormat_RGBA_F16,
 
     /**
-     * 4byte
+     * 1byte
      * GL_ALPHA
      */
     PixelFormat_A8,
@@ -64,6 +64,11 @@ enum PixelFormat_e {
      * Depth
      */
     PixelFormat_Depth,
+
+    /**
+     * 輝度限定テクスチャ
+     */
+    PixelFormat_Luminance8,
 
     /**
      * RGBA各要素を含み、プラットフォームに最適化した状態でロードする
@@ -98,6 +103,7 @@ static inline const uint getPixelBytes(const PixelFormat_e fmt) {
             2, // LuminanceF16
             8, // RGBA_F16
             1, // A8
+            1, // Luminance8
             };
 
     return size[fmt];
@@ -347,9 +353,11 @@ static inline GLenum toGLPixelFormat(const PixelFormat_e format) {
 #else
             GL_RGBA, // RGBA8888
 #endif
-            GL_LUMINANCE, GL_RGBA, // RGBA F16
+            GL_LUMINANCE, // L-16
+            GL_RGBA, // RGBA F16
             GL_ALPHA, // A8
             GL_DEPTH_COMPONENT, // Depth
+            GL_LUMINANCE, // L8
             //
             };
     return PIXEL_FORMATS[format];
@@ -372,6 +380,7 @@ static inline GLenum toGLPixelDataType(const PixelFormat_e format) {
             GL_HALF_FLOAT_OES, // RGBA F16
             GL_UNSIGNED_BYTE, // A8
             GL_UNSIGNED_SHORT, // Depth
+            GL_UNSIGNED_BYTE, // Luminance8
             //
             };
     return PIXEL_TYPES[format];

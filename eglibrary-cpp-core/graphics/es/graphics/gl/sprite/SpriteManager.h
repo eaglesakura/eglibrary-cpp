@@ -101,6 +101,10 @@ public:
         return display;
     }
 
+    virtual MShaderProgram getShader() {
+        return shader;
+    }
+
     /**
      * 四角形描画を行う
      */
