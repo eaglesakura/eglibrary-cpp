@@ -114,6 +114,19 @@ public:
     virtual ~Texture();
 
     /**
+     * 画像としての幅と高さを指定する。
+     *
+     * この設定はSpriteとして使用する際に重要となるが、実際のテクスチャサイズを超えて生成することは出来ない。
+     */
+    virtual void setImageSize(uint x, uint y) {
+        assert(x <= getTextureWidth());
+        assert(y <= getTextureHeight());
+
+        size.img_width = x;
+        size.img_height = y;
+    }
+
+    /**
      * 画像としての幅を取得する。
      */
     virtual uint getWidth() const {

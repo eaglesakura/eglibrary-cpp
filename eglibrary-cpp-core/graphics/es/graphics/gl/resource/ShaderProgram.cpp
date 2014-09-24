@@ -107,10 +107,14 @@ static GLint compileShader(const char* shader_source, const GLenum GL_XXXX_SHADE
  */
 static GLuint buildProgram(const char* vertex_shader_source, const char* fragment_shader_source) {
     const GLuint vertex_shader = compileShader(vertex_shader_source, GL_VERTEX_SHADER);
-    const GLuint fragment_shader = compileShader(fragment_shader_source, GL_FRAGMENT_SHADER);
+    if (!vertex_shader) {
+        eslog("vertex shader compile error");
+        return 0;
+    }
 
-    if (vertex_shader == 0 || fragment_shader == 0) {
-        eslog("shader compile error (%x / %x)", vertex_shader, fragment_shader);
+    const GLuint fragment_shader = compileShader(fragment_shader_source, GL_FRAGMENT_SHADER);
+    if (!fragment_shader) {
+        eslog("fragment shader compile error");
         return 0;
     }
 

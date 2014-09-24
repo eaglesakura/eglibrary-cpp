@@ -17,9 +17,9 @@ uniform mediump mat4    unif_texm;
 #define poly_height    poly_data.w
 
 //
-attribute vec4 vTexCoord;
-attribute vec4 vPosition;
-varying vec2 fTexCoord;
+attribute mediump vec4 vTexCoord;
+attribute mediump vec4 vPosition;
+varying mediump vec2 fTexCoord;
 
 void main() {
    // 位置操作
@@ -57,6 +57,6 @@ void main() {
 
    // テクスチャ操作
    {
-       fTexCoord.xy = (unif_texm * vTexCoord).xy;
+       fTexCoord.xy = (unif_texm * vec4(vTexCoord.x, 1.0 - vTexCoord.y, 0.0, 1.0)).xy;
    }
 }

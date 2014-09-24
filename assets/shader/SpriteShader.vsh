@@ -3,7 +3,6 @@
  * poly_yについては2D座標系を基本として、画面左上が(0, 0)、画面右下が(1, 1)として扱う。
  */
 // ポリゴンのXYWH
-
 uniform mediump vec4    poly_data;
 uniform mediump float   aspect;
 // ポリゴンの回転角度
@@ -25,10 +24,10 @@ uniform bool	colorOnly;
 #define poly_uv_h      poly_uv.w
 
 //
-attribute vec4 vTexCoord;
-attribute vec4 vPosition;
+attribute mediump vec4 vTexCoord;
+attribute mediump vec4 vPosition;
 
-varying vec2 fTexCoord;
+varying mediump vec2 fTexCoord;
 
 void main() {
 	mediump mat4 mat = mat4(1.0);

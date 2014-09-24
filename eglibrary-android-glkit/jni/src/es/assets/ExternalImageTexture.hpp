@@ -21,12 +21,15 @@ class ExternalImageTexture: public Texture {
      * UV操作用行列
      */
     Matrix4x4 uvMatrix;
+
+    int updatedNum;
 public:
     ExternalImageTexture() :
             Texture() {
         // external_oes必須
         setBindTarget(GL_TEXTURE_EXTERNAL_OES);
         renderingEnable = false;
+        updatedNum = 0;
     }
 
     virtual ~ExternalImageTexture() {
@@ -109,7 +112,14 @@ public:
         // バッファをコピーする
         memcpy(uvMatrix.m, matrixBuffer, sizeof(float) * 16);
 
-        renderingEnable = true;
+//        eslog("matrix[%.2f, %.2f, %.2f, %.2f]", uvMatrix.m[0][0], uvMatrix.m[0][1], uvMatrix.m[0][2], uvMatrix.m[0][3]);
+//        eslog("matrix[%.2f, %.2f, %.2f, %.2f]", uvMatrix.m[1][0], uvMatrix.m[1][1], uvMatrix.m[1][2], uvMatrix.m[1][3]);
+//        eslog("matrix[%.2f, %.2f, %.2f, %.2f]", uvMatrix.m[2][0], uvMatrix.m[2][1], uvMatrix.m[2][2], uvMatrix.m[2][3]);
+//        eslog("matrix[%.2f, %.2f, %.2f, %.2f]", uvMatrix.m[3][0], uvMatrix.m[3][1], uvMatrix.m[3][2], uvMatrix.m[3][3]);
+
+        // 正常に行列が取得できるか、ある程度の計算回数を過ぎたらもう問題ないだろう
+        renderingEnable = (!uvMatrix.isIdentity(0.00001f) || updatedNum > 30);
+        ++updatedNum;
         return true;
     }
 

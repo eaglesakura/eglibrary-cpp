@@ -39,6 +39,14 @@ public:
         surfaceSize.set((int16_t) x, (int16_t) y);
     }
 
+    /**
+     * 標準的な左上2D座標系を基本としてViewportを指定する
+     */
+    void viewport2D(int x, int y, int w, int h) {
+        y = surfaceSize.y - h + y; // 必要なサイズだけ上げ底にする
+        getRenderState()->viewport(x, y, w, h);
+    }
+
     const Vector2i16& getSurfaceSize() const {
         return surfaceSize;
     }
