@@ -89,9 +89,12 @@ public:
 
     /**
      * 仮想ディスプレイのセットアップを行う
+     * @return 古いVirtualDisplay
      */
-    virtual void setVirtualDisplay(MVirtualDisplay display) {
+    virtual MVirtualDisplay setVirtualDisplay(MVirtualDisplay display) {
+        MVirtualDisplay result = this->display;
         this->display = display;
+        return result;
     }
 
     /**

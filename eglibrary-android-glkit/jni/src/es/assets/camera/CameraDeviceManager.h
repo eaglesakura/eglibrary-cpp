@@ -23,38 +23,19 @@ enum CameraOrientationType_e {
     /**
      *
      */
-    CameraOrientationType_0 = glkit::CameraTextureRenderer::ORIENTATION_0,
+    CameraOrientationType_0 = 0,
     /**
      *
      */
-    CameraOrientationType_90 = glkit::CameraTextureRenderer::ORIENTATION_90,
+    CameraOrientationType_90 = 90,
     /**
      *
      */
-    CameraOrientationType_180 = glkit::CameraTextureRenderer::ORIENTATION_180,
+    CameraOrientationType_180 = 180,
     /**
      *
      */
-    CameraOrientationType_270 = glkit::CameraTextureRenderer::ORIENTATION_270,
-};
-
-enum CameraAutofocusType_e {
-    /**
-     *
-     */
-    CameraAutofocusType_None = glkit::CameraTextureRenderer::AUTOFOCUS_NONE,
-    /**
-     *
-     */
-    CameraAutofocusType_Processing = glkit::CameraTextureRenderer::AUTOFOCUS_PROCESSING,
-    /**
-     *
-     */
-    CameraAutofocusType_Failed = glkit::CameraTextureRenderer::AUTOFOCUS_FAILED,
-    /**
-     *
-     */
-    CameraAutofocusType_Completed = glkit::CameraTextureRenderer::AUTOFOCUS_COMPLETED,
+    CameraOrientationType_270 = 270,
 };
 
 class CameraDeviceManager: public Object {
