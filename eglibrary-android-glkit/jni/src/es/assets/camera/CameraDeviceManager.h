@@ -112,6 +112,13 @@ public:
      * カメラを解放する
      */
     virtual void dispose();
+
+    /**
+     * プレビューサイズを得る
+     */
+    Vector2i16 getPreviewSize() const {
+        return Vector2i16(camera->getPreviewWidth(), camera->getPreviewHeight());
+    }
 };
 
 /**

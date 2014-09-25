@@ -57,6 +57,13 @@ inline uint toPowerOfTwo(const uint size) {
 }
 
 /**
+ * サイズが2のn乗になるように修正する
+ */
+inline uint toPowerOfTwo(const uint x, const uint y) {
+    return std::max(toPowerOfTwo(x), toPowerOfTwo(y));
+}
+
+/**
  * 特定値に近づくように値を移動する
  */
 template<typename T>

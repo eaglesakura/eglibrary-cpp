@@ -83,6 +83,19 @@ void RenderState::viewport(int x, int y, int width, int heidht) {
     }
 }
 
+void RenderState::clearColorI(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+    clearColor((float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f);
+}
+
+void RenderState::clearColor(float r, float g, float b, float a) {
+    glstates *cur = get();
+    Color rgba = Color::fromRGBAf(r, g, b, a);
+    if (rgba != cur->clear) {
+        cur->clear = rgba;
+        glClearColor(r, g, b, a);
+    }
+}
+
 /**
  * フレームバッファを使用する
  */

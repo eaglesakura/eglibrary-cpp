@@ -122,6 +122,13 @@ struct _Vector2 {
     }
 
     /**
+     * POTサイズに変換する
+     */
+    uint pot() const {
+        return es::toPowerOfTwo((uint) x, (uint) y);
+    }
+
+    /**
      * ベクトルの長さを正規化する
      */
     void normalize() {

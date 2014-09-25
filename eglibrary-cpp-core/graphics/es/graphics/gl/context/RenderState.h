@@ -180,6 +180,9 @@ public:
      */
     void viewport(int x, int y, int width, int heidht);
 
+    void clearColorI(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+    void clearColor(float r, float g, float b, float a);
+
     /**
      *
      */
