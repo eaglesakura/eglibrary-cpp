@@ -1,10 +1,3 @@
-/*
- * Macro.hpp
- *
- *  Created on: 2014/08/23
- *      Author: eaglesakura
- */
-
 #ifndef es_system_MACRO_HPP_
 #define es_system_MACRO_HPP_
 

@@ -32,11 +32,11 @@ public:
 
     template<typename T>
     static std_shared_ptr<T> get(const long_shared_pointer lp) {
-        std_shared_ptr<T> *ptr = reinterpret_cast< std_shared_ptr<T>*>(lp);
+        std_shared_ptr<T> *ptr = reinterpret_cast<std_shared_ptr<T>*>(lp);
         if (ptr) {
             return *ptr;
         } else {
-            return std_shared_ptr < T > (nullptr);
+            return std_shared_ptr < T >(nullptr);
         }
     }
 

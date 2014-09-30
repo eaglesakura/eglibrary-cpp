@@ -29,7 +29,6 @@
 namespace es {
 typedef std::recursive_mutex es_mutex;
 typedef std::unique_lock<es_mutex> es_mutex_lock;
-
 }
 
 #endif /* EGLIBRARY_HPP_ */

@@ -17,19 +17,13 @@ inline char* __getFileName(const char* __file__) {
 }
 
 enum LogType_e {
-    /**
-     * 常に出力する
-     */
+    /* 通常出力 */
     LogType_Info,
 
-    /**
-     * デバッグ中のみ表示したい
-     */
+    /* デバッグ中のみ表示したい */
     LogType_Debug,
 
-    /**
-     * 特に重要なログで表示する
-     */
+    /* 特に重要なログで表示する */
     LogType_Alert,
 };
 
