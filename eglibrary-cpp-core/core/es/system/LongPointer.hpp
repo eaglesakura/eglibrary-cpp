@@ -22,7 +22,7 @@ typedef int64_t long_shared_pointer;
  * 整数変換したポインタを扱う。
  * 主にNDKのブリッジで使用する。
  */
-class LongShraredPtr {
+class LongSharedPtr {
 public:
     template<typename T>
     static long_shared_pointer create(const std_shared_ptr<T> p) {
@@ -63,7 +63,7 @@ public:
 /**
  * ポインタを取得する
  */
-#define es_longpointer(type, ptr)   ::es::LongShraredPtr::get< type >(ptr)
+#define es_longpointer(type, ptr)   ::es::LongSharedPtr::get< type >(ptr)
 
 }
 
