@@ -2,6 +2,7 @@
 #define BUFFER_HPP_
 
 #include    "es/eglibrary.hpp"
+#include    "es/memory/SafeArray.hpp"
 #include    <malloc.h>
 
 namespace es {
@@ -27,7 +28,7 @@ public:
         this->_length = _len;
     }
 
-    ByteBuffer(const ByteBuffer& cpy) {
+    ByteBuffer(const ByteBuffer &cpy) {
         this->buffer = cpy.buffer;
         this->_length = cpy._length;
     }
@@ -36,7 +37,7 @@ public:
 
     }
 
-    uint8_t* get() const {
+    uint8_t *get() const {
         return buffer.get();
     }
 
@@ -51,28 +52,30 @@ public:
 
 class Buffer {
     Buffer();
+
     ~Buffer();
+
 public:
 
     /**
      * バッファを確保する
      */
     static ByteBuffer create(uint bytes) {
-        return ByteBuffer( std_shared_ptr<uint8_t>(static_cast<uint8_t*>(malloc(bytes)), free), bytes);
+        return ByteBuffer(std_shared_ptr<uint8_t>(static_cast<uint8_t *>(malloc(bytes)), free), bytes);
     }
 
     /**
      * 0クリアされたバッファを生成する
      */
     static ByteBuffer createZeroBuffer(uint bytes) {
-        return ByteBuffer(std_shared_ptr<uint8_t>(static_cast<uint8_t*>(calloc(1, bytes)), free), bytes);
+        return ByteBuffer(std_shared_ptr<uint8_t>(static_cast<uint8_t *>(calloc(1, bytes)), free), bytes);
     }
 
     /**
      * 指定バイト数オフセットさせたポインタを取得する
      */
-    static void* offsetBytes(const void* origin, const int offsets) {
-        return (void*) (((uint8_t*) origin) + offsets);
+    static void *offsetBytes(const void *origin, const int offsets) {
+        return (void *) (((uint8_t *) origin) + offsets);
     }
 };
 

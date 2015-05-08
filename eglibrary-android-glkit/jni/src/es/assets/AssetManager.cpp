@@ -4,6 +4,22 @@
 
 namespace es {
 
+
+MappedAsset::MappedAsset(AAssetManager *pAssetManager, AAsset *pAsset) {
+    assert(pAssetManager);
+    assert(pAsset);
+
+    this->pAssetManager = pAssetManager;
+    this->pAsset = pAsset;
+}
+
+MappedAsset::~MappedAsset() {
+    AAsset_close(pAsset);
+}
+
+}
+
+namespace es {
 AssetManager::AssetManager(::jc::lang::object_wrapper jAssetManager) {
     assert(jAssetManager.getJobject());
 
@@ -20,7 +36,7 @@ AssetManager::~AssetManager() {
  *
  * 読み込みに失敗した場合、nullptrを返却する。
  */
-ByteBuffer AssetManager::load(const char* path) {
+ByteBuffer AssetManager::load(const char *path) {
     AAsset *pAsset = AAssetManager_open(assets, path, AASSET_MODE_BUFFER);
 
     if (pAsset == nullptr) {
@@ -37,11 +53,31 @@ ByteBuffer AssetManager::load(const char* path) {
 
     // コピーする
     {
-        const void* p = AAsset_getBuffer(pAsset);
+        const void *p = AAsset_getBuffer(pAsset);
         assert(p);
 
         memcpy(result.get(), p, bufferSize);
     }
+
+    AAsset_close(pAsset);
+
+    return result;
+}
+
+std_shared_ptr<MappedAsset> AssetManager::mmap(const char *path) {
+    AAsset *pAsset = AAssetManager_open(assets, path, AASSET_MODE_BUFFER);
+
+    if (pAsset == nullptr) {
+        eslog("load error(%s)", path);
+        return std_shared_ptr<MappedAsset>();
+    }
+    uint bufferSize = AAsset_getLength(pAsset);
+    assert(bufferSize);
+    eslog("mapping completed(%d bytes / %s)", bufferSize, path);
+
+    std_shared_ptr<MappedAsset> result(new MappedAsset(assets, pAsset));
+    result->buffer.ptr = (uint8_t *) AAsset_getBuffer(pAsset);
+    result->buffer.length = bufferSize;
 
     return result;
 }

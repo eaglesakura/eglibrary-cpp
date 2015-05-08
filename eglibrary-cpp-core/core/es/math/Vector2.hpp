@@ -2,7 +2,7 @@
 #define es_math_VEC2_HPP_
 
 #include    "es/eglibrary.hpp"
-#include    <math.h>
+#include    "es/math/Math.hpp"
 
 namespace es {
 

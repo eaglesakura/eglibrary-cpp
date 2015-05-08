@@ -28,20 +28,20 @@ struct unsafe_array {
 
     template<typename value_type2>
     unsafe_array(const value_type2 *p, const int length) {
-        this->ptr = (value_type*) p;
+        this->ptr = (value_type *) p;
         this->length = length;
     }
 
     template<typename value_type2>
     unsafe_array(const unsafe_array<value_type2> &cpy) {
-        this->ptr = (value_type*) cpy.ptr;
+        this->ptr = (value_type *) cpy.ptr;
         this->length = cpy.length;
     }
 
     /**
      * オペレータアクセスを提供する
      */
-    inline value_type& operator[](const int index) {
+    inline value_type &operator[](const int index) {
         assert(index < length);
         return ptr[index];
     }
@@ -49,15 +49,26 @@ struct unsafe_array {
     /**
      * オペレータアクセスを提供する
      */
-    inline const value_type& operator[](const int index) const {
+    inline const value_type &operator[](const int index) const {
         assert(index < length);
         return ptr[index];
+    }
+
+    inline unsafe_array<value_type> &operator+=(int num) {
+        assert(length >= num);
+        ptr += num;
+        length -= num;
+
+        if (!length) {
+            ptr = nullptr;
+        }
+        return *this;
     }
 
     /**
      * ポインタを次へ移動する
      */
-    inline unsafe_array<value_type>& operator++() {
+    inline unsafe_array<value_type> &operator++() {
         ++ptr;
         --length;
         if (!length) {
@@ -69,7 +80,7 @@ struct unsafe_array {
     /**
      * アロー演算子を提供する
      */
-    inline value_type* operator->() const {
+    inline value_type *operator->() const {
         assert(ptr);
         return ptr;
     }
@@ -77,7 +88,7 @@ struct unsafe_array {
     /**
      * 参照を提供する
      */
-    inline value_type& operator*() const {
+    inline value_type &operator*() const {
         assert(ptr);
         return *ptr;
     }
@@ -95,6 +106,15 @@ struct unsafe_array {
     bool operator!() const {
         return ptr == nullptr;
     }
+
+    /**
+     * 強制的に型変換して返却する
+     */
+    template<typename result_type>
+    result_type &as() const {
+        assert(length >= sizeof(result_type)); // 変換に必要な最低容量を満たしていなければならない
+        return *((result_type *) ptr);
+    }
 };
 
 /**
@@ -107,12 +127,13 @@ private:
     /**
      * コピーコンストラクタはサポートしない
      */
-    safe_array(const safe_array& cpy);
+    safe_array(const safe_array &cpy);
 
     /**
      * コピーをサポートしない
      */
-    safe_array& operator=(const safe_array &cpy);
+    safe_array &operator=(const safe_array &cpy);
+
 public:
     /**
      * 配列本体
@@ -233,7 +254,7 @@ public:
     /**
      * オペレータアクセスを提供する
      */
-    inline value_type& operator[](const int index) {
+    inline value_type &operator[](const int index) {
         assert(index < length);
         return ptr[index];
     }
@@ -241,7 +262,7 @@ public:
     /**
      * オペレータアクセスを提供する
      */
-    inline const value_type& operator[](const int index) const {
+    inline const value_type &operator[](const int index) const {
         assert(index < length);
         return ptr[index];
     }
