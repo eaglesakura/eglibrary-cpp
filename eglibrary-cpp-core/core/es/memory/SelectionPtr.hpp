@@ -17,7 +17,7 @@ std_shared_ptr<T> downcast(const std_shared_ptr<T2> &obj) {
     try {
         return ::std::dynamic_pointer_cast < T > (obj);
     } catch (...) {
-        jcalertf("catch downcast error(%0xx)", obj.get());
+        eslog("catch downcast error(%0xx)", obj.get());
         return std_shared_ptr<T>();
     }
 }

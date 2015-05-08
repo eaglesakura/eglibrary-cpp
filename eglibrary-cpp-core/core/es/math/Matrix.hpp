@@ -242,10 +242,10 @@ struct Matrix {
         for (int r = 0; r < ROW; ++r) {
             switch (COLM) {
             case 3:
-                jclogf("  %d | %05.3f, %05.3f, %05.3f", r, m[r][0], m[r][1], m[r][2]);
+                eslog("  %d | %05.3f, %05.3f, %05.3f", r, m[r][0], m[r][1], m[r][2]);
                 break;
             case 4:
-                jclogf("  %d | %05.3f, %05.3f, %05.3f, %05.3f", r, m[r][0], m[r][1], m[r][2], m[r][3]);
+                eslog("  %d | %05.3f, %05.3f, %05.3f, %05.3f", r, m[r][0], m[r][1], m[r][2], m[r][3]);
                 break;
             }
         }
