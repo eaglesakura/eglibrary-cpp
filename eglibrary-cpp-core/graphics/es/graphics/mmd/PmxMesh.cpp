@@ -36,4 +36,11 @@ void PmxMesh::allocVertices(const uint numVertices, const uint numExtraUV) {
         staticVertices.alloc(vertexSize * numVertices);
     }
 }
+
+void PmxMesh::allocIndices(const uint numIndex, const uint indexBytes) {
+    assert(numIndex > 0);
+    assert(indexBytes == 1 || indexBytes == 2 || indexBytes == 4);
+
+    indices.alloc(numIndex * indexBytes);
+}
 }

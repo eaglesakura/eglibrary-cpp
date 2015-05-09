@@ -141,6 +141,18 @@ class PmxMesh : public Object {
      * AABB最大位置
      */
     Vector3f maxPosition;
+
+    /**
+     * インデックスバッファ
+     *
+     * 実データはuint8 / uint16 / uint32の何れかになる。
+     */
+    safe_array<uint8_t> indices;
+
+    /**
+     * インデックスバッファのバイト数
+     */
+    uint indexBytes;
 public:
     PmxMesh();
 
@@ -150,6 +162,28 @@ public:
      * 頂点を確保する
      */
     virtual void allocVertices(const uint numVertices, const uint numExtraUV);
+
+    /**
+     * インデックスバッファを確保する
+     *
+     * numIndex * indexBytesの容量を確保する
+     */
+    virtual void allocIndices(const uint numIndex, const uint indexBytes);
+
+
+    /**
+     * 1インデックスのサイズ(byte)を取得する
+     */
+    uint getIndexBytes() const {
+        return indexBytes;
+    }
+
+    /**
+     * インデックスバッファのポインタを取得する
+     */
+    virtual uint8_t *getIndicesPointer() const {
+        return indices.ptr;
+    }
 
     /**
      * 固定頂点の1頂点のサイズ(byte)を取得する
@@ -181,6 +215,20 @@ public:
      */
     virtual uint32_t getVertexCount() const {
         return dynamicVertices.length;
+    }
+
+    /**
+     * インデックスバッファの数を取得する
+     */
+    virtual uint32_t getIndicesCount() const {
+        return indices.length / indexBytes;
+    }
+
+    /**
+     * 面数を取得する
+     */
+    virtual uint32_t getFacesCount() const {
+        return getIndicesCount() / 3;
     }
 
     /**

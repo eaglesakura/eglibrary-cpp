@@ -16,4 +16,14 @@ int StringUtils::split(const std::string &origin, const std::string &delim, std:
     return result->size() - oldSize;
 }
 
+std::string StringUtils::format(const char *fmt, ...) {
+    std_shared_ptr<char> temp(new char[strlen(fmt) + 256]);
+    va_list ap;
+    va_start(ap, fmt);
+    {
+        vsprintf(temp.get(), fmt, ap);
+    }
+    va_end(ap);
+    return std::string(temp.get());
+}
 }

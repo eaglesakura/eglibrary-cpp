@@ -58,6 +58,16 @@ protected:
      */
     virtual bool loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result);
 
+    /**
+     * インデックス情報を取得する
+     */
+    virtual bool loadPmxFaces(MmdBufferDataLoader *loader, MPmxFile result);
+
+    /**
+     * マテリアル情報を取得する
+     */
+    virtual bool loadPmxMaterials(MmdBufferDataLoader *loader, MPmxFile result);
+
 public:
     MmdFileLoader();
 

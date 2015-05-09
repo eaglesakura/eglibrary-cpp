@@ -9,6 +9,9 @@ namespace es {
 std::string MmdBufferDataLoader::loadTextBuffer() {
     uint32_t len;
     loadBuffer(&len, 4);
+    if (len == 0) {
+        return std::string();
+    }
 
     // バッファを変換する
 

@@ -3,36 +3,45 @@
 //
 
 #include <es/graphics/mmd/PmxMesh.h>
+#include <es/util/StringUtil.h>
 #include "MmdFileLoader.h"
 
 namespace es {
 
 MmdFileLoader::MmdFileLoader() {
-
+    
 }
 
 MmdFileLoader::~MmdFileLoader() {
-
+    
 }
 
 MPmxFile MmdFileLoader::loadPmx(const unsafe_array<uint8_t> buffer) {
     MmdBufferDataLoader loader(buffer);
-
+    
     MPmxFile result(new PmxFile());
     if (!loadPmxHeader(&loader, result)) {
         return MPmxFile();
     }
-
+    
     result->figure.reset(new PmxFigure());
     if (!loadPmxVertices(&loader, result)) {
         return MPmxFile();
     }
 
+    if (!loadPmxFaces(&loader, result)) {
+        return MPmxFile();
+    }
+
+    if (!loadPmxMaterials(&loader, result)) {
+        return MPmxFile();
+    }
+    
     return result;
 }
 
 bool MmdFileLoader::loadPmxHeader(MmdBufferDataLoader *loader, MPmxFile result) {
-
+    
     // load headers
     {
         const std::string magic = loader->loadFileMagic(3);
@@ -42,7 +51,7 @@ bool MmdFileLoader::loadPmxHeader(MmdBufferDataLoader *loader, MPmxFile result) 
         }
         loader->loadByte();  // skip 1byte
     }
-
+    
     // load fileversion
     result->header->version = loader->loadFloat();
     if (result->header->version > 2) {
@@ -52,7 +61,7 @@ bool MmdFileLoader::loadPmxHeader(MmdBufferDataLoader *loader, MPmxFile result) 
         eslog("PMX version(%f)", result->header->version);
         const uint numHeaderDatas = loader->loadByte();
         assert(numHeaderDatas == 8); // PMX 2.0 = 8
-
+        
         result->header->encodeType = loader->loadByte();
         result->header->addUVCount = loader->loadByte();
         result->header->vertexIndexSize = loader->loadByte();
@@ -61,7 +70,7 @@ bool MmdFileLoader::loadPmxHeader(MmdBufferDataLoader *loader, MPmxFile result) 
         result->header->boneIndexSize = loader->loadByte();
         result->header->morphIndexSize = loader->loadByte();
         result->header->rigidIndexSize = loader->loadByte();
-
+        
         eslog("encodeType(%d)", (int) result->header->encodeType);
         eslog("addUVCount(%d)", (int) result->header->addUVCount);
         eslog("vertexIndexSize(%d)", (int) result->header->vertexIndexSize);
@@ -70,10 +79,10 @@ bool MmdFileLoader::loadPmxHeader(MmdBufferDataLoader *loader, MPmxFile result) 
         eslog("boneIndexSize(%d)", (int) result->header->boneIndexSize);
         eslog("morphIndexSize(%d)", (int) result->header->morphIndexSize);
         eslog("rigidIndexSize(%d)", (int) result->header->rigidIndexSize);
-
+        
         loader->setTextEncodeType(result->header->encodeType);
     }
-
+    
     // load modelinfo
     result->info->name = loader->loadTextBuffer();
     result->info->nameEng = loader->loadTextBuffer();
@@ -85,21 +94,21 @@ bool MmdFileLoader::loadPmxHeader(MmdBufferDataLoader *loader, MPmxFile result) 
     eslog("nameEng(%s)", result->info->nameEng.c_str());
 //    eslog("comment(%s)", result->info->comment.c_str());
 //    eslog("commentEng(%s)", result->info->commentEng.c_str());
-
+    
     return true;
 }
 
 bool MmdFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result) {
-
+    
     uint numVertices = loader->loadInt32();
     eslog("PMX numVertices(%d)", numVertices);
     assert(numVertices > 0);
     MPmxMesh mesh(new PmxMesh());
-
+    
     // 頂点を生成する
     const auto addUVCount = result->header->addUVCount;
     const auto boneIndexSize = result->header->boneIndexSize;
-
+    
     // デフォルトの頂点読み込み関数
     auto boneIndexLoadFunc = [loader, boneIndexSize](int16_t *result, int numBones) -> void {
         if (boneIndexSize == 2) {
@@ -114,20 +123,20 @@ bool MmdFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
             }
         }
     };
-
+    
     mesh->allocVertices(numVertices, addUVCount);
-
+    
     PmxDynamicVertex *dynamicVertex = mesh->getDynamicVerticesPointer();
     PmxMetaVertex *metaVertex = mesh->getMetaVerticesPointer();
     uint8_t *rawStaticVertex = mesh->getStaticVerticesPointer();
     const uint32_t staticVertexBytes = mesh->getStaticVertexBytes();
-
+    
     Vector3f maxPosition(-999999, -999999, -999999);
     Vector3f minPosition(999999, 999999, 999999);
-
+    
     for (int i = 0; i < numVertices; ++i) {
         PmxStaticVertex *staticVertex = (PmxStaticVertex *) rawStaticVertex;
-
+        
         // 各種データを読み込む
         loader->loadBuffer(&dynamicVertex->pos, sizeof(Vector3f));
         loader->loadBuffer(&dynamicVertex->normal, sizeof(Vector3f));
@@ -136,13 +145,13 @@ bool MmdFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
         for (int k = 0; k < addUVCount; ++k) {
             loader->loadBuffer(&(staticVertex->extraUv[k]), sizeof(Vector4f));
         }
-
+        
         // ボーン情報を読み込む
         metaVertex->boneType = loader->loadByte();
         if (i % 1000 == 0) {
             eslog("index(%d) bone(%d) pos(%.3f, %.3f, %.3f)", i, metaVertex->boneType, dynamicVertex->pos.x, dynamicVertex->pos.y, dynamicVertex->pos.z);
         }
-
+        
         switch (metaVertex->boneType) {
             case PmxMetaVertex::BDEF1:
                 boneIndexLoadFunc(metaVertex->boneIndices, 1);
@@ -162,7 +171,7 @@ bool MmdFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
                 boneIndexLoadFunc(metaVertex->boneIndices, 2);
                 metaVertex->boneWeights[0] = loader->loadFloat();
                 metaVertex->boneWeights[1] = 1.0f - metaVertex->boneWeights[0];
-
+        
                 loader->loadBuffer(&metaVertex->boneSdef.c, sizeof(Vector3f));
                 loader->loadBuffer(&metaVertex->boneSdef.r0, sizeof(Vector3f));
                 loader->loadBuffer(&metaVertex->boneSdef.r1, sizeof(Vector3f));
@@ -173,7 +182,7 @@ bool MmdFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
 #endif
         }
         loader->loadBuffer(&staticVertex->edgeMagnification, sizeof(float));
-
+        
         // 最小・最大位置を求める
         maxPosition.x = std::max(maxPosition.x, dynamicVertex->pos.x);
         maxPosition.y = std::max(maxPosition.y, dynamicVertex->pos.y);
@@ -181,19 +190,110 @@ bool MmdFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
         minPosition.x = std::min(maxPosition.x, dynamicVertex->pos.x);
         minPosition.y = std::min(maxPosition.y, dynamicVertex->pos.y);
         minPosition.z = std::min(maxPosition.z, dynamicVertex->pos.z);
-
+        
         // 次の頂点へ進める
         ++dynamicVertex;
         ++metaVertex;
         rawStaticVertex += staticVertexBytes;
     }
-
+    
     eslog("min(%.3f, %.3f, %.3f) max(%.3f, %.3f, %.3f) box WHD(%.3f, %.3f, %.3f)",
           minPosition.x, minPosition.y, minPosition.z,
           maxPosition.x, maxPosition.y, maxPosition.z,
           maxPosition.x - minPosition.x, maxPosition.y - minPosition.y, maxPosition.z - minPosition.z
     );
+    
+    mesh->setMinPosition(minPosition);
+    mesh->setMaxPosition(maxPosition);
+    result->figure->setMesh(mesh);
+    
+    return true;
+}
 
+bool MmdFileLoader::loadPmxFaces(MmdBufferDataLoader *loader, MPmxFile result) {
+    
+    const uint numIndices = loader->loadInt32();
+    eslog("numIndices index(%d) face(%d)", numIndices, numIndices / 3);
+    assert(numIndices > 0 && numIndices % 3 == 0);
+    
+    // インデックス情報を確保する
+    result->figure->getMesh()->allocIndices(numIndices, result->header->vertexIndexSize);
+    uint8_t *pointer = result->figure->getMesh()->getIndicesPointer();
+    loader->loadBuffer(pointer, numIndices * result->header->vertexIndexSize);
+
+    return true;
+}
+
+bool MmdFileLoader::loadPmxMaterials(MmdBufferDataLoader *loader, MPmxFile result) {
+
+    const uint numTextures = loader->loadInt32();
+    eslog("numTextures(%d)", numTextures);
+    safe_array<MPmxTexture> figureTextures;
+    safe_array<MPmxTexture> mmdToonTextures;    // デフォルトToonテクスチャ
+    figureTextures.reserve(numTextures);
+    mmdToonTextures.reserve(numTextures);
+
+    for (int i = 0; i < numTextures; ++i) {
+        const std::string path = loader->loadTextBuffer();
+        figureTextures[i].reset(new PmxTexture(path));
+        eslog("texture[%d] path(%s)", i, path.c_str());
+    }
+    for (int i = 0; i < mmdToonTextures.length; ++i) {
+        figureTextures[i].reset(new PmxTexture(StringUtils::format("%02d.bmp", i + 1)));
+    }
+
+    const uint numMaterials = loader->loadInt32();
+    eslog("numMaterials(%d)", numMaterials);
+
+    const uint textureIndexSize = result->header->textureIndexSize;
+
+    for (int i = 0; i < numMaterials; ++i) {
+        MPmxMaterial material(new PmxMaterial());
+        material->setName(loader->loadTextBuffer());
+        material->setNameEng(loader->loadTextBuffer());
+        eslog("material[%d] name(%s)", i, material->getName().c_str());
+
+        material->setDiffuse(loader->loadRGBA());
+        material->setSpecular(loader->loadRGB());
+        material->setShininess(loader->loadFloat());
+        material->setAmbient(loader->loadRGB());
+        material->setRenderFlags(loader->loadByte());
+        material->setEdgeColor(loader->loadRGBA());
+        material->setEdgeSize(loader->loadFloat());
+
+        {
+            int diffuseIndex = loader->loadIntN(textureIndexSize);
+            int sphereIndex = loader->loadIntN(textureIndexSize);
+            eslog("    diffuse(%d) sphere(%d)", diffuseIndex, sphereIndex);
+            if (diffuseIndex >= 0) {
+                material->setDiffuseTexture(figureTextures[diffuseIndex]);
+            }
+            if (sphereIndex >= 0) {
+                material->setSphereTexture(mmdToonTextures[sphereIndex]);
+            }
+        }
+        material->setSphereMode((PmxMaterial::SphereMode) loader->loadByte());
+        material->setSharedSphereToon(loader->loadByte() != 0);
+
+        {
+            int toonTextureIndex = loader->loadIntN(material->isSharedSphereToon() ? 1 : textureIndexSize);
+            eslog("    toonTextureIndex(%d) shared(%s)", toonTextureIndex, material->isSharedSphereToon() ? "true" : "false");
+            if (toonTextureIndex >= 0) {
+                if (material->isSharedSphereToon()) {
+                    // 共有toon
+                    material->setToonTexture(mmdToonTextures[toonTextureIndex]);
+                } else {
+                    // 固有Toonテクスチャ
+                    material->setToonTexture(figureTextures[toonTextureIndex]);
+                }
+            }
+        }
+        material->setMemo(loader->loadTextBuffer());
+        material->setIndicesCount(loader->loadInt32());
+
+        eslog("    memo(%s)", material->getMemo().c_str());
+        eslog("    numIndices(%d) faces(%d)", material->getIndicesCount(), material->getIndicesCount() / 3);
+    }
 
     return true;
 }

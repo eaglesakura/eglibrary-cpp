@@ -5,6 +5,7 @@
 #ifndef ASSEMBLE_MMDBUFFERDATALOADER_HPP
 #define ASSEMBLE_MMDBUFFERDATALOADER_HPP
 
+#include <es/graphics/Color.hpp>
 #include    "es/memory/SafeArray.hpp"
 
 namespace es {
@@ -63,14 +64,34 @@ public:
         return result;
     }
 
-    virtual uint16_t loadInt16() {
-        uint16_t result;
+    virtual int32_t loadIntN(uint bytes) {
+        switch (bytes) {
+            case 1:
+                return loadInt8();
+            case 2:
+                return loadInt16();
+            case 4:
+                return loadInt32();
+            default:
+                assert(false);
+                return 0;
+        }
+    }
+
+    virtual int8_t loadInt8() {
+        int8_t result;
         loadBuffer(&result, sizeof(result));
         return result;
     }
 
-    virtual uint32_t loadInt32() {
-        uint32_t result;
+    virtual int16_t loadInt16() {
+        int16_t result;
+        loadBuffer(&result, sizeof(result));
+        return result;
+    }
+
+    virtual int32_t loadInt32() {
+        int32_t result;
         loadBuffer(&result, sizeof(result));
         return result;
     }
@@ -79,6 +100,21 @@ public:
         float result;
         loadBuffer(&result, sizeof(result));
         return result;
+    }
+
+    virtual Color loadRGB() {
+        float r = loadFloat();
+        float g = loadFloat();
+        float b = loadFloat();
+        return Color::fromRGBAf(r, g, b, 1.0f);
+    }
+
+    virtual Color loadRGBA() {
+        float r = loadFloat();
+        float g = loadFloat();
+        float b = loadFloat();
+        float a = loadFloat();
+        return Color::fromRGBAf(r, g, b, a);
     }
 };
 
