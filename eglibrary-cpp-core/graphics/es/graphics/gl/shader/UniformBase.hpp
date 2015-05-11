@@ -48,7 +48,7 @@ public:
      */
     bool setLocation(const MShaderProgram program, const char* name) {
         location = program->getUniformLocation(name);
-        eslog("uniform location name(%s) -> %d", name, location);
+//        eslog("uniform location name(%s) -> %d", name, location);
         return valid();
     }
 };

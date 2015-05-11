@@ -51,7 +51,7 @@ public:
         assert(name);
 
         location = shader->getAttribLocation(name);
-        eslog("attribute location name(%s) -> %d", name, location);
+//        eslog("attribute location name(%s) -> %d", name, location);
         return valid();
     }
 
@@ -103,7 +103,7 @@ public:
     /**
      * 頂点属性の設定を行う
      */
-    bool attributePointer(const GLvoid* ptr = nullptr) {
+    bool attributePointer(const GLvoid* ptr = NULL) {
         // 無効な場合は何もしない
         if (!valid()) {
             return false;

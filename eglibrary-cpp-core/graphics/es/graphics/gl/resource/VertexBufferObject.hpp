@@ -12,7 +12,7 @@ namespace es {
  * 生成は内部的に行うが、廃棄はVRAMのgcに任せる
  * Context間を移動する際は必ずunbind()を行い、stateから外すこと。
  */
-class VertexBufferObject: public GLObject {
+class VertexBufferObject : public GLObject {
     /**
      * 確保したVBO
      */
@@ -36,7 +36,7 @@ public:
      * @param suage GL_STATIC_DRAW | GL_STREAM_DRAW | GL_DYNAMIC_DRAW
      */
     void bufferData(const void *vertices, const uint sizeof_vertex, const uint vertices_length, const GLenum usage) {
-        glBufferData(GL_ARRAY_BUFFER, sizeof_vertex * vertices_length, (GLvoid*) vertices, usage);
+        glBufferData(GL_ARRAY_BUFFER, sizeof_vertex * vertices_length, (GLvoid *) vertices, usage);
         assert_gl();
     }
 
@@ -50,7 +50,7 @@ public:
      */
     template<typename VertexType>
     void bufferData(const VertexType *vertices, const uint vertices_length, const GLenum usage) {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(VertexType) * vertices_length, (GLvoid*) vertices, usage);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(VertexType) * vertices_length, (GLvoid *) vertices, usage);
         assert_gl();
     }
 

@@ -25,6 +25,7 @@ void PmxMesh::allocVertices(const uint numVertices, const uint numExtraUV) {
     {
         dynamicVertices.alloc(numVertices);
         metaVertices.alloc(numVertices);
+        dynamicVertices.zeromemory();
         metaVertices.zeromemory();
     }
 
@@ -41,6 +42,7 @@ void PmxMesh::allocIndices(const uint numIndex, const uint indexBytes) {
     assert(numIndex > 0);
     assert(indexBytes == 1 || indexBytes == 2 || indexBytes == 4);
 
+    this->indexBytes = indexBytes;
     indices.alloc(numIndex * indexBytes);
 }
 }

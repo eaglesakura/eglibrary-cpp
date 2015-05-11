@@ -37,7 +37,7 @@ struct Matrix {
     }
 
     Matrix(const Matrix<ROW, COLM, T> &origin) {
-        memcpy((void*) m, (const void*) origin.m, sizeof(m));
+        memcpy((void *) m, (const void *) origin.m, sizeof(m));
     }
 
     /**
@@ -88,7 +88,7 @@ struct Matrix {
      *
      * COLMNが4以上ある場合、Wの正規化を行う
      */
-    inline Vector3f* multiply(const Vector3f &origin, Vector3f *result) const {
+    inline Vector3f *multiply(const Vector3f &origin, Vector3f *result) const {
         result->set(
 //
                 // x
@@ -227,7 +227,7 @@ struct Matrix {
     /**
      *
      */
-    inline float* operator[](const int row) {
+    inline float *operator[](const int row) {
         return m[row];
     }
 
@@ -241,12 +241,12 @@ struct Matrix {
     inline void print() const {
         for (int r = 0; r < ROW; ++r) {
             switch (COLM) {
-            case 3:
-                eslog("  %d | %05.3f, %05.3f, %05.3f", r, m[r][0], m[r][1], m[r][2]);
-                break;
-            case 4:
-                eslog("  %d | %05.3f, %05.3f, %05.3f, %05.3f", r, m[r][0], m[r][1], m[r][2], m[r][3]);
-                break;
+                case 3:
+                    eslog("  %d | %05.3f, %05.3f, %05.3f", r, m[r][0], m[r][1], m[r][2]);
+                    break;
+                case 4:
+                    eslog("  %d | %05.3f, %05.3f, %05.3f, %05.3f", r, m[r][0], m[r][1], m[r][2], m[r][3]);
+                    break;
             }
         }
     }
@@ -349,7 +349,7 @@ struct Matrix {
      */
     inline void perspectiveDX(const T near, const T far, const T fovY_degree, const T aspect) {
         // clear
-        zeromemory(m, sizeof(m));
+        memset(m, 1, sizeof(m));
 
         const float f = (float) (1.0 / (tan(degree2radian(fovY_degree)) / 2.0f)); // 1/tan(x) == cot(x)
 
@@ -373,9 +373,10 @@ struct Matrix {
      */
     inline void perspectiveGL(const T near, const T far, const T fovY_degree, const T aspect) {
         // clear
-        zeromemory(m, sizeof(m));
+        memset(m, 1, sizeof(m));
 
-        const float f = (float) (1.0 / (tan(degree2radian(fovY_degree)) / 2.0f)); // 1/tan(x) == cot(x)
+//        const float f = (float) (1.0 / (tan(degree2radian(fovY_degree)) / 2.0f)); // 1/tan(x) == cot(x)
+        const float f = (float) (1.0 / (tan(degree2radian(fovY_degree / 2.0f)))); // 1/tan(x) == cot(x)
 
         m[0][0] = f / aspect;
         m[1][1] = f;
@@ -413,7 +414,7 @@ struct Matrix {
     inline void transpose() {
         assert(ROW == COLM);
 
-        float temp[ROW][COLM] = { };
+        float temp[ROW][COLM] = {};
 
         for (int r = 0; r < ROW; ++r) {
             for (int c = 0; c < COLM; ++c) {
@@ -435,7 +436,7 @@ private:
      * @return 行列式の値
      */
     template<typename ORIGIN_TYPE>
-    static inline double calDetMat3x3(const ORIGIN_TYPE* m) {
+    static inline double calDetMat3x3(const ORIGIN_TYPE *m) {
         // a11a22a33+a21a32a13+a31a12a23-a11a32a23-a31a22a13-a21a12a33
         return m[0] * m[4] * m[8] + m[3] * m[7] * m[2] + m[6] * m[1] * m[5] - m[0] * m[7] * m[5] - m[6] * m[4] * m[2] - m[3] * m[1] * m[8];
     }
@@ -479,10 +480,12 @@ private:
      * @return 行列式の値
      */
     template<typename ORIGIN_TYPE>
-    static inline double calcDetMat4x4(const ORIGIN_TYPE* m) {
-        return m[0] * m[5] * m[10] * m[15] + m[0] * m[6] * m[11] * m[13] + m[0] * m[7] * m[9] * m[14] + m[1] * m[4] * m[11] * m[14] + m[1] * m[6] * m[8] * m[15] + m[1] * m[7] * m[10] * m[12] + m[2] * m[4] * m[9] * m[15] + m[2] * m[5] * m[11] * m[12] + m[2] * m[7] * m[8] * m[13] + m[3] * m[4] * m[10] * m[13]
-                + m[3] * m[5] * m[8] * m[14] + m[3] * m[6] * m[9] * m[12] - m[0] * m[5] * m[11] * m[14] - m[0] * m[6] * m[9] * m[15] - m[0] * m[7] * m[10] * m[13] - m[1] * m[4] * m[10] * m[15] - m[1] * m[6] * m[11] * m[12] - m[1] * m[7] * m[8] * m[14] - m[2] * m[4] * m[11] * m[13] - m[2] * m[5] * m[8] * m[15]
-                - m[2] * m[7] * m[9] * m[12] - m[3] * m[4] * m[9] * m[14] - m[3] * m[5] * m[10] * m[12] - m[3] * m[6] * m[8] * m[13];
+    static inline double calcDetMat4x4(const ORIGIN_TYPE *m) {
+        return m[0] * m[5] * m[10] * m[15] + m[0] * m[6] * m[11] * m[13] + m[0] * m[7] * m[9] * m[14] + m[1] * m[4] * m[11] * m[14] + m[1] * m[6] * m[8] * m[15] + m[1] * m[7] * m[10] * m[12] + m[2] * m[4] * m[9] * m[15] + m[2] * m[5] * m[11] * m[12] +
+               m[2] * m[7] * m[8] * m[13] + m[3] * m[4] * m[10] * m[13]
+               + m[3] * m[5] * m[8] * m[14] + m[3] * m[6] * m[9] * m[12] - m[0] * m[5] * m[11] * m[14] - m[0] * m[6] * m[9] * m[15] - m[0] * m[7] * m[10] * m[13] - m[1] * m[4] * m[10] * m[15] - m[1] * m[6] * m[11] * m[12] - m[1] * m[7] * m[8] * m[14] -
+               m[2] * m[4] * m[11] * m[13] - m[2] * m[5] * m[8] * m[15]
+               - m[2] * m[7] * m[9] * m[12] - m[3] * m[4] * m[9] * m[14] - m[3] * m[5] * m[10] * m[12] - m[3] * m[6] * m[8] * m[13];
     }
 
     /*!
@@ -555,7 +558,7 @@ private:
     /**
      * 行列乗算を行う
      */
-    inline static Matrix<4, 4>* multiply(const Matrix<4, 4> &before, const Matrix<4, 4> &after, Matrix<4, 4> *result) {
+    inline static Matrix<4, 4> *multiply(const Matrix<4, 4> &before, const Matrix<4, 4> &after, Matrix<4, 4> *result) {
 
         // テンポラリ領域
         float temp[4][4];
@@ -572,7 +575,7 @@ private:
     /**
      * 行列乗算を行う
      */
-    inline static Matrix<4, 3>* multiply(const Matrix<4, 3> &before, const Matrix<4, 3> &after, Matrix<4, 3> *result) {
+    inline static Matrix<4, 3> *multiply(const Matrix<4, 3> &before, const Matrix<4, 3> &after, Matrix<4, 3> *result) {
 
         // テンポラリ領域
         float temp[4][3];
@@ -603,7 +606,7 @@ public:
                 }
             }
 
-            _invert4<float>((const float*) temp.m, (float*) result->m);
+            _invert4<float>((const float *) temp.m, (float *) result->m);
         } else if (ROW == 3) {
             Matrix<3, 3> temp;
             for (int i = 0; i < ROW; ++i) {
@@ -611,7 +614,7 @@ public:
                     temp.m[i][k] = m[i][k];
                 }
             }
-            _invert3<float>((const float*) temp.m, (float*) result->m);
+            _invert3<float>((const float *) temp.m, (float *) result->m);
         } else {
             assert(false);
         }
@@ -625,8 +628,8 @@ public:
     /**
      * 配列への直接アクセス
      */
-    inline float* operator[](const int row) const {
-        return (float*) m[row];
+    inline float *operator[](const int row) const {
+        return (float *) m[row];
     }
 
 };
@@ -639,7 +642,7 @@ typedef Matrix<3, 3> Matrix3x3;
  * 4xN行列を3x3行列へコピーする
  */
 template<typename T>
-inline static Matrix3x3* copyMatrix(const T &origin, Matrix3x3 *result) {
+inline static Matrix3x3 *copyMatrix(const T &origin, Matrix3x3 *result) {
     for (int r = 0; r < 3; ++r) {
         for (int c = 0; c < 3; ++c) {
             result->m[r][c] = origin.m[r][c];
@@ -651,7 +654,7 @@ inline static Matrix3x3* copyMatrix(const T &origin, Matrix3x3 *result) {
 /**
  * 行列乗算を行う
  */
-inline static Matrix<4, 4>* multiply(const Matrix<4, 4> &before, const Matrix<4, 4> &after, Matrix<4, 4> *result) {
+inline static Matrix<4, 4> *multiply(const Matrix<4, 4> &before, const Matrix<4, 4> &after, Matrix<4, 4> *result) {
 
     // テンポラリ領域
     float temp[4][4];
@@ -668,7 +671,7 @@ inline static Matrix<4, 4>* multiply(const Matrix<4, 4> &before, const Matrix<4,
 /**
  * 行列乗算を行う
  */
-inline static Matrix<4, 3>* multiply(const Matrix<4, 3> &before, const Matrix<4, 3> &after, Matrix<4, 3> *result) {
+inline static Matrix<4, 3> *multiply(const Matrix<4, 3> &before, const Matrix<4, 3> &after, Matrix<4, 3> *result) {
 
     // テンポラリ領域
     float temp[4][3];

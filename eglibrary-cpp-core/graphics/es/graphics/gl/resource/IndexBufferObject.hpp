@@ -12,11 +12,18 @@ namespace es {
  * 生成は内部で行うが、廃棄はVRAMクラスのgcに任せる。
  * Context間を移動する場合は必ずunbindを行い、ステートの残骸を残さないよう注意すること
  */
-class IndexBufferObject: public GLObject {
+class IndexBufferObject : public GLObject {
     /**
      * 確保したインデックスバッファ
      */
     GLuint indices;
+
+    /**
+     * 1インデックスのサイズ
+     */
+    size_t sizeofIndex = 2;
+
+    GLenum dataType = GL_UNSIGNED_SHORT;
 
     /**
      * インデックスバッファの配列長
@@ -44,12 +51,36 @@ public:
      * データを転送する
      * bind()を行なってから呼び出すこと。
      * @param data 転送元のデータ
-     * @param size 転送するバイト数
+     * @param indices_length 転送する配列の長さ
      * @param suage GL_STATIC_DRAW | GL_STREAM_DRAW | GL_DYNAMIC_DRAW
      */
     void bufferData(const uint16_t *indices, const uint indices_length, const GLenum usage) {
+        this->bufferData((void *) indices, sizeof(uint16_t), indices_length, usage);
+    }
+
+    /**
+     * データを転送する
+     * bind()を行なってから呼び出すこと。
+     * @param data 転送元のデータ
+     * @param indices_length 転送するバイト数
+     * @param suage GL_STATIC_DRAW | GL_STREAM_DRAW | GL_DYNAMIC_DRAW
+     */
+    void bufferData(const void *indices, const size_t sizeofIndexDataType, const uint indices_length, const GLenum usage) {
         this->length = indices_length;
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_length * sizeof(uint16_t), (GLvoid*) indices, usage);
+        this->sizeofIndex = sizeofIndexDataType;
+        switch (sizeofIndexDataType) {
+            case 1:
+                this->dataType = GL_UNSIGNED_BYTE;
+                break;
+            case 2:
+                this->dataType = GL_UNSIGNED_SHORT;
+                break;
+            case 4:
+                this->dataType = GL_UNSIGNED_INT;
+                break;
+        }
+//        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_length * sizeofIndexDataType, (GLvoid *) indices, usage);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_length * sizeof(uint16_t), (GLvoid *) indices, usage);
         assert_gl();
     }
 
@@ -65,7 +96,7 @@ public:
      * @param mode レンダリングモードを指定する デフォルトはGL_TRIANGLES
      */
     void rendering(const GLenum mode) {
-        glDrawElements(mode, length, GL_UNSIGNED_SHORT, NULL);
+        glDrawElements(mode, length, dataType, NULL);
         assert_gl();
     }
 
@@ -76,7 +107,8 @@ public:
      * @param indices_length 指定した数のインデックスバッファを描画する
      */
     void rendering(const GLenum mode, const GLsizei indicesHeaderIndex, const GLsizei indices) {
-        glDrawElements(mode, indices, GL_UNSIGNED_SHORT, (GLvoid*) (sizeof(uint16_t) * indicesHeaderIndex));
+//        glDrawElements(mode, indices, dataType, (GLvoid *) (sizeofIndex * indicesHeaderIndex));
+        glDrawElements(mode, indices, GL_UNSIGNED_SHORT, (GLvoid *) (sizeof(uint16_t) * indicesHeaderIndex));
     }
 
     virtual void dispose() {

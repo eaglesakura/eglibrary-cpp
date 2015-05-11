@@ -28,11 +28,11 @@ MPmxFile MmdFileLoader::loadPmx(const unsafe_array<uint8_t> buffer) {
     if (!loadPmxVertices(&loader, result)) {
         return MPmxFile();
     }
-
+    
     if (!loadPmxFaces(&loader, result)) {
         return MPmxFile();
     }
-
+    
     if (!loadPmxMaterials(&loader, result)) {
         return MPmxFile();
     }
@@ -58,7 +58,7 @@ bool MmdFileLoader::loadPmxHeader(MmdBufferDataLoader *loader, MPmxFile result) 
         eslog("PMX unknown version(%f)", result->header->version);
         return false;
     } else {
-        eslog("PMX version(%f)", result->header->version);
+        eslog("PMX version(%.1f)", result->header->version);
         const uint numHeaderDatas = loader->loadByte();
         assert(numHeaderDatas == 8); // PMX 2.0 = 8
         
@@ -187,9 +187,9 @@ bool MmdFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
         maxPosition.x = std::max(maxPosition.x, dynamicVertex->pos.x);
         maxPosition.y = std::max(maxPosition.y, dynamicVertex->pos.y);
         maxPosition.z = std::max(maxPosition.z, dynamicVertex->pos.z);
-        minPosition.x = std::min(maxPosition.x, dynamicVertex->pos.x);
-        minPosition.y = std::min(maxPosition.y, dynamicVertex->pos.y);
-        minPosition.z = std::min(maxPosition.z, dynamicVertex->pos.z);
+        minPosition.x = std::min(minPosition.x, dynamicVertex->pos.x);
+        minPosition.y = std::min(minPosition.y, dynamicVertex->pos.y);
+        minPosition.z = std::min(minPosition.z, dynamicVertex->pos.z);
         
         // 次の頂点へ進める
         ++dynamicVertex;
@@ -225,14 +225,14 @@ bool MmdFileLoader::loadPmxFaces(MmdBufferDataLoader *loader, MPmxFile result) {
 }
 
 bool MmdFileLoader::loadPmxMaterials(MmdBufferDataLoader *loader, MPmxFile result) {
-
+    
     const uint numTextures = loader->loadInt32();
     eslog("numTextures(%d)", numTextures);
     safe_array<MPmxTexture> figureTextures;
     safe_array<MPmxTexture> mmdToonTextures;    // デフォルトToonテクスチャ
     figureTextures.reserve(numTextures);
     mmdToonTextures.reserve(numTextures);
-
+    
     for (int i = 0; i < numTextures; ++i) {
         const std::string path = loader->loadTextBuffer();
         figureTextures[i].reset(new PmxTexture(path));
@@ -241,18 +241,18 @@ bool MmdFileLoader::loadPmxMaterials(MmdBufferDataLoader *loader, MPmxFile resul
     for (int i = 0; i < mmdToonTextures.length; ++i) {
         figureTextures[i].reset(new PmxTexture(StringUtils::format("%02d.bmp", i + 1)));
     }
-
+    
     const uint numMaterials = loader->loadInt32();
     eslog("numMaterials(%d)", numMaterials);
-
+    
     const uint textureIndexSize = result->header->textureIndexSize;
-
+    
     for (int i = 0; i < numMaterials; ++i) {
         MPmxMaterial material(new PmxMaterial());
         material->setName(loader->loadTextBuffer());
         material->setNameEng(loader->loadTextBuffer());
         eslog("material[%d] name(%s)", i, material->getName().c_str());
-
+        
         material->setDiffuse(loader->loadRGBA());
         material->setSpecular(loader->loadRGB());
         material->setShininess(loader->loadFloat());
@@ -260,7 +260,7 @@ bool MmdFileLoader::loadPmxMaterials(MmdBufferDataLoader *loader, MPmxFile resul
         material->setRenderFlags(loader->loadByte());
         material->setEdgeColor(loader->loadRGBA());
         material->setEdgeSize(loader->loadFloat());
-
+        
         {
             int diffuseIndex = loader->loadIntN(textureIndexSize);
             int sphereIndex = loader->loadIntN(textureIndexSize);
@@ -274,7 +274,7 @@ bool MmdFileLoader::loadPmxMaterials(MmdBufferDataLoader *loader, MPmxFile resul
         }
         material->setSphereMode((PmxMaterial::SphereMode) loader->loadByte());
         material->setSharedSphereToon(loader->loadByte() != 0);
-
+        
         {
             int toonTextureIndex = loader->loadIntN(material->isSharedSphereToon() ? 1 : textureIndexSize);
             eslog("    toonTextureIndex(%d) shared(%s)", toonTextureIndex, material->isSharedSphereToon() ? "true" : "false");
@@ -290,11 +290,14 @@ bool MmdFileLoader::loadPmxMaterials(MmdBufferDataLoader *loader, MPmxFile resul
         }
         material->setMemo(loader->loadTextBuffer());
         material->setIndicesCount(loader->loadInt32());
-
+        
         eslog("    memo(%s)", material->getMemo().c_str());
         eslog("    numIndices(%d) faces(%d)", material->getIndicesCount(), material->getIndicesCount() / 3);
+        
+        result->figure->addMaterial(material);
     }
-
+    
+    
     return true;
 }
 }
