@@ -41,7 +41,7 @@ struct _Vector3 {
     /**
      * 加算を行う
      */
-    _Vector3<T>& operator+=(const _Vector3 &v) {
+    _Vector3<T> &operator+=(const _Vector3 &v) {
         x += v.x;
         y += v.y;
         z += v.z;
@@ -51,7 +51,7 @@ struct _Vector3 {
     /**
      * 減算を行う
      */
-    _Vector3<T>& operator-=(const _Vector3 &v) {
+    _Vector3<T> &operator-=(const _Vector3 &v) {
         x -= v.x;
         y -= v.y;
         z -= v.z;
@@ -61,7 +61,7 @@ struct _Vector3 {
     /**
      * スカラー演算を行う
      */
-    _Vector3<T>& operator*=(const T scalar) {
+    _Vector3<T> &operator*=(const T scalar) {
         x *= scalar;
         y *= scalar;
         z *= scalar;
@@ -137,7 +137,7 @@ struct _Vector3 {
      * @return
      *
      */
-    _Vector3<T>* cross(const _Vector3<T> &v, _Vector3<T> *result) const {
+    _Vector3<T> *cross(const _Vector3<T> &v, _Vector3<T> *result) const {
         result->set((y * v.z) - (z * v.y), (z * v.x) - (x * v.z), (x * v.y) - (y * v.x));
         return result;
     }
@@ -202,9 +202,9 @@ struct _Vector3 {
     /**
      * 配列風のアクセスを提供する
      */
-    T& operator[](const uint index) {
+    T &operator[](const uint index) {
         assert(index < 3);
-        return ((T*) this)[index];
+        return ((T *) this)[index];
     }
 
     /**
@@ -246,7 +246,7 @@ inline bool equals(const Vector3f &v0, const Vector3f &v1, const float _check) {
  * ２ベクトルを線形補間する
  */
 template<typename T>
-inline _Vector3<T>* lerp(const _Vector3<T> &before, const _Vector3<T> &after, const float weight, _Vector3<T> *result) {
+inline _Vector3<T> *lerp(const _Vector3<T> &before, const _Vector3<T> &after, const float weight, _Vector3<T> *result) {
 
     const T x = (after.x * weight) + (before.x * (1.0f - weight));
     const T y = (after.y * weight) + (before.y * (1.0f - weight));
@@ -259,6 +259,22 @@ inline _Vector3<T>* lerp(const _Vector3<T> &before, const _Vector3<T> &after, co
     return result;
 }
 
+/**
+ * start -> endに向かうベクトルを計算し、正規化して方向を返す
+ */
+template<typename T>
+inline _Vector3<T> axis(const _Vector3<T> &start, const _Vector3<T> &end) {
+
+    _Vector3<T> temp = end - start;
+    const double len = temp.length();
+    if (len > 0) {
+        temp.x = (T) ((double) temp.x / len);
+        temp.y = (T) ((double) temp.y / len);
+        temp.z = (T) ((double) temp.z / len);
+    }
+
+    return temp;
+}
 }
 
 #endif /* VECTOR3_HPP_ */

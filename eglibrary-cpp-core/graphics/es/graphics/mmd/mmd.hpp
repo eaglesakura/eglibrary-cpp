@@ -18,9 +18,9 @@
  * レンダリング時に必要であれば2つの頂点をブレンドした配列を生成するほうが良い。
  *
  * PMXフォーマット参考
-
  * http://gulshan-i-raz.geo.jp/labs/2012/10/17/pmx-format1/
  * http://www18.ocn.ne.jp/~atrenas/MMD/step_0002.html
+ * https://github.com/sn0w75/MikuMikuPenguin
  */
 #include "PmxHeader.hpp"
 #include "PmxMesh.h"

@@ -15,22 +15,22 @@ enum GLStates_e {
     /**
      * カリング ON / Front
      */
-    GLStates_Cull_Front = 0x1 << 0,
+            GLStates_Cull_Front = 0x1 << 0,
 
     /**
      * カリング ON / Back
      */
-    GLStates_Cull_Back = 0x1 << 1,
+            GLStates_Cull_Back = 0x1 << 1,
 
     /**
      * 深度テストを有効化
      */
-    GLStates_DepthTest_Enable = 0x1 << 2,
+            GLStates_DepthTest_Enable = 0x1 << 2,
 
     /**
      * ステンシルテスト有効化
      */
-    GLStates_StencilTest_Enable = 0x1 << 3,
+            GLStates_StencilTest_Enable = 0x1 << 3,
 
 #if 0 /* TODO! */
     /**
@@ -74,23 +74,23 @@ enum GLBlendType_e {
     /**
      * 一般的なαブレンドを行う
      */
-    GLBlendType_Alpha = 0,
+            GLBlendType_Alpha = 0,
 
     /**
      * 加算ブレンディングを行う
      */
-    GLBlendType_Add,
+            GLBlendType_Add,
 
     /**
      * ブレンドを行わない
      */
-    GLBlendType_None,
+            GLBlendType_None,
 
     /**
      * 不明なブレンド
      * 初回set時に必ず反応するようにしておく
      */
-    GLBlendType_Unknown,
+            GLBlendType_Unknown,
 };
 
 /**
@@ -127,7 +127,7 @@ struct glstates {
     /**
      * 描画するラインの太さ
      */
-    uint8_t    lineWidth;
+    uint8_t lineWidth;
 
     /**
      * GLBlendType_e
@@ -149,25 +149,27 @@ struct glstates {
     }
 };
 
-class RenderState: public Object {
+class RenderState : public Object {
 protected:
     std::vector<glstates> states;
 
     /**
      * 現在のステートを取得する
      */
-    glstates* get() {
+    glstates *get() {
         return &states[states.size() - 1];
     }
+
     /**
      * 現在のステートを取得する
      */
-    const glstates* get() const {
+    const glstates *get() const {
         return &states[states.size() - 1];
     }
 
 public:
     RenderState();
+
     virtual ~RenderState();
 
     /**
@@ -181,6 +183,7 @@ public:
     void viewport(int x, int y, int width, int heidht);
 
     void clearColorI(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+
     void clearColor(float r, float g, float b, float a);
 
     /**
@@ -206,7 +209,7 @@ public:
     /**
      * 現在のステートを取得する
      */
-    const glstates& getCurrent() const {
+    const glstates &getCurrent() const {
         return states[states.size() - 1];
     }
 
@@ -244,6 +247,13 @@ public:
      * バッファを全てアンバインドしてクリアーな状態にする
      */
     void unbindBuffers();
+
+    /**
+     * メッシュに関連するバッファをクリアーな状態にする。
+     *
+     * 主にIBO/VBOの使用・未使用を切り替える際にクリーンし忘れないようにする
+     */
+    void unbindMeshBuffers();
 };
 
 typedef std_shared_ptr<RenderState> MRenderState;

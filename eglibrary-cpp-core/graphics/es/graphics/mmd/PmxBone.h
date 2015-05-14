@@ -8,6 +8,8 @@
 #include <es/math/Vector3.hpp>
 #include <es/memory/SafeArray.hpp>
 #include <bitset>
+#include <vector>
+#include <es/math/Matrix.hpp>
 #include    "es/eglibrary.hpp"
 
 namespace es {
@@ -36,6 +38,8 @@ struct PmdIkLink {
 
 /**
  * PMXファイルのボーン情報を管理する
+ *
+ * 全ボーン情報が含まれているため、それなりに重い
  */
 class PmxBone : public Object {
     std::string name;
@@ -182,6 +186,11 @@ public:
         return flags[arrayIndex][bitIndex];
     }
 
+
+    int16_t getParentBoneIndex() const {
+        return parentBoneIndex;
+    }
+
     void setParentBoneIndex(int parentBoneIndex) {
         PmxBone::parentBoneIndex = parentBoneIndex;
     }
@@ -300,6 +309,82 @@ public:
 
 typedef std_shared_ptr<PmxBone> MPmxBone;
 
+/**
+ * ボーンの事前計算情報
+ *
+ * ボーンは速度を優先するためにポインタの直接参照を行っているが、
+ * 生存はPmxBoneControllerに合わせて保証される。
+ */
+struct PmxPreCalcBone {
+    /**
+     * 親ボーン
+     */
+    PmxBone *parent = nullptr;
+
+    /**
+     * 自分位置
+     */
+    PmxBone *self = nullptr;
+
+    /**
+     * 開始位置
+     */
+    Vector3f pos;
+
+    /**
+     * ボーンの向き
+     */
+    Vector3f axis;
+
+    /**
+     * ボーン終了位置
+     */
+    Vector3f end;
+
+    PmxPreCalcBone() { }
+
+    ~PmxPreCalcBone() { }
+};
+
+/**
+ * PMXボーンの制御を行う
+ */
+class PmxBoneController : public Object {
+    /**
+     * 処理対象のボーン一覧
+     */
+    safe_array<MPmxBone> bones;
+
+    /**
+     * 事前計算ボーン一覧
+     */
+    safe_array<PmxPreCalcBone> preCalcBones;
+public:
+    PmxBoneController();
+
+    virtual ~PmxBoneController() { }
+
+    /**
+     * 必要な情報の事前計算を行う
+     */
+    virtual void initialize(const std::vector<MPmxBone> &bones);
+
+    /**
+     * ボーン数を取得する
+     */
+    virtual uint getBoneCount() const {
+        return bones.length;
+    }
+
+    /**
+     * 計算済みボーン情報を取得する
+     */
+    virtual PmxPreCalcBone *getBone(uint index) const {
+        return preCalcBones.ptr + index;
+    }
+};
+
+typedef std_shared_ptr<PmxBoneController> MPmxBoneController;
 
 }
 

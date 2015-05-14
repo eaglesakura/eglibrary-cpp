@@ -23,10 +23,8 @@ class PmxFigure : public Object {
 
     std::vector<MPmxMaterial> materials;
 
-    /**
-     * ボーン一覧
-     */
-    std::vector<MPmxBone> bones;
+    MPmxBoneController boneController;
+
 public:
 
     PmxFigure() { }
@@ -56,17 +54,12 @@ public:
         return materials[index];
     }
 
-    void addBone(MPmxBone bone) {
-        bones.push_back(bone);
+    const MPmxBoneController &getBoneController() const {
+        return boneController;
     }
 
-    uint getBoneCount() const {
-        return (uint) bones.size();
-    }
-
-    MPmxBone getBone(uint index) const {
-        assert(index < bones.size());
-        return bones[index];
+    void setBoneController(const MPmxBoneController &boneController) {
+        PmxFigure::boneController = boneController;
     }
 };
 

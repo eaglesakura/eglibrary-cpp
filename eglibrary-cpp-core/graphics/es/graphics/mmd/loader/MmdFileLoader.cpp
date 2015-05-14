@@ -311,6 +311,8 @@ bool MmdFileLoader::loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result) {
 
     const uint boneIndexSize = result->header->boneIndexSize;
     eslog("numBones(%d) boneIndexSize(%d)", numBones, boneIndexSize);
+
+    std::vector<MPmxBone> bones;
     for (int i = 0; i < numBones; ++i) {
         MPmxBone bone(new PmxBone());
 
@@ -320,14 +322,18 @@ bool MmdFileLoader::loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result) {
 
         bone->setPosition(loader->loadVector3());
         bone->setParentBoneIndex(loader->loadIntN(boneIndexSize));
+        eslog("    bone pos(%.2f, %.2f, %.2f)", bone->getPosition().x, bone->getPosition().y, bone->getPosition().z);
+        eslog("    bone parent(%d)", bone->getParentBoneIndex());
         bone->setDeformationLevel(loader->loadInt32());
         bone->setFlags(0, loader->loadByte());
         bone->setFlags(1, loader->loadByte());
 
         if (bone->hasFlag(PmxBone::Flag::ConnectionDisplayMethod)) {
             bone->setConnectedBoneIndex(loader->loadIntN(boneIndexSize));
+            eslog("    bone connect to(%d)", bone->getConnectedBoneIndex());
         } else {
             bone->setPositionOffset(loader->loadVector3());
+            eslog("    bone offset(%.2f, %.2f, %.2f)", bone->getPositionOffset().x, bone->getPositionOffset().y, bone->getPositionOffset().z);
         }
 
         if (bone->hasFlag(PmxBone::Flag::GiveRotation) || bone->hasFlag(PmxBone::Flag::GiveTranslation)) {
@@ -367,7 +373,13 @@ bool MmdFileLoader::loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result) {
             }
         }
 
+        bones.push_back(bone);
     }
+
+    MPmxBoneController boneController(new PmxBoneController());
+    boneController->initialize(bones);
+
+    result->figure->setBoneController(boneController);
 
     return true;
 }

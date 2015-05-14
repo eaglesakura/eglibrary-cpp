@@ -50,14 +50,14 @@ void RenderState::sync() {
 
     // viewport
     {
-        GLint xywh[4] = { 0 };
+        GLint xywh[4] = {0};
         glGetIntegerv(GL_VIEWPORT, xywh);
         assert_gl();
         cur->viewport.setXYWH((int16_t) xywh[0], (int16_t) xywh[1], (int16_t) xywh[2], (int16_t) xywh[3]);
     }
     // scissor
     {
-        GLint xywh[4] = { 0 };
+        GLint xywh[4] = {0};
         glGetIntegerv(GL_SCISSOR_BOX, xywh);
         assert_gl();
         cur->scissor.setXYWH((int16_t) xywh[0], (int16_t) xywh[1], (int16_t) xywh[2], (int16_t) xywh[3]);
@@ -65,7 +65,7 @@ void RenderState::sync() {
 
     // framebuffer
     {
-        glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint*) &cur->framebuffer);
+        glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint *) &cur->framebuffer);
         assert_gl();
     }
     // ブレンドタイプは不明にしておく
@@ -165,8 +165,8 @@ void RenderState::setBlendType(const GLBlendType_e type) {
         return;
     }
 
-    static const GLenum sfactor[] = { GL_SRC_ALPHA, GL_SRC_ALPHA, };
-    static const GLenum dfactor[] = { GL_ONE_MINUS_SRC_ALPHA, GL_ONE };
+    static const GLenum sfactor[] = {GL_SRC_ALPHA, GL_SRC_ALPHA,};
+    static const GLenum dfactor[] = {GL_ONE_MINUS_SRC_ALPHA, GL_ONE};
 
     if (type == GLBlendType_None) {
         // no blend
@@ -184,7 +184,7 @@ void RenderState::setFlags(const glstates_flags flags) {
     const glstates_flags oldFlags = get()->flags;
 
     // 差分をチェックする
-    const glstates_flags diffFlags = oldFlags ^ flags;
+    const glstates_flags diffFlags = oldFlags ^flags;
     if (!diffFlags) {
         // 差分がないなら何もしない
         return;
@@ -274,4 +274,8 @@ void RenderState::unbindBuffers() {
     bindFramebuffer(0);
 }
 
+void RenderState::unbindMeshBuffers() {
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
 }

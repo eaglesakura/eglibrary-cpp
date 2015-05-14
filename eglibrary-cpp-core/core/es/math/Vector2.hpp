@@ -29,7 +29,7 @@ struct _Vector2 {
     /**
      * 加算を行う
      */
-    _Vector2<T>& operator+=(const _Vector2 &v) {
+    _Vector2<T> &operator+=(const _Vector2 &v) {
         x += v.x;
         y += v.y;
         return (*this);
@@ -45,7 +45,7 @@ struct _Vector2 {
     /**
      * 減算を行う
      */
-    _Vector2<T>& operator-=(const _Vector2 &v) {
+    _Vector2<T> &operator-=(const _Vector2 &v) {
         x -= v.x;
         y -= v.y;
         return (*this);
@@ -141,8 +141,8 @@ struct _Vector2 {
     /**
      * 配列風のアクセスを提供する
      */
-    T& operator[](const int index) {
-        return ((T*) this)[index];
+    T &operator[](const int index) {
+        return ((T *) this)[index];
     }
 
     void set(const T _x, const T _y) {
@@ -187,7 +187,7 @@ inline bool equals(const Vector2f &v0, const Vector2f &v1, const float _check) {
  * となる。
  */
 template<typename T>
-inline _Vector2<T>* lerp(const _Vector2<T> &before, const _Vector2<T> &after, const float weight, _Vector2<T> *result) {
+inline _Vector2<T> *lerp(const _Vector2<T> &before, const _Vector2<T> &after, const float weight, _Vector2<T> *result) {
 
     const T x = (after.x * weight) + (before.x * (1.0f - weight));
     const T y = (after.y * weight) + (before.y * (1.0f - weight));
@@ -196,6 +196,22 @@ inline _Vector2<T>* lerp(const _Vector2<T> &before, const _Vector2<T> &after, co
     result->y = y;
 
     return result;
+}
+
+/**
+ * start -> endに向かうベクトルを計算し、正規化して方向を返す
+ */
+template<typename T>
+inline _Vector2<T> axis(const _Vector2<T> &start, const _Vector2<T> &end) {
+
+    _Vector2<T> temp = end - start;
+    const double len = temp.length();
+    if (len > 0) {
+        temp.x = (T) ((double) temp.x / len);
+        temp.y = (T) ((double) temp.y / len);
+    }
+
+    return temp;
 }
 }
 
