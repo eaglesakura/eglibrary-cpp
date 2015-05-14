@@ -68,6 +68,10 @@ protected:
      */
     virtual bool loadPmxMaterials(MmdBufferDataLoader *loader, MPmxFile result);
 
+    /**
+     * ボーン情報を取得する
+     */
+    virtual bool loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result);
 public:
     MmdFileLoader();
 

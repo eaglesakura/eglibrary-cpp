@@ -36,7 +36,11 @@ MPmxFile MmdFileLoader::loadPmx(const unsafe_array<uint8_t> buffer) {
     if (!loadPmxMaterials(&loader, result)) {
         return MPmxFile();
     }
-    
+
+    if (!loadPmxBones(&loader, result)) {
+        return MPmxFile();
+    }
+
     return result;
 }
 
@@ -298,6 +302,73 @@ bool MmdFileLoader::loadPmxMaterials(MmdBufferDataLoader *loader, MPmxFile resul
     }
     
     
+    return true;
+}
+
+bool MmdFileLoader::loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result) {
+
+    const uint numBones = loader->loadInt32();
+
+    const uint boneIndexSize = result->header->boneIndexSize;
+    eslog("numBones(%d) boneIndexSize(%d)", numBones, boneIndexSize);
+    for (int i = 0; i < numBones; ++i) {
+        MPmxBone bone(new PmxBone());
+
+        bone->setName(loader->loadTextBuffer());
+        bone->setNameEng(loader->loadTextBuffer());
+        eslog("bone[%d] name(%s)", i, bone->getName().c_str());
+
+        bone->setPosition(loader->loadVector3());
+        bone->setParentBoneIndex(loader->loadIntN(boneIndexSize));
+        bone->setDeformationLevel(loader->loadInt32());
+        bone->setFlags(0, loader->loadByte());
+        bone->setFlags(1, loader->loadByte());
+
+        if (bone->hasFlag(PmxBone::Flag::ConnectionDisplayMethod)) {
+            bone->setConnectedBoneIndex(loader->loadIntN(boneIndexSize));
+        } else {
+            bone->setPositionOffset(loader->loadVector3());
+        }
+
+        if (bone->hasFlag(PmxBone::Flag::GiveRotation) || bone->hasFlag(PmxBone::Flag::GiveTranslation)) {
+            bone->setProvidedParentBoneIndex(loader->loadIntN(boneIndexSize));
+            bone->setProvidedRatio(loader->loadFloat());
+        }
+
+        if (bone->hasFlag(PmxBone::Flag::AxisFixed)) {
+            bone->setAxisDirectionVector(loader->loadVector3());
+        }
+
+        if (bone->hasFlag(PmxBone::Flag::LocalAxis)) {
+            bone->setDimentionXDirectionVector(loader->loadVector3());
+            bone->setDimentionZDirectionVector(loader->loadVector3());
+        }
+        if (bone->hasFlag(PmxBone::Flag::ExternalParentTransform)) {
+            bone->setKeyValue(loader->loadInt32());
+        }
+
+        if (bone->hasFlag(PmxBone::Flag::IkEnable)) {
+            bone->setIkTargetBoneIndex(loader->loadIntN(boneIndexSize));
+            bone->setIkLoopCount(loader->loadInt32());
+            bone->setIkLimitedRadian(loader->loadFloat());
+            uint ikLinkCount = loader->loadInt32();
+            eslog("    ikLinkCount(%d)", ikLinkCount);
+
+            bone->allocIkLinkList(ikLinkCount);
+            for (int k = 0; k < ikLinkCount; ++k) {
+                PmdIkLink *pIkLink = bone->getIkLink(k);
+                pIkLink->linkBoneIndex = loader->loadIntN(boneIndexSize);
+                pIkLink->rotateLimited = loader->loadByte() != 0;
+                eslog("    ikLink[%d] limited[%s]", k, pIkLink->rotateLimited ? "true" : "false");
+                if (pIkLink->rotateLimited) {
+                    pIkLink->minRadian = loader->loadVector3();
+                    pIkLink->maxRadian = loader->loadVector3();
+                }
+            }
+        }
+
+    }
+
     return true;
 }
 }

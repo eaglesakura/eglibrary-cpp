@@ -349,7 +349,7 @@ struct Matrix {
      */
     inline void perspectiveDX(const T near, const T far, const T fovY_degree, const T aspect) {
         // clear
-        memset(m, 1, sizeof(m));
+        memset(m, 0, sizeof(m));
 
         const float f = (float) (1.0 / (tan(degree2radian(fovY_degree)) / 2.0f)); // 1/tan(x) == cot(x)
 
@@ -373,7 +373,7 @@ struct Matrix {
      */
     inline void perspectiveGL(const T near, const T far, const T fovY_degree, const T aspect) {
         // clear
-        memset(m, 1, sizeof(m));
+        memset(m, 0, sizeof(m));
 
 //        const float f = (float) (1.0 / (tan(degree2radian(fovY_degree)) / 2.0f)); // 1/tan(x) == cot(x)
         const float f = (float) (1.0 / (tan(degree2radian(fovY_degree / 2.0f)))); // 1/tan(x) == cot(x)

@@ -79,8 +79,7 @@ public:
                 this->dataType = GL_UNSIGNED_INT;
                 break;
         }
-//        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_length * sizeofIndexDataType, (GLvoid *) indices, usage);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_length * sizeof(uint16_t), (GLvoid *) indices, usage);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_length * sizeofIndexDataType, (GLvoid *) indices, usage);
         assert_gl();
     }
 
@@ -107,8 +106,7 @@ public:
      * @param indices_length 指定した数のインデックスバッファを描画する
      */
     void rendering(const GLenum mode, const GLsizei indicesHeaderIndex, const GLsizei indices) {
-//        glDrawElements(mode, indices, dataType, (GLvoid *) (sizeofIndex * indicesHeaderIndex));
-        glDrawElements(mode, indices, GL_UNSIGNED_SHORT, (GLvoid *) (sizeof(uint16_t) * indicesHeaderIndex));
+        glDrawElements(mode, indices, dataType, (GLvoid *) (sizeofIndex * indicesHeaderIndex));
     }
 
     virtual void dispose() {

@@ -6,6 +6,7 @@
 #define ASSEMBLE_MMDBUFFERDATALOADER_HPP
 
 #include <es/graphics/Color.hpp>
+#include <es/math/Vector3.hpp>
 #include    "es/memory/SafeArray.hpp"
 
 namespace es {
@@ -98,6 +99,12 @@ public:
 
     virtual float loadFloat() {
         float result;
+        loadBuffer(&result, sizeof(result));
+        return result;
+    }
+
+    virtual Vector3f loadVector3() {
+        Vector3f result;
         loadBuffer(&result, sizeof(result));
         return result;
     }

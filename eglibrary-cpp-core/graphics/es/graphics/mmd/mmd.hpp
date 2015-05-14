@@ -24,6 +24,8 @@
  */
 #include "PmxHeader.hpp"
 #include "PmxMesh.h"
+#include "PmxMaterial.h"
+#include "PmxBone.h"
 #include "PmxFigure.h"
 
 

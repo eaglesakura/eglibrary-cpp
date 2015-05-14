@@ -46,45 +46,45 @@ public:
     };
 
     enum RenderFlag {
-    /**
-     * 両面描画
-     */
-        NO_CULLING = 0x1 << 0,
+        /**
+         * 両面描画
+         */
+        NoCulling = 0x1 << 0,
 
         /**
          * 地面影
          */
-        SHADOW_GROUND = 0x1 << 1,
+        ShadowGround = 0x1 << 1,
 
         /**
          * セルフシャドウへの描画を行う
          */
-        SELFSHADOW_WRITE = 0x1 << 2,
+        SelfShadowSelf = 0x1 << 2,
 
         /**
          * セルフシャドウマッピングの影響を受ける
          */
-        SELFSHADOW_READ = 0x1 << 3,
+        SelfShadowRead = 0x1 << 3,
 
         /**
          * エッジ描画を行う
          */
-        RENDERING_EDGE = 0x1 << 4,
+        RenderingEdge = 0x1 << 4,
 
         /**
          * 頂点カラーのレンダリングを行う
          */
-        VERTEX_COLOR = 0x1 << 5,
+        RenderingVertexColor = 0x1 << 5,
 
         /**
          * ポイント描画を行う
          */
-        RENDERING_POINT = 0x1 << 6,
+        RenderingPoint = 0x1 << 6,
 
         /**
          * ライン描画を行う
          */
-        RENDERING_LINE = 0x1 << 7,
+        RenderingLine = 0x1 << 7,
     };
 protected:
     std::string name;
