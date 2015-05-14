@@ -4,19 +4,19 @@
 
 #include <es/graphics/mmd/PmxMesh.h>
 #include <es/util/StringUtil.h>
-#include "MmdFileLoader.h"
+#include "PmxFileLoader.h"
 
 namespace es {
 
-MmdFileLoader::MmdFileLoader() {
+PmxFileLoader::PmxFileLoader() {
     
 }
 
-MmdFileLoader::~MmdFileLoader() {
+PmxFileLoader::~PmxFileLoader() {
     
 }
 
-MPmxFile MmdFileLoader::loadPmx(const unsafe_array<uint8_t> buffer) {
+MPmxFile PmxFileLoader::loadPmx(const unsafe_array<uint8_t> buffer) {
     MmdBufferDataLoader loader(buffer);
     
     MPmxFile result(new PmxFile());
@@ -44,7 +44,7 @@ MPmxFile MmdFileLoader::loadPmx(const unsafe_array<uint8_t> buffer) {
     return result;
 }
 
-bool MmdFileLoader::loadPmxHeader(MmdBufferDataLoader *loader, MPmxFile result) {
+bool PmxFileLoader::loadPmxHeader(MmdBufferDataLoader *loader, MPmxFile result) {
     
     // load headers
     {
@@ -102,7 +102,7 @@ bool MmdFileLoader::loadPmxHeader(MmdBufferDataLoader *loader, MPmxFile result) 
     return true;
 }
 
-bool MmdFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result) {
+bool PmxFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result) {
     
     uint numVertices = loader->loadInt32();
     eslog("PMX numVertices(%d)", numVertices);
@@ -214,7 +214,7 @@ bool MmdFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
     return true;
 }
 
-bool MmdFileLoader::loadPmxFaces(MmdBufferDataLoader *loader, MPmxFile result) {
+bool PmxFileLoader::loadPmxFaces(MmdBufferDataLoader *loader, MPmxFile result) {
     
     const uint numIndices = loader->loadInt32();
     eslog("numIndices index(%d) face(%d)", numIndices, numIndices / 3);
@@ -228,7 +228,7 @@ bool MmdFileLoader::loadPmxFaces(MmdBufferDataLoader *loader, MPmxFile result) {
     return true;
 }
 
-bool MmdFileLoader::loadPmxMaterials(MmdBufferDataLoader *loader, MPmxFile result) {
+bool PmxFileLoader::loadPmxMaterials(MmdBufferDataLoader *loader, MPmxFile result) {
     
     const uint numTextures = loader->loadInt32();
     eslog("numTextures(%d)", numTextures);
@@ -305,7 +305,7 @@ bool MmdFileLoader::loadPmxMaterials(MmdBufferDataLoader *loader, MPmxFile resul
     return true;
 }
 
-bool MmdFileLoader::loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result) {
+bool PmxFileLoader::loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result) {
 
     const uint numBones = loader->loadInt32();
 

@@ -45,7 +45,7 @@ typedef std_shared_ptr<PmxFile> MPmxFile;
 /**
  * MMD関連ファイルのローディングを行う
  */
-class MmdFileLoader : public Object {
+class PmxFileLoader : public Object {
 
 protected:
     /**
@@ -73,9 +73,9 @@ protected:
      */
     virtual bool loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result);
 public:
-    MmdFileLoader();
+    PmxFileLoader();
 
-    virtual ~MmdFileLoader();
+    virtual ~PmxFileLoader();
 
     /**
      * PMXバッファからフィギュアを生成する
