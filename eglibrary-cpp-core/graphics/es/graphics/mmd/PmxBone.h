@@ -11,6 +11,7 @@
 #include <vector>
 #include <es/math/Matrix.hpp>
 #include    "es/eglibrary.hpp"
+#include    "es/graphics/math/GlmHelper.hpp"
 
 namespace es {
 
@@ -28,12 +29,12 @@ struct PmdIkLink {
     /**
      * 下限 (x,y,z) -> ラジアン角
      */
-    Vector3f minRadian;
+    vec3 minRadian;
 
     /**
      * 上限 (x,y,z) -> ラジアン角
      */
-    Vector3f maxRadian;
+    vec3 maxRadian;
 };
 
 /**
@@ -48,7 +49,7 @@ class PmxBone : public Object {
     /**
      * ボーン位置
      */
-    Vector3f position;
+    vec3 position;
 
     /**
      * 変形階層レベル
@@ -89,16 +90,16 @@ class PmxBone : public Object {
     /**
      * ボーンの位置オフセット
      */
-    Vector3f positionOffset;
+    vec3 positionOffset;
 
     /**
      * ボーンの向きベクトル
      */
-    Vector3f axisDirectionVector;
+    vec3 axisDirectionVector;
 
-    Vector3f dimentionXDirectionVector;
+    vec3 dimentionXDirectionVector;
 
-    Vector3f dimentionZDirectionVector;
+    vec3 dimentionZDirectionVector;
 
     int32_t keyValue;
 
@@ -135,11 +136,11 @@ public:
         PmxBone::nameEng = nameEng;
     }
 
-    const Vector3f &getPosition() const {
+    const vec3 &getPosition() const {
         return position;
     }
 
-    void setPosition(const Vector3f &position) {
+    void setPosition(const vec3 &position) {
         PmxBone::position = position;
     }
 
@@ -219,35 +220,35 @@ public:
         PmxBone::providedRatio = providedRatio;
     }
 
-    const Vector3f &getPositionOffset() const {
+    const vec3 &getPositionOffset() const {
         return positionOffset;
     }
 
-    void setPositionOffset(const Vector3f &positionOffset) {
+    void setPositionOffset(const vec3 &positionOffset) {
         PmxBone::positionOffset = positionOffset;
     }
 
-    const Vector3f &getAxisDirectionVector() const {
+    const vec3 &getAxisDirectionVector() const {
         return axisDirectionVector;
     }
 
-    void setAxisDirectionVector(const Vector3f &axisDirectionVector) {
+    void setAxisDirectionVector(const vec3 &axisDirectionVector) {
         PmxBone::axisDirectionVector = axisDirectionVector;
     }
 
-    const Vector3f &getDimentionXDirectionVector() const {
+    const vec3 &getDimentionXDirectionVector() const {
         return dimentionXDirectionVector;
     }
 
-    void setDimentionXDirectionVector(const Vector3f &dimentionXDirectionVector) {
+    void setDimentionXDirectionVector(const vec3 &dimentionXDirectionVector) {
         PmxBone::dimentionXDirectionVector = dimentionXDirectionVector;
     }
 
-    const Vector3f &getDimentionZDirectionVector() const {
+    const vec3 &getDimentionZDirectionVector() const {
         return dimentionZDirectionVector;
     }
 
-    void setDimentionZDirectionVector(const Vector3f &dimentionZDirectionVector) {
+    void setDimentionZDirectionVector(const vec3 &dimentionZDirectionVector) {
         PmxBone::dimentionZDirectionVector = dimentionZDirectionVector;
     }
 
@@ -329,17 +330,17 @@ struct PmxPreCalcBone {
     /**
      * 開始位置
      */
-    Vector3f pos;
+    vec3 pos;
 
     /**
      * ボーンの向き
      */
-    Vector3f axis;
+    vec3 axis;
 
     /**
      * ボーン終了位置
      */
-    Vector3f end;
+    vec3 end;
 
     PmxPreCalcBone() { }
 

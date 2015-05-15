@@ -10,6 +10,7 @@
 #include <es/math/Vector2.hpp>
 #include <es/memory/SafeArray.hpp>
 #include <es/math/Vector4.hpp>
+#include <es/graphics/math/GlmHelper.hpp>
 
 namespace es {
 
@@ -22,12 +23,12 @@ struct PmxDynamicVertex {
     /**
      * 変形された位置情報
      */
-    Vector3f pos;
+    vec3 pos;
 
     /**
      * 変形された法線情報
      */
-    Vector3f normal;
+    vec3 normal;
 };
 
 /**
@@ -98,14 +99,14 @@ struct PmxStaticVertex {
     /**
      * 宣言的には1つだが、末尾にPMX固有の追加UV数が付与される場合がある。
      */
-    Vector2f uv;
+    vec2 uv;
 
     /**
      * 追加UV
      *
      * 最大4つの追加UV座標を持つことになる。
      */
-    Vector4f extraUv[0];
+    vec4 extraUv[0];
 };
 
 /**
@@ -135,12 +136,12 @@ class PmxMesh : public Object {
     /**
      * AABB最小位置
      */
-    Vector3f minPosition;
+    vec3 minPosition;
 
     /**
      * AABB最大位置
      */
-    Vector3f maxPosition;
+    vec3 maxPosition;
 
     /**
      * インデックスバッファ
@@ -249,19 +250,19 @@ public:
     }
 
 
-    virtual const Vector3f &getMinPosition() const {
+    virtual const vec3 &getMinPosition() const {
         return minPosition;
     }
 
-    virtual void setMinPosition(const Vector3f &minPosition) {
+    virtual void setMinPosition(const vec3 &minPosition) {
         PmxMesh::minPosition = minPosition;
     }
 
-    virtual const Vector3f &getMaxPosition() const {
+    virtual const vec3 &getMaxPosition() const {
         return maxPosition;
     }
 
-    virtual void setMaxPosition(const Vector3f &maxPosition) {
+    virtual void setMaxPosition(const vec3 &maxPosition) {
         PmxMesh::maxPosition = maxPosition;
     }
 };

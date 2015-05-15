@@ -7,6 +7,7 @@
 
 #include <es/graphics/Color.hpp>
 #include <es/math/Vector3.hpp>
+#include <es/graphics/math/GlmHelper.hpp>
 #include    "es/memory/SafeArray.hpp"
 
 namespace es {
@@ -103,8 +104,8 @@ public:
         return result;
     }
 
-    virtual Vector3f loadVector3() {
-        Vector3f result;
+    virtual vec3 loadVector3() {
+        vec3 result;
         loadBuffer(&result, sizeof(result));
         return result;
     }

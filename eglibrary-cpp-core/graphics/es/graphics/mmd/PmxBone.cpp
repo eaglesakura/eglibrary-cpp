@@ -41,6 +41,7 @@ void PmxBoneController::initialize(const std::vector<MPmxBone> &newBones) {
                 pBone->end = pBone->self->getPosition() + pBone->self->getPositionOffset();
             }
             pBone->axis = es::axis(pBone->pos, pBone->end);
+//            pBone->axis = glm::normalize(pBone->end - pBone->end);
 
             ++index;
         }

@@ -135,8 +135,8 @@ bool PmxFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
     uint8_t *rawStaticVertex = mesh->getStaticVerticesPointer();
     const uint32_t staticVertexBytes = mesh->getStaticVertexBytes();
     
-    Vector3f maxPosition(-999999, -999999, -999999);
-    Vector3f minPosition(999999, 999999, 999999);
+    vec3 maxPosition(-999999, -999999, -999999);
+    vec3 minPosition(999999, 999999, 999999);
     
     for (int i = 0; i < numVertices; ++i) {
         PmxStaticVertex *staticVertex = (PmxStaticVertex *) rawStaticVertex;
