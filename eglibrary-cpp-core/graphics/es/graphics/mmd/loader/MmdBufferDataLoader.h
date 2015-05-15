@@ -8,6 +8,7 @@
 #include <es/graphics/Color.hpp>
 #include <es/math/Vector3.hpp>
 #include <es/graphics/math/GlmHelper.hpp>
+#include <es/util/StringUtil.h>
 #include    "es/memory/SafeArray.hpp"
 
 namespace es {
@@ -24,6 +25,8 @@ class MmdBufferDataLoader : public Object {
         UTF8,
         Unknown,
     } encodeType = Unknown;
+
+    std_shared_ptr<StringEncoder> encoder;
 public:
 
     MmdBufferDataLoader(const unsafe_array<uint8_t> &buffer) {
@@ -32,9 +35,7 @@ public:
 
     virtual ~MmdBufferDataLoader() { }
 
-    virtual void setTextEncodeType(uint8_t type) {
-        this->encodeType = (TextEncodeType) type;
-    }
+    virtual void setTextEncodeType(uint8_t type);
 
     /**
      * 文字数を指定して識別子を読み込む
@@ -50,6 +51,11 @@ public:
      * テキストバッファを読み出す
      */
     virtual std::string loadTextBuffer();
+
+    /**
+     * テキストを読み出す
+     */
+    virtual std::string loadEncodedString(int length, StringEncoder *encoder);
 
     /**
      * バッファを読み込む

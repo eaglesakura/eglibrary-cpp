@@ -143,6 +143,22 @@ public:
     int length;
 
     /**
+     * 指定した長さの配列を確保し、古い配列を確保する
+     */
+    inline void refresh(const int newLength) {
+        assert(newLength >= 0);
+
+        SAFE_DELETE_ARRAY(ptr);
+        if (newLength > 0) {
+            ptr = new value_type[newLength];
+        } else {
+            ptr = nullptr;
+        }
+        // 長さを保存する
+        length = newLength;
+    }
+
+    /**
      * 指定した長さの配列を確保し、古い配列をmemcpyする
      */
     inline void alloc(const int newLength) {

@@ -41,6 +41,16 @@ void PmxBoneController::initialize(const std::vector<MPmxBone> &newBones) {
                 pBone->end = pBone->self->getPosition() + pBone->self->getPositionOffset();
             }
             pBone->axis = es::axis(pBone->pos, pBone->end);
+
+            // 正位置の行列を計算する
+            {
+                mat4 translate = glm::translate(pBone->pos);
+//                quat boneQuat = glm::angleAxis(0.0f, pBone->axis);
+//                mat4 rotate = glm::toMat4(boneQuat);
+//                mat4 transform = translate * rotate;
+                pBone->invert = glm::inverse(translate);
+            }
+
 //            pBone->axis = glm::normalize(pBone->end - pBone->end);
 
             ++index;

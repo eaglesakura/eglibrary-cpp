@@ -6,8 +6,10 @@
 #define ASSEMBLE_GLMHELPER_HPP
 
 
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include    "es/math/Vector2.hpp"
 #include    "es/math/Vector3.hpp"
@@ -20,6 +22,7 @@ typedef ::glm::vec2 vec2;
 typedef ::glm::vec3 vec3;
 typedef ::glm::vec4 vec4;
 typedef ::glm::mat4 mat4;
+typedef ::glm::quat quat;
 
 
 /**

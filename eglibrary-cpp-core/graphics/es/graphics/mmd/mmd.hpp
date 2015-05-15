@@ -21,12 +21,15 @@
  * http://gulshan-i-raz.geo.jp/labs/2012/10/17/pmx-format1/
  * http://www18.ocn.ne.jp/~atrenas/MMD/step_0002.html
  * https://github.com/sn0w75/MikuMikuPenguin
+ * http://harigane.at.webry.info/201103/article_1.html
  */
 #include "PmxHeader.hpp"
 #include "PmxMesh.h"
 #include "PmxMaterial.h"
 #include "PmxBone.h"
 #include "PmxFigure.h"
+
+#include "VmdMotionController.h"
 
 
 #endif //ASSEMBLE_MMD_HPP

@@ -342,6 +342,11 @@ struct PmxPreCalcBone {
      */
     vec3 end;
 
+    /**
+     * 原点への変換逆行列
+     */
+    mat4 invert;
+
     PmxPreCalcBone() { }
 
     ~PmxPreCalcBone() { }
