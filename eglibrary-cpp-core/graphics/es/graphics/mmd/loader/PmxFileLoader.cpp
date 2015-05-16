@@ -316,6 +316,7 @@ bool PmxFileLoader::loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result) {
     for (int i = 0; i < numBones; ++i) {
         MPmxBone bone(new PmxBone());
 
+        bone->setIndex(i);
         bone->setName(loader->loadTextBuffer());
         bone->setNameEng(loader->loadTextBuffer());
         eslog("bone[%d] name(%s)", i, bone->getName().c_str());

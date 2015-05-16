@@ -152,7 +152,7 @@ public:
         PmxBone::deformationLevel = deformationLevel;
     }
 
-    int16_t getIndex() const {
+    uint16_t getIndex() const {
         return index;
     }
 

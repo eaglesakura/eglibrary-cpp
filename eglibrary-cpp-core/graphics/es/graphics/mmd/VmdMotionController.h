@@ -7,8 +7,10 @@
 
 #include <es/memory/SafeArray.hpp>
 #include <vector>
+#include <map>
 #include "es/eglibrary.hpp"
 #include "es/graphics/math/GlmHelper.hpp"
+#include "es/graphics/mmd/PmxBone.h"
 
 namespace es {
 
@@ -90,7 +92,7 @@ public:
     /**
      * ボーンコントロールを取得する
      */
-    MVmdBoneMotionController findBoneController(std::string name);
+    MVmdBoneMotionController findBoneController(std::string name, bool create = true);
 
     const std::string &getModelName() const {
         return modelName;
@@ -99,6 +101,11 @@ public:
     void setModelName(const std::string &modelName) {
         VmdMotionController::modelName = modelName;
     }
+
+    /**
+     * ボーン用のローカル行列を取得する
+     */
+    mat4 calcBoneLocalMatrix(int keyFrame, std::string boneName);
 };
 
 typedef std_shared_ptr<VmdMotionController> MVmdMotionController;
