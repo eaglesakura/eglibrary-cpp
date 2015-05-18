@@ -29,7 +29,15 @@
 #include "PmxBone.h"
 #include "PmxFigure.h"
 
-#include "VmdMotionController.h"
+/**
+ * VMD
+ */
+#include "VmdMotionData.h"
+
+/**
+ * Pmx <--> VMD
+ */
+#include "MmdMotionBinder.h"
 
 
 #endif //ASSEMBLE_MMD_HPP

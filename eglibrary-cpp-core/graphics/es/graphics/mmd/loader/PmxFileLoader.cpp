@@ -377,10 +377,10 @@ bool PmxFileLoader::loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result) {
         bones.push_back(bone);
     }
 
-    MPmxBoneController boneController(new PmxBoneController());
+    MPmxBoneData boneController(new PmxBoneData());
     boneController->initialize(bones);
 
-    result->figure->setBoneController(boneController);
+    result->figure->setBoneData(boneController);
 
     return true;
 }

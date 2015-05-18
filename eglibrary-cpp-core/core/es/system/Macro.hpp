@@ -1,6 +1,8 @@
 #ifndef es_system_MACRO_HPP_
 #define es_system_MACRO_HPP_
 
+#include <map>
+
 #ifdef __ANDROID__
 #undef  __APPLE__   // guard IDE
 #endif
@@ -66,15 +68,17 @@
  * 安全にdeleteを行う
  */
 #ifndef SAFE_DELETE
-#define     SAFE_DELETE( p )        if( p ){    delete p; p = NULL;     }
+#define     SAFE_DELETE(p)        if( p ){    delete p; p = NULL;     }
 #endif /* SAFE_DELETE */
 
 /**
  * 安全に配列deleteを行う
  */
 #ifndef SAFE_DELETE_ARRAY
-#define     SAFE_DELETE_ARRAY( p )  if( p ){    delete[] p; p = NULL;   }
+#define     SAFE_DELETE_ARRAY(p)  if( p ){    delete[] p; p = NULL;   }
 #endif /* SAFE_DELETE_ARRAY */
+
+namespace es {
 
 /**
  * ２つの変数の値を交換する
@@ -84,6 +88,23 @@ inline void swap(T *a, T *b) {
     T temp = *a;
     *a = *b;
     *b = temp;
+}
+
+/**
+ * Mapから簡易的に値を探す
+ */
+template<typename keyType, typename valueType>
+inline std_shared_ptr<valueType> find(const std::map<keyType, std_shared_ptr<valueType> > &objMap, const keyType &key) {
+    auto itr = objMap.find(key);
+    if (itr != objMap.end()) {
+        // found
+        return itr.second;
+    } else {
+        // notfound
+        return std_shared_ptr<valueType>();
+    }
+}
+
 }
 
 #endif

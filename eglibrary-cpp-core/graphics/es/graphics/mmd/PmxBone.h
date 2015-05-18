@@ -328,6 +328,11 @@ struct PmxPreCalcBone {
     PmxBone *self = nullptr;
 
     /**
+     * 親からのオフセット座標
+     */
+    vec3 offset;
+
+    /**
      * 開始位置
      */
     vec3 pos;
@@ -353,9 +358,9 @@ struct PmxPreCalcBone {
 };
 
 /**
- * PMXボーンの制御を行う
+ * PMXボーンのオリジナルデータ管理を行う
  */
-class PmxBoneController : public Object {
+class PmxBoneData : public Object {
     /**
      * 処理対象のボーン一覧
      */
@@ -366,9 +371,9 @@ class PmxBoneController : public Object {
      */
     safe_array<PmxPreCalcBone> preCalcBones;
 public:
-    PmxBoneController();
+    PmxBoneData();
 
-    virtual ~PmxBoneController() { }
+    virtual ~PmxBoneData() { }
 
     /**
      * 必要な情報の事前計算を行う
@@ -388,9 +393,14 @@ public:
     virtual PmxPreCalcBone *getBone(uint index) const {
         return preCalcBones.ptr + index;
     }
+
+    /**
+     * 指定されたボーンを探す
+     */
+    virtual PmxPreCalcBone *findBone(const std::string &name) const;
 };
 
-typedef std_shared_ptr<PmxBoneController> MPmxBoneController;
+typedef std_shared_ptr<PmxBoneData> MPmxBoneData;
 
 }
 

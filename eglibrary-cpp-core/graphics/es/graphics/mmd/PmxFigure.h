@@ -23,7 +23,7 @@ class PmxFigure : public Object {
 
     std::vector<MPmxMaterial> materials;
 
-    MPmxBoneController boneController;
+    MPmxBoneData boneData;
 
 public:
 
@@ -54,12 +54,12 @@ public:
         return materials[index];
     }
 
-    const MPmxBoneController &getBoneController() const {
-        return boneController;
+    const MPmxBoneData &getBoneData() const {
+        return boneData;
     }
 
-    void setBoneController(const MPmxBoneController &boneController) {
-        PmxFigure::boneController = boneController;
+    void setBoneData(const MPmxBoneData &boneData) {
+        PmxFigure::boneData = boneData;
     }
 };
 
