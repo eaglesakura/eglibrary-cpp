@@ -26,7 +26,6 @@ public:
         Loop,
         Stop,
     };
-private:
     struct BoneBind {
         /**
          * リンクされたオリジナルBone
@@ -47,7 +46,32 @@ private:
          * リンク対象のボーンモーション
          */
         MVmdBoneMotionData boneMotion;
+
+        /**
+         * ローカル座標変換行列
+         */
+        mat4 *pLocalMatrix = nullptr;
+
+        /**
+         * グローバル座標変換行列
+         */
+        mat4 *pGlobalMatrix = nullptr;
+
+        /**
+         * 頂点変換行列 / 逆行列適用済み。
+         */
+        mat4 *pVertexMatrix = nullptr;
+
+        vec3 motionTranslate;
+
+        quat motionRotate;
     };
+
+private:
+    /**
+     * ボーンごとのローカル行列テーブル
+     */
+    safe_array<mat4> localMatrixTable;
 
     /**
      * ボーンのグローバル構成行列テーブル
@@ -93,6 +117,13 @@ private:
      * デフォルトはモーションループ
      */
     MotionFillType motionFillType = Loop;
+
+
+    /**
+     * IKの更新を行う
+     */
+    void calcMotionIK();
+
 public:
 
     MmdMotionBinder();

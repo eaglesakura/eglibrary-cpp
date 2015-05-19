@@ -284,8 +284,12 @@ public:
         PmxBone::ikLimitedRadian = ikLimitedRadian;
     }
 
-    const safe_array<PmdIkLink> &getIkLinkList() const {
-        return ikLinkList;
+    unsafe_array<PmdIkLink> getIkLinkList() const {
+        return ikLinkList.iterator();
+    }
+
+    const uint getIkLinkCount() {
+        return ikLinkList.length;
     }
 
     void allocIkLinkList(uint ikNum);
@@ -323,6 +327,11 @@ struct PmxPreCalcBone {
     PmxBone *parent = nullptr;
 
     /**
+     * 付与親
+     */
+    PmxBone *provideParent = nullptr;
+
+    /**
      * 自分位置
      */
     PmxBone *self = nullptr;
@@ -351,6 +360,11 @@ struct PmxPreCalcBone {
      * 原点への変換逆行列
      */
     mat4 invert;
+
+    /**
+     * 付与親の付与率
+     */
+    float provideParentRatio = 1.0f;
 
     PmxPreCalcBone() { }
 

@@ -137,7 +137,7 @@ bool PmxFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
     
     vec3 maxPosition(-999999, -999999, -999999);
     vec3 minPosition(999999, 999999, 999999);
-    
+
     for (int i = 0; i < numVertices; ++i) {
         PmxStaticVertex *staticVertex = (PmxStaticVertex *) rawStaticVertex;
         
@@ -176,15 +176,28 @@ bool PmxFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
                 metaVertex->boneWeights[0] = loader->loadFloat();
                 metaVertex->boneWeights[1] = 1.0f - metaVertex->boneWeights[0];
         
-                loader->loadBuffer(&metaVertex->boneSdef.c, sizeof(Vector3f));
-                loader->loadBuffer(&metaVertex->boneSdef.r0, sizeof(Vector3f));
-                loader->loadBuffer(&metaVertex->boneSdef.r1, sizeof(Vector3f));
+                loader->loadBuffer(&metaVertex->boneSdef.c, sizeof(vec3));
+                loader->loadBuffer(&metaVertex->boneSdef.r0, sizeof(vec3));
+                loader->loadBuffer(&metaVertex->boneSdef.r1, sizeof(vec3));
                 break;
 #ifdef DEBUG
             default:
                 assert(false);
 #endif
         }
+
+#if 0
+        const uint CHECK_VERTEX_NUMBER = 198;
+        if (
+                metaVertex->boneIndices[0] == CHECK_VERTEX_NUMBER ||
+                metaVertex->boneIndices[1] == CHECK_VERTEX_NUMBER ||
+                metaVertex->boneIndices[2] == CHECK_VERTEX_NUMBER ||
+                metaVertex->boneIndices[3] == CHECK_VERTEX_NUMBER
+                ) {
+            debugLinkVertex++;
+        }
+#endif
+
         loader->loadBuffer(&staticVertex->edgeMagnification, sizeof(float));
         
         // 最小・最大位置を求める
@@ -200,7 +213,7 @@ bool PmxFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
         ++metaVertex;
         rawStaticVertex += staticVertexBytes;
     }
-    
+
     eslog("min(%.3f, %.3f, %.3f) max(%.3f, %.3f, %.3f) box WHD(%.3f, %.3f, %.3f)",
           minPosition.x, minPosition.y, minPosition.z,
           maxPosition.x, maxPosition.y, maxPosition.z,

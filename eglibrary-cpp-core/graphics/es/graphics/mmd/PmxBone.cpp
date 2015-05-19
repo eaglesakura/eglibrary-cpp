@@ -32,6 +32,11 @@ void PmxBoneData::initialize(const std::vector<MPmxBone> &newBones) {
                 pBone->parent = newBones[pBone->self->getParentBoneIndex()].get();
                 pBone->offset = pBone->self->getPosition() - pBone->parent->getPosition();
             }
+
+            if (pBone->self->hasProvidedParentBone()) {
+                pBone->provideParent = newBones[pBone->self->getProvidedParentBoneIndex()].get();
+                pBone->provideParentRatio = pBone->self->getProvidedRatio();
+            }
             
             pBone->pos = pBone->self->getPosition();
             if (pBone->self->hasConnectedBone()) {

@@ -78,8 +78,7 @@ bool VmdBoneMotionData::getKey(const float frame, vec3 *position, quat *rotate) 
         *rotate = start->rotate;
     }
 
-
-    return false;
+    return true;
 }
 
 VmdKeyFrame *VmdBoneMotionData::getKey(const int frame) {
