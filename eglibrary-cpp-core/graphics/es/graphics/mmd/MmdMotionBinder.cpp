@@ -121,19 +121,19 @@ void MmdMotionBinder::calcMotion() {
                 boneMatrixTable.ptr[matrixIndex] =
                         boneMatrixTable.ptr[parentIndex] *
                         localMatrixTable.ptr[matrixIndex];
-                
+
                 vertexMatrixTable.ptr[matrixIndex] =
                         boneMatrixTable.ptr[matrixIndex] *
                         iterator->pBone->invert;
             } else {
 
-                localMatrixTable.ptr[matrixIndex] = glm::translate(iterator->pBone->offset);
-                
-                boneMatrixTable.ptr[matrixIndex] =
-                        localMatrixTable.ptr[matrixIndex];
-                vertexMatrixTable.ptr[matrixIndex] =
-                        boneMatrixTable.ptr[matrixIndex] *
-                        iterator->pBone->invert;
+//                localMatrixTable.ptr[matrixIndex] = glm::translate(iterator->pBone->offset);
+//
+//                boneMatrixTable.ptr[matrixIndex] =
+//                        localMatrixTable.ptr[matrixIndex];
+//                vertexMatrixTable.ptr[matrixIndex] =
+//                        boneMatrixTable.ptr[matrixIndex] *
+//                        iterator->pBone->invert;
             }
         }
         
@@ -217,12 +217,11 @@ void MmdMotionBinder::calcMotionIK() {
                     angle = std::min(angle, IKBone->self->getIkLimitedRadian());
 
                     axis = -glm::cross(localTargetDir, localEffectorDir);
-//                    rotation = glm::rotate((float) (180.0 / M_PI * angle), axis);
                     rotation = glm::rotate(angle, axis);
 
                     if (IKLink->rotateLimited) {
                         const glm::quat desired_rotation(*linkBone->pLocalMatrix * rotation);
-                        const glm::vec3 desired_euler = glm::radians(glm::eulerAngles(desired_rotation));
+                        const glm::vec3 desired_euler = glm::eulerAngles(desired_rotation);
                         const glm::vec3 clamped_euler = glm::clamp(desired_euler, IKLink->minRadian, IKLink->maxRadian);
                         const glm::quat clamped_rotation(clamped_euler);
 //                        eslog("    linkBone[%s] angle(%.2f) euler(%.2f, %.2f, %.2f) min(%.1f, %.1f, %.1f) max(%.1f, %.1f, %.1f)",
@@ -233,11 +232,12 @@ void MmdMotionBinder::calcMotionIK() {
 //                              IKLink->maxRadian.x, IKLink->maxRadian.y, IKLink->maxRadian.z
 //                        );
 
-                        const glm::mat4 translation =
-                                glm::translate(glm::vec3((*linkBone->pLocalMatrix)[3][0], (*linkBone->pLocalMatrix)[3][1], (*linkBone->pLocalMatrix)[3][2]));
-                        (*linkBone->pLocalMatrix) = translation * glm::toMat4(clamped_rotation);
+                        linkBone->motionTranslate = vec3((*linkBone->pLocalMatrix)[3][0], (*linkBone->pLocalMatrix)[3][1], (*linkBone->pLocalMatrix)[3][2]);
+                        linkBone->motionRotate = clamped_rotation;
+                        (*linkBone->pLocalMatrix) = glm::translate(linkBone->motionTranslate) * glm::toMat4(clamped_rotation);
                     }
                     else {
+                        linkBone->motionRotate *= quat(angle, axis);
                         (*linkBone->pLocalMatrix) *= rotation;
                     }
                 }
@@ -256,10 +256,16 @@ void MmdMotionBinder::calcMotionIK() {
     // IK適用した行列を再度生成する
     iterator = binds.iterator();
     while (iterator) {
+//        mat4 rotateLink;
+//        if (iterator->pBone->self->hasFlag(PmxBone::Flag::GiveRotation)) {
+//            int16_t providedBoneIndex = iterator->pBone->self->getProvidedParentBoneIndex();
+//            rotateLink = glm::toMat4(binds.ptr[providedBoneIndex].motionRotate);
+//        }
+
         if (iterator->pBone->parent) {
             // 親行列と適用する
-//            (*iterator->pGlobalMatrix) = (*binds.ptr[iterator->pBone->parent->getIndex()].pGlobalMatrix) * (*iterator->pLocalMatrix);
-            (*iterator->pGlobalMatrix) = calcGlobalMatrix(binds.ptr, iterator.ptr);
+            (*iterator->pGlobalMatrix) = (*binds.ptr[iterator->pBone->parent->getIndex()].pGlobalMatrix) * (*iterator->pLocalMatrix);
+//            (*iterator->pGlobalMatrix) = calcGlobalMatrix(binds.ptr, iterator.ptr);
         }
 
         (*iterator->pVertexMatrix) = (*iterator->pGlobalMatrix) * iterator->pBone->invert;

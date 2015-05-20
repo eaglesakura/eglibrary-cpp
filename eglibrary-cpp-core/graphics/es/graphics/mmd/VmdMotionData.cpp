@@ -68,8 +68,13 @@ bool VmdBoneMotionData::getKey(const float frame, vec3 *position, quat *rotate) 
 
     if (end->frame != start->frame) {
         float weight = (frame - (float) start->frame) / (float) (end->frame - start->frame);
-        assert(weight >= 0.0f);
-        assert(weight <= 1.0f);
+        // 打たれていないフレームがある場合に備えて、weightは丸めを指定する
+        weight = es::minmax(0.0f, 1.0f, weight);
+//        if (weight < 0.0f || weight > 1.0f) {
+//            eslog("start(%d) end(%d) weight(%f)", start->frame, end->frame, weight);
+//        }
+//        assert(weight >= 0.0f);
+//        assert(weight <= 1.0f);
 
         *position = (end->pos * weight) + (start->pos * (1.0f - weight));
         *rotate = glm::mix(start->rotate, end->rotate, weight);

@@ -336,11 +336,12 @@ bool PmxFileLoader::loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result) {
 
         bone->setPosition(loader->loadVector3());
         bone->setParentBoneIndex(loader->loadIntN(boneIndexSize));
-        eslog("    bone pos(%.2f, %.2f, %.2f)", bone->getPosition().x, bone->getPosition().y, bone->getPosition().z);
-        eslog("    bone parent(%d)", bone->getParentBoneIndex());
         bone->setDeformationLevel(loader->loadInt32());
         bone->setFlags(0, loader->loadByte());
         bone->setFlags(1, loader->loadByte());
+        eslog("    bone pos(%.2f, %.2f, %.2f)", bone->getPosition().x, bone->getPosition().y, bone->getPosition().z);
+        eslog("    bone parent(%d)", bone->getParentBoneIndex());
+        eslog("    bone deformLevel(%d)", bone->getDeformationLevel());
 
         if (bone->hasFlag(PmxBone::Flag::ConnectionDisplayMethod)) {
             bone->setConnectedBoneIndex(loader->loadIntN(boneIndexSize));
@@ -379,7 +380,11 @@ bool PmxFileLoader::loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result) {
                 PmdIkLink *pIkLink = bone->getIkLink(k);
                 pIkLink->linkBoneIndex = loader->loadIntN(boneIndexSize);
                 pIkLink->rotateLimited = loader->loadByte() != 0;
-                eslog("    ikLink[%d] limited[%s]", k, pIkLink->rotateLimited ? "true" : "false");
+                eslog("    ikLink[%d] limited[%s] target[%d]",
+                      k,
+                      pIkLink->rotateLimited ? "true" : "false",
+                      pIkLink->linkBoneIndex
+                );
                 if (pIkLink->rotateLimited) {
                     pIkLink->minRadian = loader->loadVector3();
                     pIkLink->maxRadian = loader->loadVector3();
