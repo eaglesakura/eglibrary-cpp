@@ -142,9 +142,11 @@ bool PmxFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
         PmxStaticVertex *staticVertex = (PmxStaticVertex *) rawStaticVertex;
         
         // 各種データを読み込む
-        loader->loadBuffer(&dynamicVertex->pos, sizeof(Vector3f));
-        loader->loadBuffer(&dynamicVertex->normal, sizeof(Vector3f));
-        loader->loadBuffer(&staticVertex->uv, sizeof(Vector2f));
+        loader->loadBuffer(&dynamicVertex->pos, sizeof(vec3));
+        dynamicVertex->pos.w = 1.0f; /* vec4で扱う場合、最終要素wは常に1でなければならない */
+
+        loader->loadBuffer(&dynamicVertex->normal, sizeof(vec3));
+        loader->loadBuffer(&staticVertex->uv, sizeof(vec2));
         // 拡張UVを読み込む
         for (int k = 0; k < addUVCount; ++k) {
             loader->loadBuffer(&(staticVertex->extraUv[k]), sizeof(Vector4f));

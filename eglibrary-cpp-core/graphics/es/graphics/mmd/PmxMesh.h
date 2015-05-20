@@ -23,7 +23,7 @@ struct PmxDynamicVertex {
     /**
      * 変形された位置情報
      */
-    vec3 pos;
+    vec4 pos;
 
     /**
      * 変形された法線情報
@@ -190,7 +190,7 @@ public:
      * 固定頂点の1頂点のサイズ(byte)を取得する
      */
     virtual uint getStaticVertexBytes() const {
-        return sizeof(PmxStaticVertex) + (sizeof(Vector4f) * numExtraUV);
+        return sizeof(PmxStaticVertex) + (sizeof(vec4) * numExtraUV);
     }
 
     /**
