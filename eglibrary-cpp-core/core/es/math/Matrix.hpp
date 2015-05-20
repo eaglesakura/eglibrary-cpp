@@ -122,6 +122,18 @@ struct Matrix {
     }
 
     /**
+     * float[3]と行列の演算を行う
+     */
+    inline void multiply3(const float *origin3f, float *result4f) const {
+        // x
+        result4f[0] = m[0][0] * origin3f[0] + m[1][0] * origin3f[1] + m[2][0] * origin3f[2] + m[3][0];
+        // y
+        result4f[1] = m[0][1] * origin3f[0] + m[1][1] * origin3f[1] + m[2][1] * origin3f[2] + m[3][1];
+        // z
+        result4f[2] = m[0][2] * origin3f[0] + m[1][2] * origin3f[1] + m[2][2] * origin3f[2] + m[3][2];
+    }
+
+    /**
      * float[4]と行列の演算を行う
      */
     inline void multiply4(const float *origin4f, float *result4f) const {

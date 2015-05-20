@@ -11,6 +11,7 @@
 #include <es/memory/SafeArray.hpp>
 #include <es/math/Vector4.hpp>
 #include <es/graphics/math/GlmHelper.hpp>
+#include <vector>
 
 namespace es {
 
@@ -124,6 +125,32 @@ class PmxMesh : public Object {
     uint numExtraUV = 1;
 
     /**
+     * 同じ変形情報をグルーピングしたテーブル
+     */
+    struct {
+        /**
+         * BDEF1で計算する頂点番号一覧
+         */
+        safe_array<uint> bdef1;
+        /**
+         * BDEF2で計算する頂点番号一覧
+         */
+        safe_array<uint> bdef2;
+        /**
+         * BDEF3で計算する頂点番号一覧
+         */
+        safe_array<uint> bdef3;
+        /**
+         * BDEF4で計算する頂点番号一覧
+         */
+        safe_array<uint> bdef4;
+        /**
+         * SDEFで計算する頂点番号一覧
+         */
+        safe_array<uint> sdef;
+    } modifyTypeGroups;
+
+    /**
      * メタ情報
      */
     safe_array<PmxMetaVertex> metaVertices;
@@ -171,6 +198,36 @@ public:
      */
     virtual void allocIndices(const uint numIndex, const uint indexBytes);
 
+    /**
+     * 変形情報テーブルを設定する
+     *
+     * 元のvectorは内部的にコピーするので、メソッド呼び出し後の生存は気にしなくて良い。
+     */
+    virtual void setBoneModifyGroupIndices(const std::vector<uint> &bdef1, const std::vector<uint> &bdef2, const std::vector<uint> &bdef3, const std::vector<uint> &bdef4, const std::vector<uint> &sdef);
+
+
+    /**
+     * ボーン変形グループを取得する
+     *
+     * nullの場合は返さない。
+     */
+    virtual void getBoneModifiedGroupIndices(unsafe_array<uint> *bdef1, unsafe_array<uint> *bdef2, unsafe_array<uint> *bdef3, unsafe_array<uint> *bdef4, unsafe_array<uint> *sdef) {
+        if (bdef1) {
+            *bdef1 = modifyTypeGroups.bdef1.iterator();
+        }
+        if (bdef2) {
+            *bdef2 = modifyTypeGroups.bdef2.iterator();
+        }
+        if (bdef3) {
+            *bdef3 = modifyTypeGroups.bdef3.iterator();
+        }
+        if (bdef4) {
+            *bdef4 = modifyTypeGroups.bdef4.iterator();
+        }
+        if (sdef) {
+            *sdef = modifyTypeGroups.sdef.iterator();
+        }
+    }
 
     /**
      * 1インデックスのサイズ(byte)を取得する

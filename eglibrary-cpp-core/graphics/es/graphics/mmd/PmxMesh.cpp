@@ -45,4 +45,27 @@ void PmxMesh::allocIndices(const uint numIndex, const uint indexBytes) {
     this->indexBytes = indexBytes;
     indices.alloc(numIndex * indexBytes);
 }
+
+void PmxMesh::setBoneModifyGroupIndices(const std::vector<uint> &bdef1, const std::vector<uint> &bdef2, const std::vector<uint> &bdef3, const std::vector<uint> &bdef4, const std::vector<uint> &sdef) {
+    if (!bdef1.empty()) {
+        modifyTypeGroups.bdef1.alloc(bdef1.size());
+        modifyTypeGroups.bdef1.memcopyFrom(&bdef1[0], bdef1.size());
+    }
+    if (!bdef2.empty()) {
+        modifyTypeGroups.bdef1.alloc(bdef2.size());
+        modifyTypeGroups.bdef1.memcopyFrom(&bdef2[0], bdef1.size());
+    }
+    if (!bdef3.empty()) {
+        modifyTypeGroups.bdef1.alloc(bdef3.size());
+        modifyTypeGroups.bdef1.memcopyFrom(&bdef3[0], bdef1.size());
+    }
+    if (!bdef4.empty()) {
+        modifyTypeGroups.bdef1.alloc(bdef4.size());
+        modifyTypeGroups.bdef1.memcopyFrom(&bdef4[0], bdef1.size());
+    }
+    if (!sdef.empty()) {
+        modifyTypeGroups.bdef1.alloc(sdef.size());
+        modifyTypeGroups.bdef1.memcopyFrom(&sdef[0], bdef1.size());
+    }
+}
 }

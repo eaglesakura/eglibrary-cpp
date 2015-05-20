@@ -138,6 +138,12 @@ bool PmxFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
     vec3 maxPosition(-999999, -999999, -999999);
     vec3 minPosition(999999, 999999, 999999);
 
+    std::vector<uint> indicesBdef1;
+    std::vector<uint> indicesBdef2;
+    std::vector<uint> indicesBdef3;
+    std::vector<uint> indicesBdef4;
+    std::vector<uint> indicesSdef;
+
     for (int i = 0; i < numVertices; ++i) {
         PmxStaticVertex *staticVertex = (PmxStaticVertex *) rawStaticVertex;
         
@@ -162,15 +168,24 @@ bool PmxFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
             case PmxMetaVertex::BDEF1:
                 boneIndexLoadFunc(metaVertex->boneIndices, 1);
                 metaVertex->boneWeights[0] = 1.0f;
+                indicesBdef1.push_back(i);
                 break;
             case PmxMetaVertex::BDEF2:
                 boneIndexLoadFunc(metaVertex->boneIndices, 2);
                 metaVertex->boneWeights[0] = loader->loadFloat();
                 metaVertex->boneWeights[1] = 1.0f - metaVertex->boneWeights[0];
+                indicesBdef2.push_back(i);
                 break;
             case PmxMetaVertex::BDEF4:
                 boneIndexLoadFunc(metaVertex->boneIndices, 4);
                 loader->loadBuffer(metaVertex->boneWeights, sizeof(float) * 4);
+
+                if (metaVertex->boneWeights[3] == 0.0f) {
+                    indicesBdef3.push_back(i);
+                } else {
+                    indicesBdef4.push_back(i);
+                }
+
 //                metaVertex->boneWeights[3] = 1.0f - (metaVertex->boneWeights[0] + metaVertex->boneWeights[1] + metaVertex->boneWeights[2]);
                 break;
             case PmxMetaVertex::SDEF:
@@ -181,6 +196,8 @@ bool PmxFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
                 loader->loadBuffer(&metaVertex->boneSdef.c, sizeof(vec3));
                 loader->loadBuffer(&metaVertex->boneSdef.r0, sizeof(vec3));
                 loader->loadBuffer(&metaVertex->boneSdef.r1, sizeof(vec3));
+
+                indicesSdef.push_back(i);
                 break;
 #ifdef DEBUG
             default:
@@ -216,14 +233,16 @@ bool PmxFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
         rawStaticVertex += staticVertexBytes;
     }
 
-    eslog("min(%.3f, %.3f, %.3f) max(%.3f, %.3f, %.3f) box WHD(%.3f, %.3f, %.3f)",
+    eslog("Mesh AABB min(%.3f, %.3f, %.3f) max(%.3f, %.3f, %.3f) box WHD(%.3f, %.3f, %.3f)",
           minPosition.x, minPosition.y, minPosition.z,
           maxPosition.x, maxPosition.y, maxPosition.z,
           maxPosition.x - minPosition.x, maxPosition.y - minPosition.y, maxPosition.z - minPosition.z
     );
+    eslog("Mesh BoneType BDEF1(%d) BDEF2(%d) BDEF3(%d) BDEF4(%d) SDEF(%d)", indicesBdef1.size(), indicesBdef2.size(), indicesBdef3.size(), indicesBdef4.size(), indicesSdef.size());
     
     mesh->setMinPosition(minPosition);
     mesh->setMaxPosition(maxPosition);
+    mesh->setBoneModifyGroupIndices(indicesBdef1, indicesBdef2, indicesBdef3, indicesBdef4, indicesSdef);
     result->figure->setMesh(mesh);
     
     return true;
