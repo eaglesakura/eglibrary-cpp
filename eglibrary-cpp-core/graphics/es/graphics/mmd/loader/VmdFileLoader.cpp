@@ -52,7 +52,7 @@ bool VmdFileLoader::loadBones(MmdBufferDataLoader *loader, MVmdMotionData result
 
     for (int i = 0; i < numFrames; ++i) {
         std::string boneName = loader->loadEncodedString(15, encoder.get());
-        eslog("Frame[%d] target(%s)", i, boneName.c_str());
+//        eslog("Frame[%d] target(%s)", i, boneName.c_str());
 
         MVmdBoneMotionData controller = result->findBoneController(boneName);
         assert(controller);
@@ -63,7 +63,7 @@ bool VmdFileLoader::loadBones(MmdBufferDataLoader *loader, MVmdMotionData result
         loader->loadBuffer(key->bezier, 64);
 
         maxFrameNumber = std::max(maxFrameNumber, key->frame);
-        eslog("    Key[%d] T(%.2f, %.2f, %.2f) R(%.2f, %.2f, %.2f, %.2f)", key->frame, key->pos.x, key->pos.y, key->pos.z, key->rotate.x, key->rotate.y, key->rotate.z, key->rotate.w);
+//        eslog("    Key[%d] T(%.2f, %.2f, %.2f) R(%.2f, %.2f, %.2f, %.2f)", key->frame, key->pos.x, key->pos.y, key->pos.z, key->rotate.x, key->rotate.y, key->rotate.z, key->rotate.w);
     }
 
     eslog("    MaxFrames(%d)", maxFrameNumber);

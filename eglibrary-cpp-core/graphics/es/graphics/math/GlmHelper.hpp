@@ -7,6 +7,8 @@
 
 
 #define GLM_FORCE_RADIANS
+#define GLM_SWIZZLE
+#define GLM_FORCE_INLNIE
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
