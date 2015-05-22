@@ -59,6 +59,8 @@ public:
 
     /**
      * 新しいキーフレームを打刻する
+     *
+     * 注意) 返却されたポインタは後のキー追加や整列によって無効になる可能性が高いので、絶対に保存してはいけない。
      */
     VmdKeyFrame *newKeyFrame(const int newFrame);
 

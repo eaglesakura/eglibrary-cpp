@@ -41,6 +41,10 @@ MPmxFile PmxFileLoader::loadPmx(const unsafe_array<uint8_t> buffer) {
         return MPmxFile();
     }
 
+    if (!loadPmxMorphs(&loader, result)) {
+        return MPmxFile();
+    }
+
     return result;
 }
 
@@ -389,7 +393,7 @@ bool PmxFileLoader::loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result) {
             bone->setKeyValue(loader->loadInt32());
         }
 
-        if (bone->hasFlag(PmxBone::Flag::IkEnable)) {
+        if (bone->hasFlag(PmxBone::Flag::IkBone)) {
             bone->setIkTargetBoneIndex(loader->loadIntN(boneIndexSize));
             bone->setIkLoopCount(loader->loadInt32());
             bone->setIkLimitedRadian(loader->loadFloat());
@@ -423,4 +427,9 @@ bool PmxFileLoader::loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result) {
 
     return true;
 }
+
+bool PmxFileLoader::loadPmxMorphs(MmdBufferDataLoader *loader, MPmxFile result) {
+    return true;
+}
+
 }

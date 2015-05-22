@@ -170,7 +170,7 @@ public:
         TranslateEnable,
         Visible,
         ControlEnable,
-        IkEnable,
+        IkBone,
 
         GiveRotation = 10,
         GiveTranslation,

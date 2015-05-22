@@ -72,6 +72,12 @@ protected:
      * ボーン情報を取得する
      */
     virtual bool loadPmxBones(MmdBufferDataLoader *loader, MPmxFile result);
+
+    /**
+     * モーフィングを取得する
+     */
+    virtual bool loadPmxMorphs(MmdBufferDataLoader *loader, MPmxFile result);
+
 public:
     PmxFileLoader();
 

@@ -176,7 +176,7 @@ void MmdMotionBinder::calcMotionIK() {
     unsafe_array<BoneBind> iterator = binds.iterator();
     while (iterator) {
         PmxPreCalcBone *IKBone = iterator->pBone;
-        if (IKBone->self->hasFlag(PmxBone::Flag::IkEnable)) {
+        if (IKBone->self->hasFlag(PmxBone::Flag::IkBone)) {
             assert(IKBone->self->getIkTargetBoneIndex() >= 0);
 
             glm::mat4 IKBoneMatrix = calcGlobalMatrix(binds.ptr, iterator.ptr);
