@@ -121,10 +121,6 @@ VmdKeyFrame *VmdBoneMotionData::newKeyFrame(const int newFrame) {
         for (const auto &key : keys) {
             assert(key.frame != newFrame);
         }
-
-//        // 最後に打たれたフレームよりも大きいフレームであることを保証する
-//        eslog("name(%s) lastFrame(%d) newFrame(%d)", name.c_str(), keys[keys.size() - 1].frame, newFrame);
-//        assert(newFrame > keys[keys.size() - 1].frame);
     }
 #endif
 
@@ -146,6 +142,7 @@ VmdKeyFrame *VmdBoneMotionData::newKeyFrame(const int newFrame) {
             return &key;
         }
     }
+    // ここに到達してはいけない
     assert(false);
     return nullptr;
 //    return &keys[keys.size() - 1];
