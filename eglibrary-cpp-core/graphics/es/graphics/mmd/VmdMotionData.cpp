@@ -24,13 +24,18 @@ MVmdBoneMotionData VmdMotionData::findBoneController(std::string name, bool crea
 }
 
 bool VmdBoneMotionData::getKey(const float frame, VmdKeyFrame **start, VmdKeyFrame **end) {
+    if (keys.size() == 1) {
+        *start = *end = &keys[0];
+        return true;
+    }
+
     // check frame
-    const uint16_t checkFrame = ceil(frame);
+    const uint16_t checkFrame = (uint16_t) ceil(frame);
 
     VmdKeyFrame *before = nullptr;
     VmdKeyFrame *beforeBefore = nullptr;
     for (VmdKeyFrame &key : keys) {
-        if (checkFrame <= (float) key.frame) {
+        if (key.frame >= checkFrame) {
             *end = &key;
             if (before) {
                 *start = before;
@@ -44,16 +49,23 @@ bool VmdBoneMotionData::getKey(const float frame, VmdKeyFrame **start, VmdKeyFra
         }
     }
 
-    if (before && beforeBefore) {
+    if (!beforeBefore) {
+        *start = *end = before;
+    } else {
         *start = beforeBefore;
         *end = before;
-        return true;
-    } else if (before) {
-        *start = *end = before;
-        return true;
     }
 
-    return false;
+//    if (before && beforeBefore) {
+//        *start = beforeBefore;
+//        *end = before;
+//        return true;
+//    } else if (before) {
+//        *start = *end = before;
+//        return true;
+//    }
+
+    return true;
 }
 
 bool VmdBoneMotionData::getKey(const float frame, vec3 *position, quat *rotate) {
@@ -61,26 +73,26 @@ bool VmdBoneMotionData::getKey(const float frame, vec3 *position, quat *rotate) 
     VmdKeyFrame *end = nullptr;
 
     getKey(frame, &start, &end);
+
     assert(start);
     assert(end);
-
     assert(start->frame <= end->frame);
 
-    if (end->frame != start->frame) {
-        float weight = (frame - (float) start->frame) / (float) (end->frame - start->frame);
-        // 打たれていないフレームがある場合に備えて、weightは丸めを指定する
-        weight = es::minmax(0.0f, 1.0f, weight);
-//        if (weight < 0.0f || weight > 1.0f) {
-//            eslog("start(%d) end(%d) weight(%f)", start->frame, end->frame, weight);
-//        }
-//        assert(weight >= 0.0f);
-//        assert(weight <= 1.0f);
-
-        *position = (end->pos * weight) + (start->pos * (1.0f - weight));
-        *rotate = glm::mix(start->rotate, end->rotate, weight);
-    } else {
+    if (frame <= (float) start->frame) {
+        // 開始フレームより前であるなら、開始フレームに合わせる
         *position = start->pos;
         *rotate = start->rotate;
+    } else if (frame >= (float) end->frame) {
+        // 終了フレームより後であるなら、終了フレームに合わせる
+        *position = end->pos;
+        *rotate = end->rotate;
+    } else /* if (end->frame != start->frame) */ {
+        float weight = (frame - (float) start->frame) / (float) (end->frame - start->frame);
+        assert(weight > 0.0f);
+        assert(weight < 1.0f);
+        *position = (end->pos * weight) + (start->pos * (1.0f - weight));
+        *rotate = glm::normalize(glm::mix(glm::normalize(start->rotate), glm::normalize(end->rotate), weight));
+//        *rotate = glm::slerp(end->rotate, start->rotate, weight);
     }
 
     return true;
@@ -102,12 +114,41 @@ VmdKeyFrame *VmdBoneMotionData::getKey(const int frame) {
     return nullptr;
 }
 
-VmdKeyFrame *VmdBoneMotionData::newKeyFrame(const int frame) {
+VmdKeyFrame *VmdBoneMotionData::newKeyFrame(const int newFrame) {
+#ifdef DEBUG
+    if (!keys.empty()) {
+        // 重複するフレームが存在しないことを確認する
+        for (const auto &key : keys) {
+            assert(key.frame != newFrame);
+        }
+
+//        // 最後に打たれたフレームよりも大きいフレームであることを保証する
+//        eslog("name(%s) lastFrame(%d) newFrame(%d)", name.c_str(), keys[keys.size() - 1].frame, newFrame);
+//        assert(newFrame > keys[keys.size() - 1].frame);
+    }
+#endif
+
     VmdKeyFrame key;
-    key.frame = frame;
+    key.frame = newFrame;
     keys.push_back(key);
-    this->maxFrame = std::max(maxFrame, (int16_t) frame);
-    return &keys[keys.size() - 1];
+
+    // MEMO : データの都合上か、キーはランダムな順番に打ち込まれている可能性があるため、逐次ソートが必要になる。
+    // sorting
+    std::sort(keys.begin(), keys.end(), [](const VmdKeyFrame &lhs, const VmdKeyFrame &rhs) -> bool {
+        return lhs.frame < rhs.frame;
+    });
+    // 最初のフレーム < 最後のフレームであることを保証する
+    assert(keys[0].frame <= keys[keys.size() - 1].frame);
+    this->maxFrame = std::max(maxFrame, (int16_t) newFrame);
+
+    for (auto &key : keys) {
+        if (key.frame == newFrame) {
+            return &key;
+        }
+    }
+    assert(false);
+    return nullptr;
+//    return &keys[keys.size() - 1];
 }
 
 mat4 VmdMotionData::calcBoneLocalMatrix(int keyFrame, std::string boneName) {

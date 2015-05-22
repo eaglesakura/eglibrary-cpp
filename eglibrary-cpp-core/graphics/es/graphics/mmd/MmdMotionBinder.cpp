@@ -81,7 +81,11 @@ void MmdMotionBinder::calcMotion() {
     unsafe_array<BoneBind> iterator = binds.iterator();
     while (iterator) {
         const uint matrixIndex = iterator->pBone->self->getIndex();
-        
+
+        if (iterator->pBone->self->hasProvidedParentBone()) {
+            // TODO ProvidedParentBoneIndexが後に来る可能性があるので、アルゴリズムの改良が必要
+//            assert(iterator->pBone->self->getIndex() > iterator->pBone->self->getProvidedParentBoneIndex());
+        }
         
         if (iterator->boneMotion) {
             iterator->boneMotion->getKey(currentMotionFrame, &iterator->motionTranslate, &iterator->motionRotate);
@@ -139,7 +143,6 @@ void MmdMotionBinder::calcMotion() {
         
         ++iterator;
     }
-
     calcMotionIK();
 }
 
@@ -186,7 +189,6 @@ void MmdMotionBinder::calcMotionIK() {
                     assert(IKLink->linkBoneIndex >= 0);
                     BoneBind *linkBone = binds.ptr + IKLink->linkBoneIndex;
 
-//                    tmpMatrix = *targetBone->pGlobalMatrix;
                     tmpMatrix = calcGlobalMatrix(binds.ptr, targetBone);
 
                     effectorPos.x = tmpMatrix[3][0];

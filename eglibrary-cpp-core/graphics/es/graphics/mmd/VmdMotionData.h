@@ -60,7 +60,7 @@ public:
     /**
      * 新しいキーフレームを打刻する
      */
-    VmdKeyFrame *newKeyFrame(const int frame);
+    VmdKeyFrame *newKeyFrame(const int newFrame);
 
     /**
      * ループ処理用のダミーフレームを挿入する

@@ -13,16 +13,16 @@ static const char *CHARSET_UTF8 = "UTF-8";
 static const char *CHARSET_UTF16LE = "UTF-16LE";
 
 class StringEncoder {
-    iconv_t ic;
+    ::iconv_t ic;
 public:
 
     StringEncoder(const char *dstFormat, const char *srcFormat) {
-        ic = iconv_open(dstFormat, srcFormat);
+        ic = ::iconv_open(dstFormat, srcFormat);
     }
 
     ~StringEncoder() {
         if (ic) {
-            iconv_close(ic);
+            ::iconv_close(ic);
         }
     }
 
