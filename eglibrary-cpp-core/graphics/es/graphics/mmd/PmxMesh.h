@@ -30,6 +30,11 @@ struct PmxDynamicVertex {
      * 変形された法線情報
      */
     vec3 normal;
+
+    /**
+     * 16byte単位にパッキングするためのダミー領域
+     */
+    float dummy;
 };
 
 /**
