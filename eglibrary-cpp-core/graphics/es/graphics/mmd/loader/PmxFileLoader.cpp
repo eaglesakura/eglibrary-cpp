@@ -134,10 +134,10 @@ bool PmxFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
     
     mesh->allocVertices(numVertices, addUVCount);
     
-    PmxDynamicVertex *dynamicVertex = mesh->getDynamicVerticesPointer();
+    PmxSkinVertex *dynamicVertex = mesh->getDynamicVerticesPointer();
     PmxMetaVertex *metaVertex = mesh->getMetaVerticesPointer();
-    uint8_t *rawStaticVertex = mesh->getStaticVerticesPointer();
-    const uint32_t staticVertexBytes = mesh->getStaticVertexBytes();
+    uint8_t *rawStaticVertex = mesh->getMeshVerticesPointer();
+    const uint32_t staticVertexBytes = mesh->getMeshVertexBytes();
     
     vec3 maxPosition(-999999, -999999, -999999);
     vec3 minPosition(999999, 999999, 999999);
@@ -149,7 +149,7 @@ bool PmxFileLoader::loadPmxVertices(MmdBufferDataLoader *loader, MPmxFile result
     std::vector<uint> indicesSdef;
 
     for (int i = 0; i < numVertices; ++i) {
-        PmxStaticVertex *staticVertex = (PmxStaticVertex *) rawStaticVertex;
+        PmxMeshVertex *staticVertex = (PmxMeshVertex *) rawStaticVertex;
         
         // 各種データを読み込む
         loader->loadBuffer(&dynamicVertex->pos, sizeof(vec3));

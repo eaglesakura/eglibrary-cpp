@@ -31,7 +31,6 @@ typedef ::glm::quat quat;
 /**
  * メモリサイズの検証
  */
-
 static_assert(sizeof(mat4) == (sizeof(float) * 16), "sizeof(mat4) != float[4][4]");
 static_assert(sizeof(vec2) == (sizeof(float) * 2), "sizeof(vec2) != float[2]");
 static_assert(sizeof(vec3) == (sizeof(float) * 3), "sizeof(vec3) != float[3]");

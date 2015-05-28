@@ -16,7 +16,6 @@ MVmdBoneMotionData VmdMotionData::findBoneController(std::string name, bool crea
         ctrl->setName(name);
         
         boneMotions.push_back(ctrl);
-        
         return ctrl;
     } else {
         return MVmdBoneMotionData();
@@ -55,15 +54,6 @@ bool VmdBoneMotionData::getKey(const float frame, VmdKeyFrame **start, VmdKeyFra
         *start = beforeBefore;
         *end = before;
     }
-
-//    if (before && beforeBefore) {
-//        *start = beforeBefore;
-//        *end = before;
-//        return true;
-//    } else if (before) {
-//        *start = *end = before;
-//        return true;
-//    }
 
     return true;
 }

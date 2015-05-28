@@ -23,18 +23,18 @@ void PmxMesh::allocVertices(const uint numVertices, const uint numExtraUV) {
 
     // 動的制御頂点を生成する
     {
-        dynamicVertices.alloc(numVertices);
+        skinVertices.alloc(numVertices);
         metaVertices.alloc(numVertices);
-        dynamicVertices.zeromemory();
+        skinVertices.zeromemory();
         metaVertices.zeromemory();
     }
 
     // 固定頂点を生成する
     {
-        const uint vertexSize = getStaticVertexBytes();
-        eslog("PmxStaticVertex size(%d bytes) extraUV num(%d)", vertexSize, numExtraUV);
-        assert(vertexSize >= sizeof(PmxStaticVertex));
-        staticVertices.alloc(vertexSize * numVertices);
+        const uint vertexSize = getMeshVertexBytes();
+        eslog("PmxMeshVertex size(%d bytes) extraUV num(%d)", vertexSize, numExtraUV);
+        assert(vertexSize >= sizeof(PmxMeshVertex));
+        meshVertices.alloc(vertexSize * numVertices);
     }
 }
 

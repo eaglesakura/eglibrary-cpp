@@ -22,7 +22,7 @@ namespace es {
  * このバッファはソフトウェアスキニングで動的に制御やコピーが頻繁に行われる
  * UV情報を含むため、この頂点の大きさは動的である。
  */
-struct PmxDynamicVertex {
+struct PmxSkinVertex {
     /**
      * 変形された位置情報
      */
@@ -99,17 +99,24 @@ struct PmxMetaVertex {
 
 /**
  * 静的に扱われる頂点情報
+ *
+ * UVモーフィングの対象とする場合はこの頂点も動的に扱う必要がある。
  */
-struct PmxStaticVertex {
+struct PmxMeshVertex {
+    /**
+     * 宣言的には1つだが、末尾にPMX固有の追加UV数が付与される場合がある。
+     */
+    vec2 uv;
+
     /**
      * Edge倍率
      */
     float edgeMagnification;
 
     /**
-     * 宣言的には1つだが、末尾にPMX固有の追加UV数が付与される場合がある。
+     * byte位置を整列するためのダミーデータ
      */
-    vec2 uv;
+    float dummy;
 
     /**
      * 追加UV
@@ -127,7 +134,7 @@ class PmxMesh : public Object {
     /**
      * スキニング処理の影響を受けない頂点
      */
-    safe_array<uint8_t> staticVertices;
+    safe_array<uint8_t> meshVertices;
 
     /**
      * 保持しているUV座標数
@@ -168,7 +175,7 @@ class PmxMesh : public Object {
     /**
      * スキニング処理の影響を受ける頂点
      */
-    safe_array<PmxDynamicVertex> dynamicVertices;
+    safe_array<PmxSkinVertex> skinVertices;
 
     /**
      * AABB最小位置
@@ -215,7 +222,6 @@ public:
      */
     virtual void setBoneModifyGroupIndices(const std::vector<uint> &bdef1, const std::vector<uint> &bdef2, const std::vector<uint> &bdef3, const std::vector<uint> &bdef4, const std::vector<uint> &sdef);
 
-
     /**
      * ボーン変形グループを取得する
      *
@@ -241,6 +247,8 @@ public:
 
     /**
      * 1インデックスのサイズ(byte)を取得する
+     *
+     * 1/2/4の何れかになる
      */
     uint getIndexBytes() const {
         return indexBytes;
@@ -256,8 +264,8 @@ public:
     /**
      * 固定頂点の1頂点のサイズ(byte)を取得する
      */
-    virtual uint getStaticVertexBytes() const {
-        return sizeof(PmxStaticVertex) + (sizeof(vec4) * numExtraUV);
+    virtual uint getMeshVertexBytes() const {
+        return sizeof(PmxMeshVertex) + (sizeof(vec4) * numExtraUV);
     }
 
     /**
@@ -265,8 +273,8 @@ public:
      *
      * 保持しているUV座標数によって、1頂点の大きさが変化することに注意する。
      */
-    virtual uint8_t *getStaticVerticesPointer() const {
-        return staticVertices.ptr;
+    virtual uint8_t *getMeshVerticesPointer() const {
+        return meshVertices.ptr;
     }
 
     /**
@@ -274,15 +282,22 @@ public:
      *
      * 頂点バッファに転送済みである場合、RAM側の情報は不要になるので、削除しても構わない。
      */
-    virtual void clearStaticVertices() {
-        staticVertices.clear();
+    virtual void clearMeshVertices() {
+        meshVertices.clear();
+    }
+
+    /**
+     * スキニング対象の頂点情報を廃棄する
+     */
+    virtual void clearDynamicVertices() {
+        skinVertices.clear();
     }
 
     /**
      * メッシュに含まれる頂点数を取得する
      */
     virtual uint32_t getVertexCount() const {
-        return dynamicVertices.length;
+        return skinVertices.length;
     }
 
     /**
@@ -304,12 +319,12 @@ public:
      *
      * レンダリング側はこの大きさの格納先メモリを生成する必要がある。
      */
-    virtual uint32_t getDynamicVertexBufferBytes() const {
-        return sizeof(PmxDynamicVertex) * dynamicVertices.length;
+    virtual uint32_t getSkinVertexBufferBytes() const {
+        return sizeof(PmxSkinVertex) * skinVertices.length;
     }
 
-    virtual PmxDynamicVertex *getDynamicVerticesPointer() const {
-        return dynamicVertices.ptr;
+    virtual PmxSkinVertex *getDynamicVerticesPointer() const {
+        return skinVertices.ptr;
     }
 
     virtual PmxMetaVertex *getMetaVerticesPointer() const {

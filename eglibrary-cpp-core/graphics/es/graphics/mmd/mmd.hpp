@@ -1,10 +1,14 @@
-//
-// Created by @eaglesakura on 15/05/08.
-//
-
+/**
+ * libmmd
+ *
+ * MMD関係の読み込みを行うモバイル向けのライブラリ。
+ * C++11のサポートを前提とし、Android NDK / iOSで軽量に動作することを目標にする。
+ *
+ * レンダリングはOpenGL ES / Metal / (将来的には)Khronos Vulkan等、プラットフォームごとの差異があるため、このライブラリでは基本的に提供しない。
+ * ただし、グラフィクスに影響されないスキニングは提供し、各プラットフォームでの確認が容易になるようにサポートする。
+ */
 #ifndef ASSEMBLE_MMD_HPP
 #define ASSEMBLE_MMD_HPP
-
 
 
 /**
