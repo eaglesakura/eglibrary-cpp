@@ -46,7 +46,7 @@ public:
     /**
      * ロケーション設定を行う
      */
-    bool setLocation(const MShaderProgram shader, const char* name) {
+    bool setLocation(const MShaderProgram shader, const char *name) {
         assert(shader);
         assert(name);
 
@@ -88,7 +88,7 @@ public:
  * @param offset_header 頂点構造体から実際の属性までのオフセット値 {vec3, vec2}で後半にアクセスする場合はsizeof(vec3)を指定する
  */
 template<typename vertex_struct, GLsizei attr_size, GLenum attr_type, GLboolean attr_normalized, GLsizei offset_header>
-class VertexAttribute: public VertexAttributeBase {
+class VertexAttribute : public VertexAttributeBase {
 public:
     VertexAttribute() {
     }
@@ -103,12 +103,24 @@ public:
     /**
      * 頂点属性の設定を行う
      */
-    bool attributePointer(const GLvoid* ptr = NULL) {
+    bool attributePointer(const GLvoid *ptr = nullptr) {
         // 無効な場合は何もしない
         if (!valid()) {
             return false;
         }
         glVertexAttribPointer(location, attr_size, attr_type, attr_normalized, sizeof(vertex_struct), Buffer::offsetBytes(ptr, offset_header));
+        return true;
+    }
+
+    /**
+     * 頂点属性の設定を行う
+     */
+    bool attributePointer(const uint strideBytes, const GLvoid *ptr) {
+        // 無効な場合は何もしない
+        if (!valid()) {
+            return false;
+        }
+        glVertexAttribPointer(location, attr_size, attr_type, attr_normalized, strideBytes, Buffer::offsetBytes(ptr, offset_header));
         return true;
     }
 };
