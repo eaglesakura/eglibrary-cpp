@@ -95,6 +95,7 @@ struct RectT {
         right = x + w;
         bottom = y + h;
     }
+
     /**
      * 指定座標がTOPになるように移動させる
      */
@@ -179,11 +180,11 @@ struct RectT {
     }
 
     T width() const {
-        return abs(right - left);
+        return ::std::abs(right - left);
     }
 
     T height() const {
-        return abs(bottom - top);
+        return ::std::abs(bottom - top);
     }
 
     T centerX() const {

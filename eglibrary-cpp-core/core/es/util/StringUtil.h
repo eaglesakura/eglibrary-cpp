@@ -3,11 +3,12 @@
 
 #include    "es/eglibrary.hpp"
 #include    <vector>
-#include    <iconv.h>
+//#include    <iconv.h>
 #include <es/memory/SafeArray.hpp>
 
 namespace es {
 
+#if 0
 static const char *CHARSET_SJIS = "SJIS";
 static const char *CHARSET_UTF8 = "UTF-8";
 static const char *CHARSET_UTF16LE = "UTF-16LE";
@@ -48,7 +49,7 @@ public:
         return std::string((char *) outbuf.ptr);
     }
 };
-
+#endif
 
 class StringUtils {
 public:

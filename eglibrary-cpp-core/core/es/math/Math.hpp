@@ -4,6 +4,7 @@
 #include    "es/eglibrary.hpp"
 #include    <math.h>
 #include    <cstdlib>
+#include    <complex>
 
 namespace es {
 
@@ -68,8 +69,8 @@ inline uint toPowerOfTwo(const uint x, const uint y) {
  */
 template<typename T>
 inline T targetMove(const T now, const T target, const T _offset) {
-    const T offset = abs(_offset);
-    if (abs(target - now) <= offset) {
+    const T offset = (_offset < 0 ? -_offset : _offset);
+    if (::std::abs(target - now) <= offset) {
         return target;
     } else if (target > now) {
         return now + offset;
@@ -83,7 +84,7 @@ inline T targetMove(const T now, const T target, const T _offset) {
  * 演算誤差をある程度考慮する。
  */
 inline bool equals(const float a, const float b, const float _check) {
-    return abs(a - b) < _check;
+    return ::std::abs(a - b) < _check;
 }
 
 /**
@@ -91,7 +92,7 @@ inline bool equals(const float a, const float b, const float _check) {
  * 演算誤差をある程度考慮する。
  */
 inline bool equals(const float a, const float b) {
-    return abs(a - b) < 0.000001f;
+    return ::std::abs(a - b) < 0.000001f;
 }
 
 /**
