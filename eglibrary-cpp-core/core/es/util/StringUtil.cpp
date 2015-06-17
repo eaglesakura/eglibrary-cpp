@@ -1,8 +1,7 @@
 #include    "StringUtil.h"
+#include <iterator>
 #include <sstream>
 #include <es/memory/Buffer.hpp>
-
-using namespace std;
 
 namespace es {
 
@@ -10,10 +9,10 @@ namespace es {
  * 文字列を適当なseparatorで分割する
  */
 int StringUtils::split(const std::string &origin, const std::string &delim, std::vector<std::string> *result) {
-    int oldSize = (int) result->size();
+    const size_t oldSize = result->size();
 
-    istringstream iss(origin);
-    copy(istream_iterator<string>(iss), istream_iterator<string>(), back_inserter(*result));
+    std::istringstream iss(origin);
+    copy(std::istream_iterator<std::string>(iss), std::istream_iterator<std::string>(), std::back_inserter(*result));
     return result->size() - oldSize;
 }
 

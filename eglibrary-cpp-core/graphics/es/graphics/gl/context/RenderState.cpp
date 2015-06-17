@@ -27,7 +27,7 @@ void RenderState::sync() {
     GLint temp;
     // depth check
     if (glIsEnabled(GL_DEPTH_TEST)) {
-        cur->flags |= GLStates_DepthTest_Enable;
+        cur->flags |= GLState_DepthTest_Enable;
     }
     assert_gl();
 
@@ -35,16 +35,24 @@ void RenderState::sync() {
     if (glIsEnabled(GL_CULL_FACE)) {
         glGetIntegerv(GL_CULL_FACE_MODE, &temp);
         if (temp == GL_FRONT) {
-            cur->flags |= GLStates_Cull_Front;
+            cur->flags |= GLState_Cull_Front;
         } else {
-            cur->flags |= GLStates_Cull_Back;
+            cur->flags |= GLState_Cull_Back;
         }
+    }
+    assert_gl();
+
+    // FrontFace
+    glGetIntegerv(GL_FRONT_FACE, &temp);
+    if (temp == GL_CW) {
+        // 表ポリの反転
+        cur->flags |= GLState_FrontFace_CW;
     }
     assert_gl();
 
     // stencil
     if (glIsEnabled(GL_STENCIL_TEST)) {
-        cur->flags |= GLStates_StencilTest_Enable;
+        cur->flags |= GLState_StencilTest_Enable;
     }
     assert_gl();
 
@@ -62,7 +70,6 @@ void RenderState::sync() {
         assert_gl();
         cur->scissor.setXYWH((int16_t) xywh[0], (int16_t) xywh[1], (int16_t) xywh[2], (int16_t) xywh[3]);
     }
-
     // framebuffer
     {
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint *) &cur->framebuffer);
@@ -190,9 +197,9 @@ void RenderState::setFlags(const glstates_flags flags) {
         return;
     }
 
-    if (diffFlags & GLStates_DepthTest_Enable) {
+    if (diffFlags & GLState_DepthTest_Enable) {
         // 深度チェックが切り替わった
-        if (flags & GLStates_DepthTest_Enable) {
+        if (flags & GLState_DepthTest_Enable) {
             glEnable(GL_DEPTH_TEST);
         } else {
             glDisable(GL_DEPTH_TEST);
@@ -200,16 +207,16 @@ void RenderState::setFlags(const glstates_flags flags) {
     }
 
     // back cullingを切り替える
-    if (diffFlags & GLStates_Cull_Back) {
-        if (flags & GLStates_Cull_Back) {
+    if (diffFlags & GLState_Cull_Back) {
+        if (flags & GLState_Cull_Back) {
             glEnable(GL_CULL_FACE);
             glCullFace(GL_BACK);
         } else {
             glDisable(GL_CULL_FACE);
         }
-    } else if (diffFlags & GLStates_Cull_Front) {
+    } else if (diffFlags & GLState_Cull_Front) {
         // frontが切り替わった
-        if (flags & GLStates_Cull_Front) {
+        if (flags & GLState_Cull_Front) {
             glEnable(GL_CULL_FACE);
             glCullFace(GL_FRONT);
         } else {
@@ -217,10 +224,21 @@ void RenderState::setFlags(const glstates_flags flags) {
         }
     }
 
+    // 表ポリゴンの向きをチェック
+    if (diffFlags & GLState_FrontFace_CW) {
+        if (flags & GLState_FrontFace_CW) {
+            // 表ポリゴン判定を反転する
+            glFrontFace(GL_CW);
+        } else {
+            // 表ポリゴン判定をデフォルトにする
+            glFrontFace(GL_CCW);
+        }
+    }
+
     // stencil test
-    if (diffFlags & GLStates_StencilTest_Enable) {
+    if (diffFlags & GLState_StencilTest_Enable) {
         // ステンシルチェックが切り替わった
-        if (flags & GLStates_StencilTest_Enable) {
+        if (flags & GLState_StencilTest_Enable) {
             glEnable(GL_STENCIL_TEST);
         } else {
             glDisable(GL_STENCIL_TEST);

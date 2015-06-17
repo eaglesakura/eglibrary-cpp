@@ -11,26 +11,26 @@ namespace es {
 /**
  * キャッシュコントロールするステート情報
  */
-enum GLStates_e {
+enum GLState_e {
     /**
      * カリング ON / Front
      */
-            GLStates_Cull_Front = 0x1 << 0,
+            GLState_Cull_Front = 0x1 << 0,
 
     /**
      * カリング ON / Back
      */
-            GLStates_Cull_Back = 0x1 << 1,
+            GLState_Cull_Back = 0x1 << 1,
 
     /**
      * 深度テストを有効化
      */
-            GLStates_DepthTest_Enable = 0x1 << 2,
+            GLState_DepthTest_Enable = 0x1 << 2,
 
     /**
      * ステンシルテスト有効化
      */
-            GLStates_StencilTest_Enable = 0x1 << 3,
+            GLState_StencilTest_Enable = 0x1 << 3,
 
 #if 0 /* TODO! */
     /**
@@ -63,6 +63,10 @@ enum GLStates_e {
      */
     GLStates_Mask_Stencil_Disable = 0x1 << 9,
 #endif
+    /**
+     * 表ポリゴンをデフォルトとは反転する
+     */
+            GLState_FrontFace_CW = 0x1 << 10,
 };
 
 /**

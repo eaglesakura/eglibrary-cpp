@@ -50,7 +50,7 @@ glstates DeviceContext::createDefaultState2D() const {
  */
 glstates DeviceContext::createDefaultState3D() const {
     glstates states = { 0 };
-    states.flags |= (GLStates_Cull_Back | GLStates_DepthTest_Enable); // 背面カリング & 深度テスト
+    states.flags |= (GLState_Cull_Back | GLState_DepthTest_Enable); // 背面カリング & 深度テスト
 
     // viewport
     states.viewport.right = surfaceSize.x;
