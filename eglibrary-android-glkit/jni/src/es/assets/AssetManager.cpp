@@ -64,7 +64,7 @@ ByteBuffer AssetManager::load(const char *path) {
     return result;
 }
 
-std_shared_ptr<MappedAsset> AssetManager::mmap(const char *path) {
+std::shared_ptr<MappedAsset> AssetManager::mmap(const char *path) {
     AAsset *pAsset = AAssetManager_open(assets, path, AASSET_MODE_BUFFER);
 
     if (pAsset == nullptr) {

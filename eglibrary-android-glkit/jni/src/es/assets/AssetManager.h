@@ -64,7 +64,7 @@ public:
      *
      * resultのデストラクタで自動的にリソースは解放される。
      */
-    std_shared_ptr<MappedAsset> mmap(const char *path);
+    std::shared_ptr<MappedAsset> mmap(const char *path);
 
     /**
      * テキストファイルを文字列として読み込む
