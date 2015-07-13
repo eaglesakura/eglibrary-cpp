@@ -1,17 +1,17 @@
-#ifndef es_gl_IAPPLICATIONFRAGMENT_H_
-#define es_gl_IAPPLICATIONFRAGMENT_H_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 
 namespace es {
 
 class ApplicationFragmentController;
+
 class BaseApplication;
 
 /**
  * アプリの子要素としてコントローラーを追加する
  */
-class IApplicationFragment: public Object {
+class IApplicationFragment : public Object {
     ApplicationFragmentController *controller;
 
     int64_t id;
@@ -23,6 +23,7 @@ protected:
         controller = nullptr;
         id = (int64_t) this;
     }
+
 public:
     virtual ~IApplicationFragment() {
     }
@@ -68,12 +69,12 @@ public:
     /**
      * アタッチされているアプリを取得する
      */
-    virtual BaseApplication* getApplication() const;
+    virtual BaseApplication *getApplication() const;
 
     /**
      * フラグメント用コントローラーを取得する
      */
-    virtual ApplicationFragmentController* getController() const {
+    virtual ApplicationFragmentController *getController() const {
         return controller;
     }
 
@@ -81,7 +82,7 @@ public:
         return id;
     }
 
-    virtual const std::string& getTag() const {
+    virtual const std::string &getTag() const {
         return tag;
     }
 
@@ -89,16 +90,11 @@ public:
      *
      */
     template<typename T>
-    T* getApplicationTo() const {
-        return dynamic_cast<T*>(getApplication());
+    T *getApplicationTo() const {
+        return dynamic_cast<T *>(getApplication());
     }
 
 };
 
-typedef std_shared_ptr<IApplicationFragment> MApplicationFragment;
-
-typedef es_selection_ptr<IApplicationFragment> SApplicationFragment;
-
 }
 
-#endif /* IAPPLICATIONFRAGMENT_H_ */

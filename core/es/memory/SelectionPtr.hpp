@@ -1,5 +1,4 @@
-#ifndef es_SELECTIONPTR_HPP_
-#define es_SELECTIONPTR_HPP_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 
@@ -219,11 +218,4 @@ public:
     }
 };
 
-/**
- * selection_ptr
- */
-#define es_selection_ptr     ::es::SelectionPtr
-
 }
-
-#endif /* SELECTIONPTR_HPP_ */

@@ -1,12 +1,4 @@
-/*
- * Object.hpp
- *
- *  Created on: 2014/08/23
- *      Author: eaglesakura
- */
-
-#ifndef es_system_OBJECT_HPP_
-#define es_system_OBJECT_HPP_
+#pragma once
 
 namespace es {
 
@@ -25,5 +17,3 @@ public:
 };
 
 }
-
-#endif /* OBJECT_HPP_ */

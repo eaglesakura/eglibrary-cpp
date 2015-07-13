@@ -1,7 +1,4 @@
 #pragma once
 
 #include    "es/eglibrary.hpp"
-
-namespace es {
-
-}
+#include    "es/glfw/device/GlfwDevice.h"

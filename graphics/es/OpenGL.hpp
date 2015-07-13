@@ -1,5 +1,4 @@
-#ifndef OPENGL_HPP_
-#define OPENGL_HPP_
+#pragma once
 
 #include    "es/Graphics.hpp"
 
@@ -32,5 +31,3 @@
 #include    "es/graphics/gl/shader/ColorUniform.hpp"
 #include    "es/graphics/gl/shader/TextureUniform.hpp"
 #include    "es/graphics/gl/shader/VertexAttribute.hpp"
-
-#endif /* OPENGL_HPP_ */
