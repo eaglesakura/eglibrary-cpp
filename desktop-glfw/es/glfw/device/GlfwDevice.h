@@ -61,6 +61,14 @@ public:
             const std::string &title,
             const std::shared_ptr<GlfwDevice> sharedContext = std::shared_ptr<GlfwDevice>()
     );
+
+    /**
+     * オフスクリーン用のデバイスを生成する
+     */
+    static std::shared_ptr<GlfwDevice> createOffscreenInstance(
+            const uint width, const uint height,
+            const std::shared_ptr<GlfwDevice> sharedContext = std::shared_ptr<GlfwDevice>()
+    );
 };
 
 }

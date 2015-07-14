@@ -11,7 +11,7 @@ GlfwDevice::GlfwDevice(GLFWwindow *newWindow) : window(newWindow) {
 GlfwDevice::~GlfwDevice() {
 
     if (window) {
-        if(glfwGetCurrentContext() == window) {
+        if (glfwGetCurrentContext() == window) {
             glfwMakeContextCurrent(nullptr);
         }
         glfwDestroyWindow(window);
@@ -48,6 +48,7 @@ std::shared_ptr<GlfwDevice> GlfwDevice::createInstance(const uint width, const u
         eslog("GLFW Error(%x) Message(%s)", error, msg);
     });
 
+    glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, resizeable ? GL_TRUE : GL_FALSE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
@@ -55,6 +56,37 @@ std::shared_ptr<GlfwDevice> GlfwDevice::createInstance(const uint width, const u
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow *window = glfwCreateWindow(width, height, title.c_str(), nullptr, sharedContext ? sharedContext->window : nullptr);
+    if (!window) {
+        return result;
+    }
+
+    result.reset(new GlfwDevice(window));
+
+    glfwMakeContextCurrent(nullptr);
+    return result;
+}
+
+std::shared_ptr<GlfwDevice> GlfwDevice::createOffscreenInstance(const uint width, const uint height, const std::shared_ptr<GlfwDevice> sharedContext) {
+    std::shared_ptr<GlfwDevice> result;
+    if (!sharedContext && !existDevices) {
+        if (!glfwInit()) {
+            return result;
+        }
+    }
+
+
+    glfwSetErrorCallback([](int error, const char *msg) {
+        eslog("GLFW Error(%x) Message(%s)", error, msg);
+    });
+
+    glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    GLFWwindow *window = glfwCreateWindow(width, height, "", nullptr, sharedContext ? sharedContext->window : nullptr);
     if (!window) {
         return result;
     }
@@ -81,4 +113,5 @@ void GlfwDevice::bind() {
 void GlfwDevice::unbind() {
     glfwMakeContextCurrent(nullptr);
 }
+
 }
