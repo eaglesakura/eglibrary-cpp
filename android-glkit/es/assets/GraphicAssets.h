@@ -40,7 +40,7 @@ class GraphicAssets : public Object {
     /**
      * AssetManagerの管理
      */
-    MAssetManager assetManager;
+    std::shared_ptr<AssetManager> assetManager;
 public:
     /**
      *

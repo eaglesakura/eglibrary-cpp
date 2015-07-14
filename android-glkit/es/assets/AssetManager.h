@@ -1,12 +1,4 @@
-/*
- * AssetManager.h
- *
- *  Created on: 2014/08/25
- *      Author: eaglesakura
- */
-
-#ifndef es_assets_ASSETMANAGER_H_
-#define es_assets_ASSETMANAGER_H_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 #include    "es/memory/Buffer.hpp"
@@ -78,8 +70,6 @@ public:
     }
 };
 
-typedef std_shared_ptr<AssetManager> MAssetManager;
+//typedef std_shared_ptr<AssetManager> MAssetManager;
 
 }
-
-#endif /* ASSETMANAGER_H_ */
