@@ -1,14 +1,8 @@
-/*
- * SafeArray.hpp
- *
- *  Created on: 2014/08/23
- *      Author: eaglesakura
- */
-
-#ifndef es_memory_SAFEARRAY_HPP_
-#define es_memory_SAFEARRAY_HPP_
+#pragma once
 
 #include    "es/eglibrary.hpp"
+#include    <string.h>
+#include    <vector>
 
 namespace es {
 
@@ -329,7 +323,7 @@ public:
 namespace util {
 
 template<typename T>
-inline T *asPointer(const std::vector<T> &v, const uint offset = 0) {
+inline T *asPointer(const std::vector<T> &v, const size_t offset = 0) {
     assert(offset < v.size());
     return (T *) &(v[offset]);
 }
@@ -351,7 +345,7 @@ inline void valloc(std::vector<T> *origin, const size_t newSize, const bool with
 template<typename T>
 inline void zeromemory(std::vector<T> *origin) {
     assert(origin);
-    memset(asPointer(*origin), 0x00, sizeof(T) * origin->size());
+    memset(&((*origin)[0]), 0, sizeof(T) * origin->size());
 }
 
 /**
@@ -366,5 +360,3 @@ inline void safe_delete(safe_array<value_type> &values) {
 }
 
 }
-
-#endif /* SAFEARRAY_HPP_ */
