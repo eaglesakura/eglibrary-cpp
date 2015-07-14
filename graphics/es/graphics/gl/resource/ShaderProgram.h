@@ -1,5 +1,4 @@
-#ifndef es_graphics_gl_SHADERPROGRAM_H_
-#define es_graphics_gl_SHADERPROGRAM_H_
+#pragma once
 
 #include    "es/Graphics.hpp"
 #include    "es/graphics/gl/context/DeviceContext.h"
@@ -7,13 +6,16 @@
 
 namespace es {
 
-class ShaderProgram: public GLObject {
+class ShaderProgram : public GLObject {
     GLuint program;
     uint16_t maxAttributes;
     uint16_t maxUniforms;
+
     ShaderProgram(const GLuint program);
+
 public:
     virtual ~ShaderProgram();
+
     /**
      * 管理しているリソースの解放を行う
      */
@@ -37,7 +39,7 @@ public:
     /**
      * ビルドを行う
      */
-    static std_shared_ptr<ShaderProgram> build(const char* vertex_shader, const char* frament_shader, MDeviceContext state = MDeviceContext());
+    static std_shared_ptr<ShaderProgram> build(const char *vertex_shader, const char *frament_shader, MDeviceContext state = MDeviceContext());
 };
 
 /**
@@ -46,5 +48,3 @@ public:
 typedef std_shared_ptr<ShaderProgram> MShaderProgram;
 
 }
-
-#endif /* SHADERPROGRAM_HPP_ */
