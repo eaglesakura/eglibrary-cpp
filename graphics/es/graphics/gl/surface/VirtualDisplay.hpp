@@ -1,5 +1,4 @@
-#ifndef es_graphics_gl_VIRTUALDISPLAY_HPP_
-#define es_graphics_gl_VIRTUALDISPLAY_HPP_
+#pragma once
 
 #include    "es/Graphics.hpp"
 #include    "es/math/Rect.hpp"
@@ -354,5 +353,3 @@ public:
 typedef std_shared_ptr<VirtualDisplay> MVirtualDisplay;
 
 }
-
-#endif /* VIRTUALDISPLAY_HPP_ */

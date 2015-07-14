@@ -3,10 +3,7 @@
 #include    "es/Graphics.hpp"
 
 // math
-#include    "es/math/Matrix.hpp"
-#include    "es/math/Vector2.hpp"
-#include    "es/math/Vector3.hpp"
-#include    "es/math/Vector4.hpp"
+#include    "es/graphics/math/GlmHelper.hpp"
 
 // base
 #include    "es/graphics/gl/surface/VirtualDisplay.hpp"

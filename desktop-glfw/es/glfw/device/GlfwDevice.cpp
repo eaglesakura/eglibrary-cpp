@@ -106,7 +106,6 @@ void GlfwDevice::pollEvents() {
 }
 
 void GlfwDevice::bind() {
-    assert(!glfwGetCurrentContext());
     glfwMakeContextCurrent(window);
 }
 
@@ -114,4 +113,13 @@ void GlfwDevice::unbind() {
     glfwMakeContextCurrent(nullptr);
 }
 
+Vector2i16 GlfwDevice::getWindowSize() const {
+    Vector2i result;
+    glfwGetWindowSize(window, &result.x, &result.y);
+    return Vector2i16((int16_t) result.x, (int16_t) result.y);
+}
+
+bool GlfwDevice::isWindowVisible() const {
+    return glfwGetWindowAttrib(window, GLFW_VISIBLE);
+}
 }

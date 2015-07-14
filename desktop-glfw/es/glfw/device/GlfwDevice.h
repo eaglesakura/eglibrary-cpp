@@ -3,6 +3,8 @@
 #include "es/eglibrary.hpp"
 #include <es/system/Object.hpp>
 #include <memory>
+#include <GLFW/glfw3.h>
+#include <es/math/Vector2.hpp>
 
 class GLFWwindow;
 
@@ -51,6 +53,20 @@ public:
      * ウィンドウに対するイベントハンドリングを行う
      */
     void pollEvents();
+
+    /**
+     * ウィンドウのサイズを取得する
+     */
+    Vector2i16 getWindowSize() const;
+
+    /**
+     * ウィンドウの可視状態を取得する
+     */
+    bool isWindowVisible() const;
+
+    GLFWwindow *getWindow() const {
+        return window;
+    }
 
     /**
      * インスタンスを生成する

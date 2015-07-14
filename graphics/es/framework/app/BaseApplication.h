@@ -6,10 +6,10 @@ namespace es {
 
 class BaseApplication : public Object {
 protected:
-    BaseApplication();
+    BaseApplication() = default;
 
 public:
-    virtual ~BaseApplication();
+    virtual ~BaseApplication() = default;
 
     virtual void onAppInitialize() = 0;
 
