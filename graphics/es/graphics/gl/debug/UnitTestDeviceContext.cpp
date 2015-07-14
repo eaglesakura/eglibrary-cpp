@@ -10,6 +10,8 @@ UnitTestDeviceContext::UnitTestDeviceContext() {
 }
 
 UnitTestDeviceContext::~UnitTestDeviceContext() {
+    assert_gl();
+    glFinish();
     DeviceContext::unuseThisThread();
     assert(DeviceContext::getContextNum() == 0);
 }

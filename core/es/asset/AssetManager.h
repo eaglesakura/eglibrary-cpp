@@ -5,12 +5,10 @@ class IAsset;
 
 class IAssetLoader;
 
-namespace debug {
+class AssetManager {
+    AssetManager() = delete;
 
-class TestAssetManager {
-    TestAssetManager() = delete;
-
-    ~TestAssetManager() = delete;
+    ~AssetManager() = delete;
 
 public:
     /**
@@ -31,7 +29,6 @@ public:
     static std::shared_ptr<IAsset> load(const std::string &path);
 };
 
-}
 }
 
 

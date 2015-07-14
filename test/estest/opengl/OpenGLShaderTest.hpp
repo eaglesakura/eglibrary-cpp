@@ -6,11 +6,14 @@
 namespace es {
 namespace test {
 
+/**
+ * スプライト用のデフォルトシェーダーが正常にビルドできることを確認する
+ */
 TEST(OpenGLShaderTest, SpriteShaderCompile) {
     ES_OPENGL_UNITTEST();
 
-    auto vsh = debug::TestAssetManager::load("shader/SpriteShader.vsh");
-    auto fsh = debug::TestAssetManager::load("shader/SpriteShader.fsh");
+    auto vsh = AssetManager::load("shader/SpriteShader.vsh");
+    auto fsh = AssetManager::load("shader/SpriteShader.fsh");
     ASSERT_TRUE((bool) vsh);
     ASSERT_TRUE((bool) fsh);
 
