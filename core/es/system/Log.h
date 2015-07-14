@@ -5,11 +5,13 @@
 
 namespace es {
 
+namespace internal {
+
 /**
  * __FILE__マクロからファイル名を取得する
  */
-inline char* __getFileName(const char* __file__) {
-#if ( defined(BUILD_MacOSX) || defined(BUILD_Android) || defined(BUILD_MacOSX) )
+inline char *__getFileName(const char *__file__) {
+#if (defined(BUILD_MacOSX) || defined(BUILD_Android) || defined(BUILD_MacOSX) )
     return strrchr(__file__, '/') + 1;
 #else
     return strrchr(__file__, '/') + 1;
@@ -18,27 +20,49 @@ inline char* __getFileName(const char* __file__) {
 
 enum LogType_e {
     /* 通常出力 */
-    LogType_Info,
+            LogType_Info,
 
     /* デバッグ中のみ表示したい */
-    LogType_Debug,
+            LogType_Debug,
 
     /* 特に重要なログで表示する */
-    LogType_Alert,
+            LogType_Alert,
 };
 
-#ifndef LOG_TAG
-#define LOG_TAG "jni-log"
-#endif
+class Logger {
+public:
+    /**
+     * libMikuMikuSimple用のログ関数
+     * デフォルトログ関数を利用しない場合、適宜書き換える。
+     */
+    typedef void (*LogFunctionPtr)(const LogType_e type, const char *, const char *, ...);
 
-void __logDebugF(const LogType_e type, const char* __file, const char* fmt, ...);
+private:
+    static LogFunctionPtr func;
+public:
+    /**
+     * ログの実装を変更する
+     */
+    static void setFunction(LogFunctionPtr ptr) {
+        Logger::func = ptr;
+    }
+
+    /**
+     * ログの実装を取得する
+     */
+    static LogFunctionPtr get() {
+        return func;
+    }
+};
+
+}
 
 #if !defined(EGLIBRARY_NO_LOG)
 
 /**
  * 特定条件下の設定
  */
-#define eslog_from(file, line, ... )       { ::es::__logDebugF(::es::LogType_Debug, ::es::__getFileName(file),  "L " es_num_to_str(__LINE__) " | " __VA_ARGS__); }
+#define eslog_from(file, line, ...)       { ::es::internal::Logger::get()(::es::internal::LogType_Debug, ::es::internal::__getFileName(file),  "L " es_num_to_str(__LINE__) " | " __VA_ARGS__); }
 
 /**
  * 文字列化用ダミー
@@ -53,17 +77,17 @@ void __logDebugF(const LogType_e type, const char* __file, const char* fmt, ...)
 /**
  * フォーマット付きログ
  */
-#define eslog(... )       ::es::__logDebugF(::es::LogType_Info, ::es::__getFileName(__FILE__), "L " es_num_to_str(__LINE__) " | " __VA_ARGS__)
+#define eslog(...)       ::es::internal::Logger::get()(::es::internal::LogType_Info, ::es::internal::__getFileName(__FILE__), "L " es_num_to_str(__LINE__) " | " __VA_ARGS__)
 
 /**
  * フォーマット付きログ
  */
-#define esdebug(... )       ::es::__logDebugF(::es::LogType_Debug, ::es::__getFileName(__FILE__), "L " es_num_to_str(__LINE__) " | " __VA_ARGS__)
+#define esdebug(...)     ::es::internal::Logger::get()(::es::internal::LogType_Debug, ::es::internal::__getFileName(__FILE__), "L " es_num_to_str(__LINE__) " | " __VA_ARGS__)
 
 /**
  * アラート表示
  */
-#define esalert( ... )      ::es::__logDebugF(::es::LogType_Alert, ::es::__getFileName(__FILE__), "L %d | " __VA_ARGS__)
+#define esalert(...)      ::es::internal::Logger::get()(::es::internal::LogType_Alert, ::es::internal::__getFileName(__FILE__), "L %d | " __VA_ARGS__)
 
 #else
 

@@ -17,15 +17,16 @@ public:
         start();
         end();
     }
+
     ~NanoTimer() {
     }
 
-    NanoTimer& start() {
+    NanoTimer &start() {
         startTime = std::chrono::high_resolution_clock::now();
         return *this;
     }
 
-    NanoTimer& end() {
+    NanoTimer &end() {
         endTime = std::chrono::high_resolution_clock::now();
         return *this;
     }
@@ -49,6 +50,12 @@ public:
      */
     double microSecond() {
         return ((double) std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count()) / 1000.0;
+    }
+
+    static void sleepMs(const uint ms) {
+        std::this_thread::sleep_for(
+                std::chrono::milliseconds(ms)
+        );
     }
 };
 }

@@ -1,26 +1,14 @@
 #include    "es/eglibrary.hpp"
 
-#ifdef  BUILD_Android
+#if defined(BUILD_Android)
 #include    "android/log.h"
-#endif
 
-namespace es {
+namespace {
 
-void __logDebugF(const LogType_e type, const char* __file, const char* fmt, ...) {
-#if !defined(EGLIBRARY_NO_LOG) /* opt out EGLIBRARY_NO_LOG */
-
-// debug check
-#if !defined(DEBUG)
-    // デバッグモード以外ならログレベルをチェック
-    if(type >= LogType_Debug) {
-        return;
-    }
-#endif
-
-    /**
-     * Android用ビルド
-     */
-#ifdef  BUILD_Android
+/**
+ * ログ出力を行う
+ */
+void logAndroid(const es::internal::LogType_e type, const char *__file, const char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
 
@@ -28,12 +16,22 @@ void __logDebugF(const LogType_e type, const char* __file, const char* fmt, ...)
     __android_log_vprint(LOG_TYPES[type], __file, fmt, ap);
 
     va_end(ap);
-#endif  /* BUILD_Android */
+}
 
-    /**
-     * その他のプラットフォーム
-     */
-#if defined(BUILD_iOS) || defined(BUILD_MacOSX)
+}
+
+namespace es {
+internal::Logger::LogFunctionPtr internal::Logger::func = logAndroid;
+}
+
+#elif !defined(BUILD_iOS)
+
+namespace {
+
+/**
+ * ログ出力を行う
+ */
+void logBasic(const es::internal::LogType_e type, const char *__file, const char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
 
@@ -42,9 +40,12 @@ void __logDebugF(const LogType_e type, const char* __file, const char* fmt, ...)
     printf("\n"); // コンソール改行
 
     va_end(ap);
+}
+
+}
+namespace es {
+internal::Logger::LogFunctionPtr internal::Logger::func = logBasic;
+}
+
 #endif
 
-#endif /* opt out EGLIBRARY_NO_LOG  */
-}
-
-}

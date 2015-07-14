@@ -9,7 +9,11 @@ GlfwDevice::GlfwDevice(GLFWwindow *newWindow) : window(newWindow) {
 }
 
 GlfwDevice::~GlfwDevice() {
+
     if (window) {
+        if(glfwGetCurrentContext() == window) {
+            glfwMakeContextCurrent(nullptr);
+        }
         glfwDestroyWindow(window);
     }
 
@@ -56,6 +60,8 @@ std::shared_ptr<GlfwDevice> GlfwDevice::createInstance(const uint width, const u
     }
 
     result.reset(new GlfwDevice(window));
+
+    glfwMakeContextCurrent(nullptr);
     return result;
 }
 
@@ -65,5 +71,14 @@ void GlfwDevice::requestCloseWindow() {
 
 void GlfwDevice::pollEvents() {
     glfwPollEvents();
+}
+
+void GlfwDevice::bind() {
+    assert(!glfwGetCurrentContext());
+    glfwMakeContextCurrent(window);
+}
+
+void GlfwDevice::unbind() {
+    glfwMakeContextCurrent(nullptr);
 }
 }

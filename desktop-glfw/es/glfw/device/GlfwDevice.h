@@ -28,6 +28,16 @@ public:
     bool isWindowClose() const;
 
     /**
+     * 呼び出しを行ったThreadに関連付ける
+     */
+    void bind();
+
+    /**
+     * Threadの関連付けを解除する
+     */
+    void unbind();
+
+    /**
      * 画面のリフレッシュを行う
      */
     void swapBuffers();
