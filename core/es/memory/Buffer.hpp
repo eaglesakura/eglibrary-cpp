@@ -11,7 +11,7 @@ class ByteBuffer {
     /**
      * 管理しているバッファ
      */
-    std_shared_ptr<uint8_t> buffer;
+    std::shared_ptr<uint8_t> buffer;
 
     /**
      * バッファのサイズ

@@ -4,7 +4,7 @@
 #include    "es/eglibrary.hpp"
 #include    "es/memory/Buffer.hpp"
 #include    "JointConnector.hpp"
-#include    "AssetManager.h"
+#include "AndroidAssetManager.h"
 
 #include    "es/OpenGL.hpp"
 #include    "es/Sprite.hpp"
@@ -40,7 +40,7 @@ class GraphicAssets : public Object {
     /**
      * AssetManagerの管理
      */
-    std::shared_ptr<AssetManager> assetManager;
+    std::shared_ptr<AndroidAssetManager> assetManager;
 public:
     /**
      *

@@ -325,6 +325,35 @@ public:
     }
 };
 
+
+namespace util {
+
+template<typename T>
+inline T *asPointer(const std::vector<T> &v, const uint offset = 0) {
+    assert(offset < v.size());
+    return (T *) &(v[offset]);
+}
+
+/**
+ * Vectorのメモリを指定量確保し、配列アクセスが可能なようにする。
+ */
+template<typename T>
+inline void valloc(std::vector<T> *origin, const size_t newSize, const bool withZero) {
+    origin->resize(newSize);
+    if (withZero) {
+        memset(&((*origin)[0]), 0, sizeof(T) * newSize);
+    }
+
+    assert(origin->capacity() == newSize);
+    assert(origin->size() == newSize);
+}
+
+template<typename T>
+inline void zeromemory(std::vector<T> *origin) {
+    assert(origin);
+    memset(asPointer(*origin), 0x00, sizeof(T) * origin->size());
+}
+
 /**
  * 個々の要素に対してSAFE_DELETEをかける
  */
@@ -333,6 +362,7 @@ inline void safe_delete(safe_array<value_type> &values) {
     for (int i = 0; i < values.length; ++i) {
         SAFE_DELETE(values.ptr[i]);
     }
+}
 }
 
 }

@@ -1,4 +1,4 @@
-#include    "AssetManager.h"
+#include "AndroidAssetManager.h"
 
 #include    <android/asset_manager_jni.h>
 
@@ -20,7 +20,7 @@ MappedAsset::~MappedAsset() {
 }
 
 namespace es {
-AssetManager::AssetManager(::jc::lang::object_wrapper jAssetManager) {
+AndroidAssetManager::AndroidAssetManager(::jc::lang::object_wrapper jAssetManager) {
     assert(jAssetManager.getJobject());
 
     this->jAssetManager = jAssetManager;
@@ -28,7 +28,7 @@ AssetManager::AssetManager(::jc::lang::object_wrapper jAssetManager) {
     assert(this->assets);
 }
 
-AssetManager::~AssetManager() {
+AndroidAssetManager::~AndroidAssetManager() {
 }
 
 /**
@@ -36,7 +36,7 @@ AssetManager::~AssetManager() {
  *
  * 読み込みに失敗した場合、nullptrを返却する。
  */
-ByteBuffer AssetManager::load(const char *path) {
+ByteBuffer AndroidAssetManager::load(const char *path) {
     AAsset *pAsset = AAssetManager_open(assets, path, AASSET_MODE_BUFFER);
 
     if (pAsset == nullptr) {
@@ -64,7 +64,7 @@ ByteBuffer AssetManager::load(const char *path) {
     return result;
 }
 
-std::shared_ptr<MappedAsset> AssetManager::mmap(const char *path) {
+std::shared_ptr<MappedAsset> AndroidAssetManager::mmap(const char *path) {
     AAsset *pAsset = AAssetManager_open(assets, path, AASSET_MODE_BUFFER);
 
     if (pAsset == nullptr) {

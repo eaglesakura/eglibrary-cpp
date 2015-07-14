@@ -17,7 +17,7 @@ GraphicAssets::GraphicAssets(::jc::lang::object_wrapper jApplicationContext) {
     eslog("jAssetManager(%x)", this->jAssetManager.getJobject());
     this->jAssetManager.globalRef();
 
-    this->assetManager.reset(new AssetManager(jAssetManager));
+    this->assetManager.reset(new AndroidAssetManager(jAssetManager));
 }
 
 GraphicAssets::~GraphicAssets() {

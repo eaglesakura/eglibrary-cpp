@@ -29,7 +29,7 @@ public:
 /**
  * Androidのassetsディレクトリを管理する
  */
-class AssetManager {
+class AndroidAssetManager {
     /**
      * Java側のAssetManagerクラス
      */
@@ -40,9 +40,9 @@ class AssetManager {
      */
     AAssetManager *assets;
 public:
-    AssetManager(::jc::lang::object_wrapper jAssetManager);
+    AndroidAssetManager(::jc::lang::object_wrapper jAssetManager);
 
-    virtual ~AssetManager();
+    virtual ~AndroidAssetManager();
 
     /**
      * アセットを読み出し、メモリへコピーする。
@@ -70,6 +70,6 @@ public:
     }
 };
 
-//typedef std_shared_ptr<AssetManager> MAssetManager;
+//typedef std_shared_ptr<AndroidAssetManager> MAssetManager;
 
 }
