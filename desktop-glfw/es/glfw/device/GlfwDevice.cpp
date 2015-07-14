@@ -54,6 +54,7 @@ std::shared_ptr<GlfwDevice> GlfwDevice::createInstance(const uint width, const u
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_FOCUSED, GL_TRUE);
 
     GLFWwindow *window = glfwCreateWindow(width, height, title.c_str(), nullptr, sharedContext ? sharedContext->window : nullptr);
     if (!window) {
@@ -79,12 +80,13 @@ std::shared_ptr<GlfwDevice> GlfwDevice::createOffscreenInstance(const uint width
         eslog("GLFW Error(%x) Message(%s)", error, msg);
     });
 
-    glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
+    glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 
     GLFWwindow *window = glfwCreateWindow(width, height, "", nullptr, sharedContext ? sharedContext->window : nullptr);
     if (!window) {
