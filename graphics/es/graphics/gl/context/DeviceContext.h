@@ -11,23 +11,6 @@ namespace es {
  * Threadに関連付けられたデバイスを管理する
  */
 class DeviceContext : public Object {
-    /**
-     * 大本のサーフェイスのデフォルトサイズ
-     */
-    Vector2i16 surfaceSize;
-
-    /**
-     * レンダリング用ステート
-     */
-    MRenderState renderState;
-
-    /**
-     * シェーダー用ステート
-     */
-    MShaderState shaderState;
-protected:
-    DeviceContext();
-
 public:
     virtual ~DeviceContext();
 
@@ -78,6 +61,30 @@ public:
      * 現在のスレッドで使用しなくなった
      */
     static void unuseThisThread();
+
+    /**
+     * 有効なコンテキスト数を取得する
+     */
+    static uint getContextNum();
+
+protected:
+    /**
+     * 大本のサーフェイスのデフォルトサイズ
+     */
+    Vector2i16 surfaceSize;
+
+    /**
+     * レンダリング用ステート
+     */
+    MRenderState renderState;
+
+    /**
+     * シェーダー用ステート
+     */
+    MShaderState shaderState;
+
+    DeviceContext();
+
 };
 
 /**

@@ -15,6 +15,8 @@
 
 #include    <memory>
 
+#include    "es/debug/Testing.hpp"
+
 #include	"es/system/Macro.hpp"
 #include	"es/system/Log.h"
 #include    "es/system/Object.hpp"

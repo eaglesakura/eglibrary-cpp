@@ -124,4 +124,10 @@ void DeviceContext::unuseThisThread() {
     }
 }
 
+uint DeviceContext::getContextNum() {
+    // 制御ロックをかける
+    es_mutex_lock lock(g_devicesMutex);
+
+    return (uint) g_devices.size();
+}
 }
