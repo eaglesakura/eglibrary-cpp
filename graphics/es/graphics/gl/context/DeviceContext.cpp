@@ -7,7 +7,7 @@ namespace es {
 DeviceContext::DeviceContext() {
     eslog("new ThreadDevice::ThreadDevice(%x)", this);
 
-#ifdef  BUILD_Android
+#if defined(BUILD_Android)
     {
         EGLDisplay display = eglGetCurrentDisplay();
         EGLSurface surface = eglGetCurrentSurface(EGL_READ);
@@ -21,6 +21,14 @@ DeviceContext::DeviceContext() {
 
         assert(eglGetError() == EGL_SUCCESS);
     }
+#else
+    {
+        GLint xywh[4] = {0};
+        glGetIntegerv(GL_VIEWPORT, xywh);
+        assert_gl();
+        surfaceSize.x = xywh[2];
+        surfaceSize.y = xywh[3];
+    }
 #endif
 
     renderState.reset(new RenderState());
@@ -29,6 +37,7 @@ DeviceContext::DeviceContext() {
 
     eslog("current thread surface size(%d x %d)", surfaceSize.x, surfaceSize.y);
 }
+
 DeviceContext::~DeviceContext() {
     eslog("delete ThreadDevice::~ThreadDevice(%x)", this);
 }
@@ -37,7 +46,7 @@ DeviceContext::~DeviceContext() {
  * 2Dレンダリングのデフォルトステートを取得する
  */
 glstates DeviceContext::createDefaultState2D() const {
-    glstates states = { 0 };
+    glstates states = {0};
 
     // viewport
     states.viewport.right = surfaceSize.x;
@@ -49,7 +58,7 @@ glstates DeviceContext::createDefaultState2D() const {
  * 3Dレンダリングのデフォルトステートを取得する
  */
 glstates DeviceContext::createDefaultState3D() const {
-    glstates states = { 0 };
+    glstates states = {0};
     states.flags |= (GLState_Cull_Back | GLState_DepthTest_Enable); // 背面カリング & 深度テスト
 
     // viewport

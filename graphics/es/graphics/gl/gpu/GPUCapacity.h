@@ -6,6 +6,18 @@
 namespace es {
 
 /**
+ * OpenGLのバージョンを示す
+ * 上位100と10の位がバージョン、1の位がESとコアプロファイルの区別
+ */
+enum OpenGLVersion_e {
+    OpenGLVersion_ES20 = 200,
+    OpenGLVersion_ES30 = 300,
+    OpenGLVersion_ES31 = 310,
+    OpenGLVersion_41 = 411,
+    OpenGLVersion_Unknown = 0,
+};
+
+/**
  * 対応している拡張機能
  */
 enum GPUExtension_e {
@@ -13,38 +25,38 @@ enum GPUExtension_e {
      * ETC1に対応している
      * GL_OES_compressed_ETC1_RGB8_texture
      */
-    GPUExtension_Texture_ETC1,
+            GPUExtension_Texture_ETC1,
 
     /**
      * PVRTC対応
      * GL_IMG_texture_compression_pvrtc
      */
-    GPUExtension_Texture_PVRTC,
+            GPUExtension_Texture_PVRTC,
 
     /**
      * S3TC対応
      * GL_EXT_texture_compression_s3tc
      */
-    GPUExtension_Texture_S3TC,
+            GPUExtension_Texture_S3TC,
 
     /**
      * BGRAテクスチャ対応
      * GL_EXT_texture_format_BGRA8888
      */
-    GPUExtension_Texture_BGRA8888,
+            GPUExtension_Texture_BGRA8888,
 
     /**
      * external画像
      * GL_OES_EGL_image_external
      * for Android（support SurfaceTexture）
      */
-    GPUExtension_OES_EGL_image_external,
+            GPUExtension_OES_EGL_image_external,
 
     /**
      * 深度テクスチャが利用できる
      * GL_OES_depth_texture
      */
-    GPUExtension_Texture_Depth,
+            GPUExtension_Texture_Depth,
 
     /**
      * タイルレンダリング対応
@@ -52,41 +64,41 @@ enum GPUExtension_e {
      * PowerVR(iOS, GalaxyNexus, etc...)
      * Mali(Nexus 10, Galaxy S2, etc...)
      */
-    GPUExtension_TileBasedDeferredRendering,
+            GPUExtension_TileBasedDeferredRendering,
 
     /**
      * half floatテクスチャが利用できる
      */
-    GPUExtension_Texture_HalfFloat,
+            GPUExtension_Texture_HalfFloat,
 
     /**
      * レンダリングバッファにRGB8/RGBA8を利用する
      * 利用ができなかった場合、RGB565/RGB5_A1に丸められる
      */
-    GPUExtension_Renderbuffer_RGB8_RGBA8,
+            GPUExtension_Renderbuffer_RGB8_RGBA8,
 
     /**
      * レンダリングバッファの深度ステンシルでD24bit/S8bitのパックが可能
      * 利用ができなかった場合、各々に確保される
      */
-    GPUExtension_Renderbuffer_PackedDepth24Stencil8,
+            GPUExtension_Renderbuffer_PackedDepth24Stencil8,
 
     /**
      * レンダリングバッファのD24bitが利用可能
      * 利用ができなかった場合、16bitで確保される
      */
-    GPUExtension_Renderbuffer_Depth24,
+            GPUExtension_Renderbuffer_Depth24,
 
     /**
      * レンダリングバッファのD32bitが利用可能
      * 利用ができなかった場合、16bitで確保される
      */
-    GPUExtension_Renderbuffer_Depth32,
+            GPUExtension_Renderbuffer_Depth32,
 
     /**
      * num flags
      */
-    GPUExtension_Num,
+            GPUExtension_Num,
 };
 
 /**
@@ -97,30 +109,36 @@ enum GPUFamily_e {
      * Mali GPU
      * GalaxyS2, GalaxyS3, Nexus10
      */
-    GPUFamily_Mali,
+            GPUFamily_Mali,
 
     /**
      * PowerVR GPU
      * iOS, GalaxyNexus
      */
-    GPUFamily_PowerVR,
+            GPUFamily_PowerVR,
 
     /**
      * Adreno GPU
      * XperiaGX
      */
-    GPUFamily_Adreno,
+            GPUFamily_Adreno,
 
     /**
      * Tegra GPU
      * OptimusPad, GalaxyTab10.1, Nexus7
      */
-    GPUFamily_Tegra,
+            GPUFamily_Tegra,
+
+    /**
+     * GeForce Desktop
+     * Mac Book Pro
+     */
+            GPUFamily_GeForce,
 
     /**
      * not found...
      */
-    GPUFamily_Unknown,
+            GPUFamily_Unknown,
 };
 
 /**
@@ -130,25 +148,41 @@ enum GPUFamily_e {
 class GPUCapacity {
     friend class DeviceContext;
 
-    /**
-     * 通常、newはできない。
-     */
-    GPUCapacity();
-    ~GPUCapacity();
+    GPUCapacity() = delete;
+
+    ~GPUCapacity() = delete;
+
     /**
      * 初期化を行う
      */
     static void initialize();
+
 public:
 
     /**
      * レンダラー名を取得する
      */
-    static const std::string& getRenderer();
+    static const std::string &getRenderer();
+
     /**
      * ベンダー名を取得する
      */
-    static const std::string& getVendor();
+    static const std::string &getVendor();
+
+    /**
+     * バージョン名を取得する
+     */
+    static const std::string &getVersion();
+
+    /**
+     * OpenGLのバージョンを取得する
+     */
+    static const OpenGLVersion_e getGLVersion();
+
+    /**
+     * OpenGL ESであればtrue
+     */
+    static const bool isOpenGLES();
 
     /**
      * 頂点属性の最大数を取得する。
