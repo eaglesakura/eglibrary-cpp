@@ -20,7 +20,7 @@ void AndroidContextUtil::initialize(JNIEnv *env, jobject jContext) {
     }
 
     ::jc::jni::initJniSupport(env);
-    gContext = ::jc::lang::object_wrapper(jContext, env, false);
+    gContext = ::jc::lang::object_wrapper(jContext, env, true);
     gContext.globalRef().multiThread(true);
 
     gContext_class = ::jc::lang::class_wrapper(gContext.getClass(), env);
