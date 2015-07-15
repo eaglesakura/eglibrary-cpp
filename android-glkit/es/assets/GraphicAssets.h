@@ -1,5 +1,4 @@
-#ifndef es_assets_GRAPHICSASSETS_H_
-#define es_assets_GRAPHICSASSETS_H_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 #include    "es/memory/Buffer.hpp"
@@ -74,4 +73,3 @@ typedef ::std::shared_ptr<GraphicAssets> MGraphicAssets;
 
 }
 
-#endif /* GRAPHICSASSETS_H_ */
