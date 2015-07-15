@@ -30,7 +30,7 @@ class AndroidAssetLoader : public IAssetLoader {
 
     std::string basePath;
 public:
-    AndroidAssetLoader(::jc::lang::object_wrapper jApplicationContext, const std::string &newBasePath = "");
+    AndroidAssetLoader(::jc::lang::object_wrapper jContext, const std::string &newBasePath = "");
 
     virtual ~AndroidAssetLoader() = default;
 

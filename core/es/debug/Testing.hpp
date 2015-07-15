@@ -1,8 +1,9 @@
 #pragma once
 
+#include <assert.h>
+
 #if defined(ES_BUILD_GTEST_MODE)
 
-#include <assert.h>
 #include <exception>
 #include <string>
 #include "gtest/gtest.h"
@@ -43,11 +44,11 @@ public:
 
 #ifdef  assert
 #undef  assert
+#endif
 
 /**
  * gtestの実行は強制停止ではなく、例外を投げてgtestに挙動をハンドリングさせる
  */
 #define assert(e)  if(!(e)){ throw ::es::debug::TestAssertException(__FILE__, __LINE__, #e); }
-#endif
 
 #endif

@@ -78,7 +78,6 @@ void GPUCapacity::initialize() {
     initialized = true;
 
     {
-        // TODO glGetStringは非推奨なので、将来的には別な方法に書き換える必要がある。
         // レンダラ名と系列機チェック
         const char *pRenderer = (const char *) glGetString(GL_RENDERER);
         renderer = pRenderer;

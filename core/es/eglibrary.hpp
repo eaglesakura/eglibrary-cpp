@@ -1,10 +1,10 @@
 #pragma once
 
+#include    "es/debug/Testing.hpp"
 #include    <stdint.h>
 #include    <limits.h>
 #include    <stddef.h>
 #include    <stdlib.h>
-#include    <assert.h>
 #include    <string.h>
 #include    <string>
 
@@ -15,7 +15,6 @@
 
 #include    <memory>
 
-#include    "es/debug/Testing.hpp"
 
 #include	"es/system/Macro.hpp"
 #include	"es/system/Log.h"
