@@ -7,6 +7,14 @@
 #include <string>
 #include "gtest/gtest.h"
 
+
+#if defined(_NOEXCEPT)
+#define ES_NOEXCEPT    _NOEXCEPT
+#elif defined(_GLIBCXX_USE_NOEXCEPT)
+#define ES_NOEXCEPT     _GLIBCXX_USE_NOEXCEPT
+#endif
+
+
 namespace es {
 namespace debug {
 
@@ -14,15 +22,18 @@ class TestAssertException : public std::exception {
     std::string whatText;
 public:
     TestAssertException(const char *__file__, const int __line__, const char *__whatText) {
+        char temp[10] = "";
+        sprintf(temp, "%d", __line__);
+
         whatText = std::string(__file__) +
                    std::string(" | L ") +
-                   std::to_string(__line__) +
+                   std::string(temp) +
                    std::string("\nERROR : ") +
                    std::string(__whatText) +
                    std::string("\n");
     }
 
-    virtual const char *what() const _NOEXCEPT {
+    virtual const char *what() const ES_NOEXCEPT {
         return whatText.c_str();
     }
 };

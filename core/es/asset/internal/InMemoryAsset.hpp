@@ -10,6 +10,7 @@ namespace internal {
 
 /**
  * 一旦メモリに全て読み込むアセット
+ * 手軽で簡単に扱えるが、メモリは大量に消費する。
  */
 class InMemoryAsset : public Object, public IAsset {
     /**
