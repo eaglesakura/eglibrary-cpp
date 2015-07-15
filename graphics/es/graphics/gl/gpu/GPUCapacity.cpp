@@ -125,6 +125,17 @@ void GPUCapacity::initialize() {
         glGetIntegerv(GL_MINOR_VERSION, &minor);
         if (glGetError() == GL_NO_ERROR) {
 #if defined(BUILD_Android) || defined(BUILD_iOS)
+
+            // ES2.0以上しかサポートしない
+            assert(major >= 2);
+
+            if (major == 3 && minor == 1) {
+                glVersion = OpenGLVersion_ES31;
+            } else if (major == 3 && minor == 0) {
+                glVersion = OpenGLVersion_ES30;
+            } else if (major == 2) {
+                glVersion = OpenGLVersion_ES20;
+            }
 #else
             if (major == 4 && minor == 1) {
                 glVersion = OpenGLVersion_41;
