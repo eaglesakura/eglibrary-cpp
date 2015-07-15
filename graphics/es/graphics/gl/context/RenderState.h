@@ -259,6 +259,6 @@ public:
     void unbindMeshBuffers();
 };
 
-typedef std_shared_ptr<RenderState> MRenderState;
+typedef ::std::shared_ptr<RenderState> MRenderState;
 
 }

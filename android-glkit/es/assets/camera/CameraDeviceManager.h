@@ -42,25 +42,25 @@ class CameraDeviceManager: public Object {
     /**
      * カメラ制御
      */
-    std_shared_ptr<es::glkit::CameraTextureRenderer> camera;
+    ::std::shared_ptr<es::glkit::CameraTextureRenderer> camera;
 
     /**
      * プレビュー制御
      */
-    std_shared_ptr<es::glkit::PreviewSurfaceTexture> previewSurface;
+    ::std::shared_ptr<es::glkit::PreviewSurfaceTexture> previewSurface;
 
     /**
      * プレビュー対象テクスチャ
      */
     MExternalImageTexture previewTexture;
 public:
-    CameraDeviceManager(std_shared_ptr<es::glkit::CameraTextureRenderer> camera);
+    CameraDeviceManager(::std::shared_ptr<es::glkit::CameraTextureRenderer> camera);
     virtual ~CameraDeviceManager();
 
     /**
      * カメラ制御クラスを取得する
      */
-    virtual std_shared_ptr<es::glkit::CameraTextureRenderer> getCamera() const {
+    virtual ::std::shared_ptr<es::glkit::CameraTextureRenderer> getCamera() const {
         return camera;
     }
 
@@ -105,7 +105,7 @@ public:
 /**
  * カメラ制御
  */
-typedef std_shared_ptr<CameraDeviceManager> MCameraDeviceManager;
+typedef ::std::shared_ptr<CameraDeviceManager> MCameraDeviceManager;
 
 }
 

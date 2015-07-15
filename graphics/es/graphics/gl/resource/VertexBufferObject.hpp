@@ -84,7 +84,7 @@ public:
     }
 };
 
-typedef std_shared_ptr<VertexBufferObject> MVertexBufferObject;
+typedef ::std::shared_ptr<VertexBufferObject> MVertexBufferObject;
 
 }
 

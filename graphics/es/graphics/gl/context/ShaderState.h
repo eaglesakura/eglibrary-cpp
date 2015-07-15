@@ -144,6 +144,6 @@ public:
 /**
  * Managed
  */
-typedef std_shared_ptr<ShaderState> MShaderState;
+typedef ::std::shared_ptr<ShaderState> MShaderState;
 
 }

@@ -248,7 +248,7 @@ public:
     virtual void dispose();
 };
 
-typedef std_shared_ptr<Texture> MTexture;
+typedef ::std::shared_ptr<Texture> MTexture;
 
 }
 

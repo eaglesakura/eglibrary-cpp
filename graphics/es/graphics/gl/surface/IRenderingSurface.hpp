@@ -63,7 +63,7 @@ public:
 /**
  * managed
  */
-typedef std_shared_ptr<IRenderingSurface> MRenderingSurface;
+typedef ::std::shared_ptr<IRenderingSurface> MRenderingSurface;
 
 #if 0
 /**

@@ -350,6 +350,6 @@ public:
     }
 };
 
-typedef std_shared_ptr<VirtualDisplay> MVirtualDisplay;
+typedef ::std::shared_ptr<VirtualDisplay> MVirtualDisplay;
 
 }

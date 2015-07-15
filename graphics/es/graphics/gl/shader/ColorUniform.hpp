@@ -1,5 +1,4 @@
-#ifndef es_graphics_gl_COLORUNIFORM_HPP_
-#define es_graphics_gl_COLORUNIFORM_HPP_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 #include    "es/Graphics.hpp"
@@ -17,7 +16,7 @@ public:
         color = 0;
     }
 
-    ColorUniform(MShaderProgram program, const char *name) {
+    ColorUniform(std::shared_ptr<ShaderProgram> program, const char *name) {
         color = 0;
         setLocation(program, name);
     }
@@ -52,4 +51,3 @@ public:
 };
 }
 
-#endif /* COLORUNIFORM_HPP_ */

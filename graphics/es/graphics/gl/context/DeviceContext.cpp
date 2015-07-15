@@ -84,7 +84,7 @@ es_mutex g_devicesMutex;
 /**
  * 現在のThreadに関連付けられたデバイスを取得する
  */
-std_shared_ptr<DeviceContext> DeviceContext::current() {
+::std::shared_ptr<DeviceContext> DeviceContext::current() {
     // 制御ロックをかける
     es_mutex_lock lock(g_devicesMutex);
 

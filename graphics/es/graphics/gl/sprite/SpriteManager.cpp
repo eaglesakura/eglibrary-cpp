@@ -13,7 +13,7 @@ SpriteManager::~SpriteManager() {
 /**
  * シェーダーの設定と初期化を行う
  */
-void SpriteManager::setShader(MShaderProgram shader) {
+void SpriteManager::setShader(std::shared_ptr<ShaderProgram> shader) {
     this->shader = shader;
     this->shader->bind();
 

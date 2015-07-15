@@ -69,13 +69,13 @@ std::shared_ptr<MappedAsset> AndroidAssetManager::mmap(const char *path) {
 
     if (pAsset == nullptr) {
         eslog("load error(%s)", path);
-        return std_shared_ptr<MappedAsset>();
+        return ::std::shared_ptr<MappedAsset>();
     }
     uint bufferSize = AAsset_getLength(pAsset);
     assert(bufferSize);
     eslog("mapping completed(%d bytes / %s)", bufferSize, path);
 
-    std_shared_ptr<MappedAsset> result(new MappedAsset(assets, pAsset));
+    ::std::shared_ptr<MappedAsset> result(new MappedAsset(assets, pAsset));
     result->buffer.ptr = (uint8_t *) AAsset_getBuffer(pAsset);
     result->buffer.length = bufferSize;
 

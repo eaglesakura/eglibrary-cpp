@@ -124,7 +124,7 @@ MTexture GraphicAssets::loadTextureFromAssets(const std::string &path, const Tex
 /**
  * assets配下からシェーダーを読み出す
  */
-MShaderProgram GraphicAssets::loadShaderFromAssets(const std::string &vertShaderFile, const std::string &fragShaderFile) {
+shared_ptr<ShaderProgram> GraphicAssets::loadShaderFromAssets(const std::string &vertShaderFile, const std::string &fragShaderFile) {
     std::string vertShader = assetManager->loadText(vertShaderFile.c_str());
     std::string fragShader = assetManager->loadText(fragShaderFile.c_str());
 
@@ -144,7 +144,7 @@ MShaderProgram GraphicAssets::loadShaderFromAssets(const std::string &vertShader
  * SpriteManagerを生成する
  */
 MSpriteManager GraphicAssets::createSpriteManager(const std::string &vertShaderFile, const std::string &fragShaderFile) {
-    MShaderProgram spriteShader = loadShaderFromAssets(vertShaderFile, fragShaderFile);
+    shared_ptr<ShaderProgram> spriteShader = loadShaderFromAssets(vertShaderFile, fragShaderFile);
     if (!spriteShader) {
         return MSpriteManager();
     }
@@ -170,7 +170,7 @@ MCameraDeviceManager GraphicAssets::connectCameraDevice(const CameraDeviceMode_e
         return MCameraDeviceManager();
     }
 
-    std_shared_ptr<glkit::CameraTextureRenderer> camera(new glkit::CameraTextureRenderer(jCameraTextureRenderer.globalRef()));
+    ::std::shared_ptr<glkit::CameraTextureRenderer> camera(new glkit::CameraTextureRenderer(jCameraTextureRenderer.globalRef()));
     MCameraDeviceManager result(new CameraDeviceManager(camera));
 
     return result;

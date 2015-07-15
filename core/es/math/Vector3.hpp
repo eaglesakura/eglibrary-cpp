@@ -1,5 +1,4 @@
-#ifndef es_math_VECTOR3_HPP_
-#define es_math_VECTOR3_HPP_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 #include    <math.h>
@@ -276,5 +275,3 @@ inline _Vector3<T> axis(const _Vector3<T> &start, const _Vector3<T> &end) {
     return temp;
 }
 }
-
-#endif /* VECTOR3_HPP_ */

@@ -1,5 +1,4 @@
-#ifndef es_graphics_gl_QUAD_H_
-#define es_graphics_gl_QUAD_H_
+#pragma once
 
 #include    "es/OpenGL.hpp"
 
@@ -110,8 +109,6 @@ public:
     virtual void dispose();
 };
 
-typedef std_shared_ptr<Quad> MQuad;
+typedef ::std::shared_ptr<Quad> MQuad;
 
 }
-
-#endif /* QUAD_H_ */

@@ -1,5 +1,4 @@
-#ifndef es_math_VECTOR4_HPP_
-#define es_math_VECTOR4_HPP_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 #include    <math.h>
@@ -186,5 +185,3 @@ inline _Vector4<T>* lerp(const _Vector4<T> &before, const _Vector4<T> &after, co
     return result;
 }
 }
-
-#endif /* VECTOR4_HPP_ */

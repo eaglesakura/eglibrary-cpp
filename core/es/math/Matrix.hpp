@@ -1,12 +1,4 @@
-/*
- * Matrix.hpp
- *
- *  Created on: 2014/09/09
- *      Author: eaglesakura
- */
-
-#ifndef es_math_MATRIX_HPP_
-#define es_math_MATRIX_HPP_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 #include    "es/math/Math.hpp"
@@ -697,5 +689,3 @@ inline static Matrix<4, 3> *multiply(const Matrix<4, 3> &before, const Matrix<4,
     return result;
 }
 }
-
-#endif /* MATRIX_HPP_ */

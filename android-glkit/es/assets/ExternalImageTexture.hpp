@@ -10,7 +10,7 @@ class ExternalImageTexture: public Texture {
     /**
      * 焼き込み用サーフェイス
      */
-    std_shared_ptr<es::glkit::PreviewSurfaceTexture> surfaceTexture;
+    ::std::shared_ptr<es::glkit::PreviewSurfaceTexture> surfaceTexture;
 
     /**
      * テクスチャのレンダリング準備ができたらtrue
@@ -63,7 +63,7 @@ public:
     /**
      * SDKのSurfaceTextureを渡す
      */
-    virtual void setPreviewSurfaceTexture(std_shared_ptr<es::glkit::PreviewSurfaceTexture> surface) {
+    virtual void setPreviewSurfaceTexture(::std::shared_ptr<es::glkit::PreviewSurfaceTexture> surface) {
         this->surfaceTexture = surface;
     }
 
@@ -132,7 +132,7 @@ public:
     }
 };
 
-typedef std_shared_ptr<ExternalImageTexture> MExternalImageTexture;
+typedef ::std::shared_ptr<ExternalImageTexture> MExternalImageTexture;
 
 }
 

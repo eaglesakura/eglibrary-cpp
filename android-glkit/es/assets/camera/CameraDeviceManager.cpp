@@ -2,7 +2,7 @@
 
 namespace es {
 
-CameraDeviceManager::CameraDeviceManager(std_shared_ptr<es::glkit::CameraTextureRenderer> camera) {
+CameraDeviceManager::CameraDeviceManager(::std::shared_ptr<es::glkit::CameraTextureRenderer> camera) {
     this->camera = camera;
 }
 

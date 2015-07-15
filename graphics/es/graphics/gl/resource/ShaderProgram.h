@@ -39,12 +39,7 @@ public:
     /**
      * ビルドを行う
      */
-    static std_shared_ptr<ShaderProgram> build(const char *vertex_shader, const char *frament_shader, MDeviceContext state = MDeviceContext());
+    static ::std::shared_ptr<ShaderProgram> build(const char *vertex_shader, const char *frament_shader, MDeviceContext state = MDeviceContext());
 };
-
-/**
- * managed
- */
-typedef std_shared_ptr<ShaderProgram> MShaderProgram;
 
 }

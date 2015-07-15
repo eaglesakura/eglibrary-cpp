@@ -20,7 +20,7 @@
 #include	"es/system/Macro.hpp"
 #include	"es/system/Log.h"
 #include    "es/system/Object.hpp"
-#include    "es/memory/SelectionPtr.hpp"
+#include    "es/memory/selection_ptr.hpp"
 
 namespace es {
 typedef std::recursive_mutex es_mutex;

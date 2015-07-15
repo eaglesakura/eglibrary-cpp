@@ -1,5 +1,4 @@
-#ifndef es_grahpics_gl_UNIFORMBASE_HPP_
-#define es_grahpics_gl_UNIFORMBASE_HPP_
+#pragma once
 
 #include    "es/Graphics.hpp"
 #include    "es/graphics/gl/resource/ShaderProgram.h"
@@ -16,6 +15,7 @@ protected:
     UniformBase() {
         location = -1;
     }
+
 public:
 
     ~UniformBase() {
@@ -46,7 +46,7 @@ public:
     /**
      * uniform locationを取得する
      */
-    bool setLocation(const MShaderProgram program, const char* name) {
+    bool setLocation(const ::std::shared_ptr<ShaderProgram> program, const char *name) {
         location = program->getUniformLocation(name);
 //        eslog("uniform location name(%s) -> %d", name, location);
         return valid();
@@ -56,17 +56,18 @@ public:
 /**
  * boolean型の指定を行うuniform
  */
-class BooleanUniform: public UniformBase {
+class BooleanUniform : public UniformBase {
     bool value;
 public:
     BooleanUniform() {
         value = false;
     }
 
-    BooleanUniform(MShaderProgram program, const char* name) {
+    BooleanUniform(::std::shared_ptr<ShaderProgram> program, const char *name) {
         value = false;
         setLocation(program, name);
     }
+
     /**
      * 情報を転送する
      */
@@ -87,4 +88,3 @@ public:
 
 }
 
-#endif /* UNIFORMBASE_HPP_ */

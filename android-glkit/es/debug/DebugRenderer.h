@@ -8,7 +8,7 @@ namespace es {
 namespace debug {
 
 class DebugRenderer {
-    std_shared_ptr<es::debug::RealtimeDebugWindowBridge> debugWindow;
+    ::std::shared_ptr<es::debug::RealtimeDebugWindowBridge> debugWindow;
 public:
     DebugRenderer(jc::lang::object_wrapper jRealtimeDebugWindowBridge);
 
@@ -20,7 +20,7 @@ public:
     virtual void addMessage(std::string message, uint showTimeMs = 0, Color color = Color::white());
 };
 
-typedef std_shared_ptr<DebugRenderer> MDebugRenderer;
+typedef ::std::shared_ptr<DebugRenderer> MDebugRenderer;
 
 
 }

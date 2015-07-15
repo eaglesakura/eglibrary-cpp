@@ -1,5 +1,4 @@
-#ifndef es_graphics_gl_TEXTUREUNIFORM_HPP_
-#define es_graphics_gl_TEXTUREUNIFORM_HPP_
+#pragma once
 
 #include    "es/graphics/gl/resource/Texture.h"
 #include    "es/graphics/gl/shader/UniformBase.hpp"
@@ -19,7 +18,7 @@ public:
         bindUnit = -1;
     }
 
-    TextureUniform(MShaderProgram program, const char *name) {
+    TextureUniform(std::shared_ptr<ShaderProgram> program, const char *name) {
         bindUnit = -1;
         setLocation(program, name);
     }
@@ -69,7 +68,7 @@ public:
         }
     }
 
-    TextureArrayUniform(MShaderProgram program, const char *name) {
+    TextureArrayUniform(std::shared_ptr<ShaderProgram> program, const char *name) {
         bindUnits.alloc(GPUCapacity::getMaxTextureUnits());
         for (int i = 0; i < bindUnits.length; ++i) {
             bindUnits[i] = i;
@@ -100,5 +99,3 @@ public:
 };
 
 }
-
-#endif /* TEXTUREUNIFORM_HPP_ */

@@ -330,7 +330,7 @@ public:
 /**
  * managed
  */
-typedef std_shared_ptr<FrameBufferObject> MFrameBufferObject;
+typedef ::std::shared_ptr<FrameBufferObject> MFrameBufferObject;
 }
 
 #endif /* FRAMEBUFFEROBJECT_HPP_ */

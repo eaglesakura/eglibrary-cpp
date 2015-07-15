@@ -4,7 +4,7 @@
 #include    "es/memory/Buffer.hpp"
 #include    "JointConnector.hpp"
 #include    <android/asset_manager.h>
-#include <es/memory/SafeArray.hpp>
+#include    <es/memory/SafeArray.hpp>
 
 namespace es {
 
@@ -70,6 +70,6 @@ public:
     }
 };
 
-//typedef std_shared_ptr<AndroidAssetManager> MAssetManager;
+//typedef ::std::shared_ptr<AndroidAssetManager> MAssetManager;
 
 }

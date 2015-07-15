@@ -25,19 +25,14 @@
 #define DEBUG
 #endif
 
-/**
- * ::std::shared_ptrを認識しないIDE対策
- */
-#ifndef std_shared_ptr
-#define std_shared_ptr  ::std::shared_ptr
-#endif
 
-/**
- * ::std::weak_ptrを認識しないIDE対策
- */
-#ifndef std_weak_ptr
-#define std_weak_ptr    ::std::weak_ptr
-#endif
+//
+///**
+// * ::std::weak_ptrを認識しないIDE対策
+// */
+//#ifndef std_weak_ptr
+//#define std_weak_ptr    ::std::weak_ptr
+//#endif
 
 /**
  * 安全にdeleteを行う
@@ -71,14 +66,14 @@ inline void swap(T *a, T *b) {
  * Mapから簡易的に値を探す
  */
 template<typename keyType, typename valueType>
-inline std_shared_ptr<valueType> find(const std::map<keyType, std_shared_ptr<valueType> > &objMap, const keyType &key) {
+inline ::std::shared_ptr<valueType> find(const std::map<keyType, ::std::shared_ptr<valueType> > &objMap, const keyType &key) {
     auto itr = objMap.find(key);
     if (itr != objMap.end()) {
         // found
         return itr.second;
     } else {
         // notfound
-        return std_shared_ptr<valueType>();
+        return ::std::shared_ptr<valueType>();
     }
 }
 

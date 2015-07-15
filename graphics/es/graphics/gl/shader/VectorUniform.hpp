@@ -1,5 +1,4 @@
-#ifndef es_graphics_gl_VECTORUNIFORM_HPP_
-#define es_graphics_gl_VECTORUNIFORM_HPP_
+#pragma once
 
 #include    "UniformBase.hpp"
 #include    "es/math/Vector2.hpp"
@@ -30,7 +29,7 @@ public:
         }
     }
 
-    VectorUniform(MShaderProgram program, const char *name) {
+    VectorUniform(::std::shared_ptr<ShaderProgram> program, const char *name) {
         // 0で初期化する
         for (int i = 0; i < vector_length; ++i) {
             vec[i] = (vector_type) 0;
@@ -246,5 +245,3 @@ typedef VectorUniform<float, 3 * 3> Matrix3Uniform;
  */
 typedef VectorUniform<float, 4 * 4> Matrix4Uniform;
 }
-
-#endif /* VECTORUNIFORM_HPP_ */

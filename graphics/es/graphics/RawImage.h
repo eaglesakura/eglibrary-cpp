@@ -118,7 +118,7 @@ public:
 /**
  * managed
  */
-typedef typename std_shared_ptr<RawImage> MRawImage;
+typedef typename ::std::shared_ptr<RawImage> MRawImage;
 
 }
 

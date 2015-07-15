@@ -22,7 +22,7 @@ public:
         _length = 0;
     }
 
-    ByteBuffer(std_shared_ptr<uint8_t> buffer, const uint _len) {
+    ByteBuffer(::std::shared_ptr<uint8_t> buffer, const uint _len) {
         this->buffer = buffer;
         this->_length = _len;
     }
@@ -60,14 +60,14 @@ public:
      * バッファを確保する
      */
     inline static ByteBuffer create(uint bytes) {
-        return ByteBuffer(std_shared_ptr<uint8_t>(static_cast<uint8_t *>(malloc(bytes)), free), bytes);
+        return ByteBuffer(::std::shared_ptr<uint8_t>(static_cast<uint8_t *>(malloc(bytes)), free), bytes);
     }
 
     /**
      * 0クリアされたバッファを生成する
      */
     inline static ByteBuffer createZeroBuffer(uint bytes) {
-        return ByteBuffer(std_shared_ptr<uint8_t>(static_cast<uint8_t *>(calloc(1, bytes)), free), bytes);
+        return ByteBuffer(::std::shared_ptr<uint8_t>(static_cast<uint8_t *>(calloc(1, bytes)), free), bytes);
     }
 
     /**

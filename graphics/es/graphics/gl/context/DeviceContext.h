@@ -55,7 +55,7 @@ public:
     /**
      * 現在のThreadに関連付けられたデバイスを取得する
      */
-    static std_shared_ptr<DeviceContext> current();
+    static ::std::shared_ptr<DeviceContext> current();
 
     /**
      * 現在のスレッドで使用しなくなった
@@ -90,6 +90,6 @@ protected:
 /**
  * Managed
  */
-typedef std_shared_ptr<DeviceContext> MDeviceContext;
+typedef ::std::shared_ptr<DeviceContext> MDeviceContext;
 
 }

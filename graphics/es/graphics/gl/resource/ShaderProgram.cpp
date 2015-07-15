@@ -172,16 +172,16 @@ static GLuint buildProgram(const char* vertex_shader_source, const char* fragmen
 /**
  * ビルドを行う
  */
-std_shared_ptr<ShaderProgram> ShaderProgram::build(const char* vertex_shader, const char* frament_shader, MDeviceContext state) {
+::std::shared_ptr<ShaderProgram> ShaderProgram::build(const char* vertex_shader, const char* frament_shader, MDeviceContext state) {
     GLuint program = buildProgram(vertex_shader, frament_shader);
     if (!program) {
         eslog("error vert shader\n%s", vertex_shader);
         eslog("error frag shader\n%s", frament_shader);
 
-        return MShaderProgram();
+        return std::shared_ptr<ShaderProgram>();
     }
 
-    MShaderProgram result(new ShaderProgram(program));
+    std::shared_ptr<ShaderProgram> result(new ShaderProgram(program));
     return result;
 }
 }

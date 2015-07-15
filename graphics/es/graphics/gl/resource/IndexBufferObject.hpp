@@ -123,7 +123,7 @@ public:
 /**
  * managed
  */
-typedef std_shared_ptr<IndexBufferObject> MIndexBufferObject;
+typedef ::std::shared_ptr<IndexBufferObject> MIndexBufferObject;
 }
 
 #endif /* INDEXBUFFEROBJECT_HPP_ */

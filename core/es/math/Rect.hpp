@@ -1,5 +1,4 @@
-#ifndef es_math_RECT_HPP_
-#define es_math_RECT_HPP_
+#pragma once
 
 #include    "es/math/Math.hpp"
 #include    "es/math/Vector2.hpp"
@@ -483,5 +482,3 @@ RectT<T> createRectFromCWH(const T centerX, const T centerY, const T width, cons
 }
 
 }
-
-#endif /* RECT_HPP_ */

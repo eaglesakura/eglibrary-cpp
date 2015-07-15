@@ -1,12 +1,4 @@
-/*
- * BitFlags.hpp
- *
- *  Created on: 2014/09/08
- *      Author: eaglesakura
- */
-
-#ifndef es_memory_BITFLAGS_HPP_
-#define es_memory_BITFLAGS_HPP_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 
@@ -111,5 +103,3 @@ public:
         return true;
     }
 };
-
-#endif /* BITFLAGS_HPP_ */

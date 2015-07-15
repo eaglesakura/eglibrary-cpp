@@ -57,7 +57,7 @@ public:
     /**
      * assets配下からシェーダーを読み出す
      */
-    virtual MShaderProgram loadShaderFromAssets(const std::string &vertShaderFile, const std::string &fragShaderFile);
+    virtual std::shared_ptr<ShaderProgram> loadShaderFromAssets(const std::string &vertShaderFile, const std::string &fragShaderFile);
 
     /**
      * SpriteManagerを生成する
@@ -70,7 +70,7 @@ public:
     virtual MCameraDeviceManager connectCameraDevice(const CameraDeviceMode_e deviceType);
 };
 
-typedef std_shared_ptr<GraphicAssets> MGraphicAssets;
+typedef ::std::shared_ptr<GraphicAssets> MGraphicAssets;
 
 }
 

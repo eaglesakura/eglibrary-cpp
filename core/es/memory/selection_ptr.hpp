@@ -8,16 +8,16 @@ namespace es {
  * スマートポインタのダウンキャストを行う
  */
 template<typename T, typename T2>
-std_shared_ptr<T> downcast(const std_shared_ptr<T2> &obj) {
+::std::shared_ptr<T> downcast(const ::std::shared_ptr<T2> &obj) {
     if (!obj) {
-        return std_shared_ptr<T>();
+        return ::std::shared_ptr<T>();
     }
 
     try {
         return ::std::dynamic_pointer_cast < T > (obj);
     } catch (...) {
         eslog("catch downcast error(%0xx)", obj.get());
-        return std_shared_ptr<T>();
+        return ::std::shared_ptr<T>();
     }
 }
 
@@ -30,7 +30,7 @@ std_shared_ptr<T> downcast(const std_shared_ptr<T2> &obj) {
  * 例えば、ライブラリ内のリスナポインタ保持等、個々のアプリごとに設計思想が違う場合に利用する。
  */
 template<typename T>
-class SelectionPtr {
+class selection_ptr {
     /**
      * 生ポインタ
      */
@@ -39,22 +39,22 @@ class SelectionPtr {
     /**
      *
      */
-    std_shared_ptr<T> shared;
+    ::std::shared_ptr<T> shared;
 
     /**
      *
      */
-    std_weak_ptr<T> weak;
+    std::weak_ptr<T> weak;
 
 public:
-    SelectionPtr() {
+    selection_ptr() {
         raw = NULL;
     }
 
     /**
      * コピーコンストラクタ
      */
-    SelectionPtr(const SelectionPtr &origin) {
+    selection_ptr(const selection_ptr &origin) {
         this->raw = origin.raw;
         this->shared = origin.shared;
         this->weak = origin.weak;
@@ -64,7 +64,7 @@ public:
      * 生ポインタで生成
      */
     template<typename T2>
-    SelectionPtr(const T2 *p) {
+    selection_ptr(const T2 *p) {
         this->raw = (T*) p;
     }
 
@@ -72,7 +72,7 @@ public:
      *
      */
     template<typename T2>
-    SelectionPtr(const std_shared_ptr<T2> &sp) {
+    selection_ptr(const ::std::shared_ptr<T2> &sp) {
         this->raw = nullptr;
         this->shared = sp;
     }
@@ -81,7 +81,7 @@ public:
      *
      */
     template<typename T2>
-    SelectionPtr(const std_weak_ptr<T2> &wp) {
+    selection_ptr(const std::weak_ptr<T2> &wp) {
         this->raw = nullptr;
         this->weak = wp;
     }
@@ -157,7 +157,7 @@ public:
     /**
      * ポインタをリセットする
      */
-    void reset(const std_shared_ptr<T> &p) {
+    void reset(const ::std::shared_ptr<T> &p) {
         reset();
         shared = p;
     }
@@ -165,7 +165,7 @@ public:
     /**
      * ポインタをリセットする
      */
-    void reset(const std_weak_ptr<T> &p) {
+    void reset(const std::weak_ptr<T> &p) {
         reset();
         weak = p;
     }
@@ -174,8 +174,8 @@ public:
      * 特定の型へダウンキャストする
      */
     template<typename DC>
-    SelectionPtr<DC> downcast() const {
-        SelectionPtr<DC> result;
+    selection_ptr<DC> downcast() const {
+        selection_ptr<DC> result;
 
         if (raw) {
             result.raw = dynamic_cast<DC>(raw);
@@ -191,14 +191,14 @@ public:
     /**
      * 同値である場合はtrue
      */
-    bool operator==(const SelectionPtr &p) const {
+    bool operator==(const selection_ptr &p) const {
         return get() == dynamic_cast<T*>(p.get());
     }
 
     /**
      * 異なる値である場合はtrue
      */
-    bool operator!=(const SelectionPtr &p) const {
+    bool operator!=(const selection_ptr &p) const {
         return get() != dynamic_cast<T*>(p.get());
     }
 
@@ -210,7 +210,7 @@ public:
         return !exist();
     }
 
-    SelectionPtr<T>& operator=(const SelectionPtr<T> &cpy) {
+    selection_ptr<T>& operator=(const selection_ptr<T> &cpy) {
         this->raw = cpy.raw;
         this->shared = cpy.shared;
         this->weak = cpy.weak;

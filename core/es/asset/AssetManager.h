@@ -8,10 +8,6 @@ class IAsset;
 class IAssetLoader;
 
 class AssetManager {
-    AssetManager() = delete;
-
-    ~AssetManager() = delete;
-
 public:
     /**
      * カスタムローダーを追加する
@@ -29,6 +25,10 @@ public:
      * アセットの読み込みを行う
      */
     static std::shared_ptr<IAsset> load(const std::string &path);
+private:
+    AssetManager() = delete;
+
+    ~AssetManager() = delete;
 };
 
 }

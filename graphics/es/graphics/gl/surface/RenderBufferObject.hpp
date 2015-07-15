@@ -76,7 +76,7 @@ public:
     }
 };
 
-typedef std_shared_ptr<RenderBufferObject> MRenderBufferObject;
+typedef ::std::shared_ptr<RenderBufferObject> MRenderBufferObject;
 
 }
 

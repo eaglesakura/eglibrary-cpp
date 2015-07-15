@@ -1,5 +1,4 @@
-#ifndef es_math_VEC2_HPP_
-#define es_math_VEC2_HPP_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 #include    "es/math/Math.hpp"
@@ -214,5 +213,3 @@ inline _Vector2<T> axis(const _Vector2<T> &start, const _Vector2<T> &end) {
     return temp;
 }
 }
-
-#endif /* VEC2_HPP_ */

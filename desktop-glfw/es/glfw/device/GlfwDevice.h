@@ -3,6 +3,13 @@
 #include "es/eglibrary.hpp"
 #include <es/system/Object.hpp>
 #include <memory>
+#include "es/OpenGL.hpp"
+
+// MacではGL3が優先されるため、旧バージョンのGLをガードする
+#if !defined(__gl_h_) && defined(BUILD_MacOSX)
+#define __gl_h_
+#endif
+
 #include <GLFW/glfw3.h>
 #include <es/math/Vector2.hpp>
 

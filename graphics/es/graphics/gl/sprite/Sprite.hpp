@@ -294,7 +294,7 @@ public:
     }
 };
 
-typedef std_shared_ptr<Sprite> MSprite;
+typedef ::std::shared_ptr<Sprite> MSprite;
 
 }
 

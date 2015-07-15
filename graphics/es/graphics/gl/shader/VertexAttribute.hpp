@@ -1,6 +1,4 @@
-#ifndef es_graphics_gl_VERTEXATTRIBUTE_HPP_
-#define es_graphics_gl_VERTEXATTRIBUTE_HPP_
-
+#pragma once
 #include    "es/Graphics.hpp"
 #include    "es/graphics/gl/resource/ShaderProgram.h"
 
@@ -46,7 +44,7 @@ public:
     /**
      * ロケーション設定を行う
      */
-    bool setLocation(const MShaderProgram shader, const char *name) {
+    bool setLocation(const std::shared_ptr<ShaderProgram> shader, const char *name) {
         assert(shader);
         assert(name);
 
@@ -93,7 +91,7 @@ public:
     VertexAttribute() {
     }
 
-    VertexAttribute(MShaderProgram program, const char *name) {
+    VertexAttribute(std::shared_ptr<ShaderProgram> program, const char *name) {
         setLocation(program, name);
     }
 
@@ -126,5 +124,3 @@ public:
 };
 
 }
-
-#endif /* VERTEXATTRIBUTEBASE_HPP_ */

@@ -9,7 +9,7 @@ namespace es {
  * フラグメント管理を行う
  */
 class ApplicationFragmentController : public Object {
-    typedef typename std::vector<SelectionPtr<IApplicationFragment> > fragment_container;
+    typedef typename std::vector<selection_ptr<IApplicationFragment> > fragment_container;
 
     mutable es_mutex transactionLock;
 
@@ -32,7 +32,7 @@ class ApplicationFragmentController : public Object {
 
     BaseApplication *application;
 protected:
-    virtual void onAddFragment(SelectionPtr<IApplicationFragment> fragment) {
+    virtual void onAddFragment(selection_ptr<IApplicationFragment> fragment) {
         assert(fragment);
 
         fragment->onAttach(this);
@@ -41,7 +41,7 @@ protected:
         fragments.push_back(fragment);
     }
 
-    virtual void onRemoveFragment(SelectionPtr<IApplicationFragment> fragment) {
+    virtual void onRemoveFragment(selection_ptr<IApplicationFragment> fragment) {
         assert(fragment);
 
         fragment->onPause();
@@ -68,7 +68,7 @@ public:
     /**
      * フラグメント追加を行う
      */
-    virtual void addFragment(SelectionPtr<IApplicationFragment> fragment) {
+    virtual void addFragment(selection_ptr<IApplicationFragment> fragment) {
         es_mutex_lock lock(transactionLock);
 
         requestAddFragment.push_back(fragment);
@@ -77,7 +77,7 @@ public:
     /**
      * フラグメントの削除を行う
      */
-    virtual void removeFragment(SelectionPtr<IApplicationFragment> fragment) {
+    virtual void removeFragment(selection_ptr<IApplicationFragment> fragment) {
         es_mutex_lock lock(transactionLock);
 
         requestRemoveFragment.push_back(fragment);
@@ -181,7 +181,7 @@ public:
     /**
      * IDを指定してFragmentを取得する
      */
-    virtual SelectionPtr<IApplicationFragment> findFragmentById(const uint64_t id) const {
+    virtual selection_ptr<IApplicationFragment> findFragmentById(const uint64_t id) const {
         es_mutex_lock lock(transactionLock);
 
         auto itr = fragments.begin(), end = fragments.end();
@@ -191,13 +191,13 @@ public:
             }
             ++itr;
         }
-        return SelectionPtr<IApplicationFragment>();
+        return selection_ptr<IApplicationFragment>();
     }
 
     /**
      * タグを指定してFragmentを取得する
      */
-    virtual SelectionPtr<IApplicationFragment> findFragmentByTag(const std::string &tag) {
+    virtual selection_ptr<IApplicationFragment> findFragmentByTag(const std::string &tag) {
         es_mutex_lock lock(transactionLock);
 
         auto itr = fragments.begin(), end = fragments.end();
@@ -207,7 +207,7 @@ public:
             }
             ++itr;
         }
-        return SelectionPtr<IApplicationFragment>();
+        return selection_ptr<IApplicationFragment>();
     }
 };
 

@@ -1,5 +1,4 @@
-#ifndef es_graphics_gl_SPRITEMANAGER_H_
-#define es_graphics_gl_SPRITEMANAGER_H_
+#pragma once
 
 #include    "es/OpenGL.hpp"
 #include    "es/graphics/gl/sprite/Quad.h"
@@ -14,7 +13,7 @@ protected:
     /**
      * レンダリング用固定シェーダ
      */
-    MShaderProgram shader;
+    std::shared_ptr<ShaderProgram> shader;
 
     /**
      * レンダリング中のみ有効なContext
@@ -85,7 +84,7 @@ public:
     /**
      * シェーダーの設定と初期化を行う
      */
-    virtual void setShader(MShaderProgram shader);
+    virtual void setShader(std::shared_ptr<ShaderProgram> shader);
 
     /**
      * 仮想ディスプレイのセットアップを行う
@@ -104,7 +103,7 @@ public:
         return display;
     }
 
-    virtual MShaderProgram getShader() {
+    virtual std::shared_ptr<ShaderProgram> getShader() {
         return shader;
     }
 
@@ -291,8 +290,6 @@ public:
     virtual void dispose();
 };
 
-typedef std_shared_ptr<SpriteManager> MSpriteManager;
+typedef ::std::shared_ptr<SpriteManager> MSpriteManager;
 
 }
-
-#endif /* SPRITEMANAGER_H_ */

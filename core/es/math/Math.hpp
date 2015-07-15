@@ -1,5 +1,4 @@
-#ifndef MATH_HPP_
-#define MATH_HPP_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 #include    <math.h>
@@ -218,5 +217,3 @@ inline const int64_t round(const double value) {
 }
 
 }
-
-#endif /* MATH_HPP_ */
