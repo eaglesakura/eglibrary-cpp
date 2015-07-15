@@ -98,6 +98,7 @@ void GPUCapacity::initialize() {
                 {"Tegra",   GPUFamily_Tegra},
                 {"Adreno",  GPUFamily_Adreno},
                 {"GeForce", GPUFamily_GeForce},
+                {"Intel HD", GPUFamily_IntelHdGraphics},
         };
 
         for (int i = 0; i < (sizeof(gpu_groups) / sizeof(GPUFamilyGroup)); ++i) {

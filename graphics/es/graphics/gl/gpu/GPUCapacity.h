@@ -136,6 +136,12 @@ enum GPUFamily_e {
             GPUFamily_GeForce,
 
     /**
+     * Intel Desktop
+     * Mac Book Air
+     */
+            GPUFamily_IntelHdGraphics,
+
+    /**
      * not found...
      */
             GPUFamily_Unknown,
