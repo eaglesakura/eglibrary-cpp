@@ -22,6 +22,16 @@
 #include    "es/memory/selection_ptr.hpp"
 
 namespace es {
+template<typename T>
+using sp = ::std::shared_ptr<T>;
+
+template<typename T>
+using wp = ::std::weak_ptr<T>;
+
+template<typename T>
+using selp  = ::es::selection_ptr<T>;
+
+
 typedef std::recursive_mutex es_mutex;
 typedef std::unique_lock<es_mutex> es_mutex_lock;
 }

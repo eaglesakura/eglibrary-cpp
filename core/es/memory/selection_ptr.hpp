@@ -72,18 +72,18 @@ public:
      *
      */
     template<typename T2>
-    selection_ptr(const ::std::shared_ptr<T2> &sp) {
+    selection_ptr(const ::std::shared_ptr<T2> &shared) {
         this->raw = nullptr;
-        this->shared = sp;
+        this->shared = shared;
     }
 
     /**
      *
      */
     template<typename T2>
-    selection_ptr(const std::weak_ptr<T2> &wp) {
+    selection_ptr(const std::weak_ptr<T2> &weak) {
         this->raw = nullptr;
-        this->weak = wp;
+        this->weak = weak;
     }
 
     /**
