@@ -1,8 +1,9 @@
 #pragma once
 
-#include <es/graphics/PixelFormat.hpp>
 #include "es/eglibrary.hpp"
+#include <es/graphics/PixelFormat.hpp>
 #include "es/asset/IAsset.hpp"
+#include "es/memory/Buffer.hpp"
 
 namespace es {
 
@@ -78,21 +79,45 @@ public:
     bool load(std::shared_ptr<IAsset> asset, selection_ptr<ImageBufferListener> listener);
 
 private:
-    ByteBuffer preReadedBuffer;
+    ByteBuffer readedBuffer;
 
     /**
      * 一度に読み込む高さピクセル数。
      * 小さくするほど省メモリになるが、オーバーヘッドが大きくなる。
      * 0の場合一括で全てを読み込む。
      */
-    uint16_t readLines = 0;
+    uint16_t onceReadLines = 0;
 
     /**
      * ピクセルフォーマット変換をリクエストする場合、指定のフォーマットを設定する。
      *
      * ただし、未サポートのピクセルフォーマットを指定しようとするとfalseを返却してロードを強制終了する。
      */
-    PixelFormat_e convertPixelFormat = PixelFormat_RGBA8888;
+    PixelFormat_e pixelConvert = PixelFormat_RGBA8888;
 };
+
+PngFileDecoder::PngFileDecoder() {
+
+}
+
+PngFileDecoder::~PngFileDecoder() {
+
+}
+
+PngFileDecoder &PngFileDecoder::preReadedBuffer(const unsafe_array<uint8_t> &buffer) {
+    return *this;
+}
+
+PngFileDecoder &PngFileDecoder::readLines(const uint lines) {
+    return *this;
+}
+
+PngFileDecoder &PngFileDecoder::convertPixelFormat(const PixelFormat_e format) {
+    return *this;
+}
+
+bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<ImageBufferListener> listener) {
+    return false;
+}
 
 }
