@@ -280,20 +280,27 @@ void RenderState::set(const glstates &state) {
         glClearColor(state.clear.rf(), state.clear.gf(), state.clear.bf(), state.clear.af());
         cur->clear = state.clear;
     }
+
+    assert_gl();
+}
+
+void RenderState::unbindMeshBuffers() {
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 /**
  * バッファを全てアンバインドしてクリアーな状態にする
  */
 void RenderState::unbindBuffers() {
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    unbindMeshBuffers();
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     bindFramebuffer(0);
 }
 
-void RenderState::unbindMeshBuffers() {
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+void RenderState::unbindResources() {
+    unbindBuffers();
+    glUseProgram(0);
+
 }
 }

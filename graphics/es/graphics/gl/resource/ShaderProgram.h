@@ -22,14 +22,19 @@ public:
     virtual void dispose();
 
     /**
+     * シェーダープログラムのハンドラを取得する
+     */
+    GLuint getProgramHandle() const;
+
+    /**
      * プログラム属性変数のロケーションを取得する
      */
-    virtual GLint getAttribLocation(const char *name) const;
+    GLint getAttribLocation(const char *name) const;
 
     /**
      * uniform変数のロケーションを取得する
      */
-    virtual GLint getUniformLocation(const char *name) const;
+    GLint getUniformLocation(const char *name) const;
 
     /**
      * GLと関連付ける

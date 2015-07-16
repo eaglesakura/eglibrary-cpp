@@ -65,7 +65,7 @@ namespace {
 /**
  * シェーダーの読み込みを行う。
  */
-static GLint compileShader(const char* shader_source, const GLenum GL_XXXX_SHADER) {
+static GLint compileShader(const char *shader_source, const GLenum GL_XXXX_SHADER) {
     const GLint shader = glCreateShader(GL_XXXX_SHADER);
     assert_gl();
 
@@ -82,11 +82,11 @@ static GLint compileShader(const char* shader_source, const GLenum GL_XXXX_SHADE
             // エラーメッセージを取得
             glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
             if (infoLen > 1) {
-                GLchar *msg = (GLchar*) calloc(infoLen, sizeof(GLchar));
+                GLchar *msg = (GLchar *) calloc(infoLen, sizeof(GLchar));
                 glGetShaderInfoLog(shader, infoLen, NULL, msg);
 
                 eslog("%s", msg);
-                free((void*) msg);
+                free((void *) msg);
             } else {
                 eslog("comple error not info...");
             }
@@ -105,7 +105,7 @@ static GLint compileShader(const char* shader_source, const GLenum GL_XXXX_SHADE
 /**
  * 頂点・フラグメントシェーダーをリンクし、ShaderProgramを作成する
  */
-static GLuint buildProgram(const char* vertex_shader_source, const char* fragment_shader_source) {
+static GLuint buildProgram(const char *vertex_shader_source, const char *fragment_shader_source) {
     const GLuint vertex_shader = compileShader(vertex_shader_source, GL_VERTEX_SHADER);
     if (!vertex_shader) {
         eslog("vertex shader compile error");
@@ -139,10 +139,12 @@ static GLuint buildProgram(const char* vertex_shader_source, const char* fragmen
             // エラーメッセージを取得
             glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLen);
             if (infoLen > 1) {
-                GLchar *msg = (GLchar*) calloc(infoLen, sizeof(GLchar));
+                GLchar *msg = (GLchar *) calloc(infoLen, sizeof(GLchar));
                 glGetProgramInfoLog(program, infoLen, NULL, msg);
                 eslog("%s", msg);
-                free((void*) msg);
+                free((void *) msg);
+            } else {
+                eslog("Link Failed(Not Information)");
             }
         }
 
@@ -163,16 +165,18 @@ static GLuint buildProgram(const char* vertex_shader_source, const char* fragmen
     // リンク済みのため、個々のシェーダーオブジェクトの解放フラグを立てる
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
+    assert_gl();
 
     // リンク済みのプログラムを返す
     return program;
 }
 
 }
+
 /**
  * ビルドを行う
  */
-::std::shared_ptr<ShaderProgram> ShaderProgram::build(const char* vertex_shader, const char* frament_shader, MDeviceContext state) {
+::std::shared_ptr<ShaderProgram> ShaderProgram::build(const char *vertex_shader, const char *frament_shader, MDeviceContext state) {
     GLuint program = buildProgram(vertex_shader, frament_shader);
     if (!program) {
         eslog("error vert shader\n%s", vertex_shader);
@@ -183,5 +187,9 @@ static GLuint buildProgram(const char* vertex_shader_source, const char* fragmen
 
     std::shared_ptr<ShaderProgram> result(new ShaderProgram(program));
     return result;
+}
+
+GLuint ShaderProgram::getProgramHandle() const {
+    return program;
 }
 }

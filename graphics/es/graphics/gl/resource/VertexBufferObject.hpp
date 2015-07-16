@@ -28,6 +28,13 @@ public:
     }
 
     /**
+     * 頂点配列のハンドラを取得する
+     */
+    GLuint getVertexArrayHandle() const {
+        return vertices;
+    }
+
+    /**
      * バッファにデータを転送する。
      * 必ずbind()済みの状態で呼び出すこと
      * @param source 転送元のデータポインタ

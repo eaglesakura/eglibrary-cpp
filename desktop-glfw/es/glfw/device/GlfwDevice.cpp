@@ -112,6 +112,8 @@ void GlfwDevice::bind() {
 }
 
 void GlfwDevice::unbind() {
+    // GPUコマンドキューの処理完了を行わなければならない
+    glFinish();
     glfwMakeContextCurrent(nullptr);
 }
 

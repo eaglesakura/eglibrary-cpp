@@ -39,6 +39,7 @@ DeviceContext::DeviceContext() {
 }
 
 DeviceContext::~DeviceContext() {
+    renderState->unbindResources();
     eslog("delete ThreadDevice::~ThreadDevice(%x)", this);
 }
 
