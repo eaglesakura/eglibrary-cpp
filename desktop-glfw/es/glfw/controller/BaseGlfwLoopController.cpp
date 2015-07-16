@@ -26,7 +26,6 @@ void BaseGlfwLoopController::execute() {
             break;
         }
 
-
         // 可視状態チェック
         bool nowWindowVisible = device->isWindowVisible();
         if (nowWindowVisible != oldWindowVisible) {
@@ -48,7 +47,7 @@ void BaseGlfwLoopController::execute() {
 
         if (loopState == LoopState::Run) {
             // サーフェイスサイズチェック
-            Vector2i16 nowSurfaceSize = device->getWindowSize();
+            Vector2i16 nowSurfaceSize = device->getFramebufferSize();
             if (nowSurfaceSize != oldSurfaceSize) {
                 eslog("onSurfaceChanged(%x) old(%dx%d) -> new(%dx%d)", this,
                       (int) oldSurfaceSize.x, (int) oldSurfaceSize.y,

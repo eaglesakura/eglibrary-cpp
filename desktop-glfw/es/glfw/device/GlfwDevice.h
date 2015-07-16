@@ -21,12 +21,6 @@ namespace es {
  * GLFWのレンダリングデバイスを管理する
  */
 class GlfwDevice : public Object {
-    static int existDevices;
-
-    GLFWwindow *window = nullptr;
-
-    GlfwDevice(GLFWwindow *window);
-
 public:
 
     virtual ~GlfwDevice();
@@ -67,13 +61,21 @@ public:
     Vector2i16 getWindowSize() const;
 
     /**
+     * フレームバッファサイズを取得する
+     */
+    Vector2i16 getFramebufferSize() const;
+
+    /**
+     * ウィンドウのスケール率を取得する
+     */
+    float getWindowScale() const;
+
+    /**
      * ウィンドウの可視状態を取得する
      */
     bool isWindowVisible() const;
 
-    GLFWwindow *getWindow() const {
-        return window;
-    }
+    GLFWwindow *getWindow() const;
 
     /**
      * インスタンスを生成する
@@ -92,6 +94,13 @@ public:
             const uint width, const uint height,
             const std::shared_ptr<GlfwDevice> sharedContext = std::shared_ptr<GlfwDevice>()
     );
+
+private:
+    static int existDevices;
+
+    GLFWwindow *window = nullptr;
+
+    GlfwDevice(GLFWwindow *window);
 };
 
 }
