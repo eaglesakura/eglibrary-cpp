@@ -126,4 +126,18 @@ Vector2i16 GlfwDevice::getWindowSize() const {
 bool GlfwDevice::isWindowVisible() const {
     return glfwGetWindowAttrib(window, GLFW_VISIBLE);
 }
+
+Vector2i16 GlfwDevice::getFramebufferSize() const {
+    Vector2i result;
+    glfwGetFramebufferSize(window, &result.x, &result.y);
+    return Vector2i16((int16_t) result.x, (int16_t) result.y);
+}
+
+float GlfwDevice::getWindowScale() const {
+    return (float) getFramebufferSize().x / (float) getWindowSize().x;
+}
+
+GLFWwindow *GlfwDevice::getWindow() const {
+    return window;
+}
 }

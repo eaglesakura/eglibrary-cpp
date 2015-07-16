@@ -7,13 +7,15 @@ namespace es {
 
 /**
  * OpenGLのバージョンを示す
- * 上位100と10の位がバージョン、1の位がESとコアプロファイルの区別
+ * GL互換バージョン : XX
+ * ES互換バージョン :   XX
+ * GL(1) or ES(0) :     X
  */
 enum OpenGLVersion_e {
-    OpenGLVersion_ES20 = 200,
-    OpenGLVersion_ES30 = 300,
-    OpenGLVersion_ES31 = 310,
-    OpenGLVersion_41 = 411,
+    OpenGLVersion_ES20 = 30200,
+    OpenGLVersion_ES30 = 40300,
+    OpenGLVersion_ES31 = 45310,
+    OpenGLVersion_41   = 41301,
     OpenGLVersion_Unknown = 0,
 };
 
