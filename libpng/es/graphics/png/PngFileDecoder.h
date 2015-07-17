@@ -11,34 +11,41 @@ namespace es {
  * 画像の基本情報
  */
 struct ImageInfo {
-    uint width;
-    uint height;
+    uint16_t width;
+    uint16_t height;
     enum ImageFormat_e {
         ImageFormat_PNG,
     } imageFormat;
 
     /**
-     * 読み込まれたピクセルフォーマット
+     * 元画像ピクセルフォーマット
      */
-    PixelFormat_e pixelFormat = PixelFormat_RGBA8888;
+    PixelFormat_e srcPixelFormat;
+
+    /**
+     * 変換されたピクセルフォーマット
+     */
+    PixelFormat_e dstPixelFormat;
 };
 
 /**
  * 画像読み込み時にコールバックを受け取る
  */
-class ImageBufferListener {
+class IImageBufferListener {
 public:
     /**
      * 画像情報を読み込んだ
+     *
+     * infoの所有権はDecoderにあるため、ポインタを保存してはならない。
      */
-    virtual void onImageInfoReceived(const ImageInfo *info);
+    virtual void onImageInfoReceived(const ImageInfo *info) = 0;
 
     /**
      * 画像を指定行読み込んだ
      *
      * 引数lineは使いまわされる可能性があるため、内部的にテクスチャコピー等を行うこと。
      */
-    virtual void onImageLineReceived(const unsafe_array<uint8_t> line, const uint lines);
+    virtual void onImageLineReceived(const ImageInfo *info, const unsafe_array<uint8_t> pixels, const uint height) = 0;
 };
 
 /**
@@ -56,7 +63,7 @@ public:
      * ファイルフォーマットチェック等、事前に読み込んで閉まっているバッファがあったらそれを渡す
      * 内部ではデータをコピーするため、バッファは解放しても構わない。
      */
-    PngFileDecoder &preReadedBuffer(const unsafe_array<uint8_t> &buffer);
+    void setReadedBuffer(const unsafe_array<uint8_t> &buffer);
 
     /**
      * 一度の読み込みで読み込む行数（高さ）を指定する。
@@ -64,19 +71,19 @@ public:
      * 0を指定した場合、全データを一括で読み込む。
      * デフォルトは0になっている。
      */
-    PngFileDecoder &readLines(const uint lines);
+    void setOnceReadHeight(const uint heightPixels);
 
     /**
      * ピクセルフォーマットの変換リクエストを行う。
      */
-    PngFileDecoder &convertPixelFormat(const PixelFormat_e format);
+    void setConvertPixelFormat(const PixelFormat_e format);
 
     /**
      * アセットをPNGファイルとして読み込む
      *
      * 読み込みに成功したらtrue、それ以外はfalseを返却する。
      */
-    bool load(std::shared_ptr<IAsset> asset, selection_ptr<ImageBufferListener> listener);
+    bool load(std::shared_ptr<IAsset> asset, selection_ptr<IImageBufferListener> listener);
 
 private:
     ByteBuffer readedBuffer;
@@ -95,29 +102,5 @@ private:
      */
     PixelFormat_e pixelConvert = PixelFormat_RGBA8888;
 };
-
-PngFileDecoder::PngFileDecoder() {
-
-}
-
-PngFileDecoder::~PngFileDecoder() {
-
-}
-
-PngFileDecoder &PngFileDecoder::preReadedBuffer(const unsafe_array<uint8_t> &buffer) {
-    return *this;
-}
-
-PngFileDecoder &PngFileDecoder::readLines(const uint lines) {
-    return *this;
-}
-
-PngFileDecoder &PngFileDecoder::convertPixelFormat(const PixelFormat_e format) {
-    return *this;
-}
-
-bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<ImageBufferListener> listener) {
-    return false;
-}
 
 }

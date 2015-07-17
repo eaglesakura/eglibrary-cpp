@@ -10,7 +10,7 @@ LocalFileAssetLoader::LocalFileAssetLoader(const std::string &_basePath) : baseP
 std::shared_ptr<IAsset> LocalFileAssetLoader::load(const std::string &path) {
     std::ifstream stream(basePath + path, std::ifstream::in | std::ifstream::binary);
     if (stream.fail()) {
-        eslog("LoadFiled(%s)", (basePath + path).c_str());
+//        eslog("LoadFiled(%s)", (basePath + path).c_str());
         return std::shared_ptr<IAsset>();
     }
 

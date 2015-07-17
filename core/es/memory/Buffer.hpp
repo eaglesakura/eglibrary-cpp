@@ -22,7 +22,7 @@ public:
         _length = 0;
     }
 
-    ByteBuffer(::std::shared_ptr<uint8_t> buffer, const uint _len) {
+    ByteBuffer(sp<uint8_t> buffer, const uint _len) {
         this->buffer = buffer;
         this->_length = _len;
     }
@@ -61,6 +61,16 @@ public:
      */
     inline static ByteBuffer create(uint bytes) {
         return ByteBuffer(::std::shared_ptr<uint8_t>(static_cast<uint8_t *>(malloc(bytes)), free), bytes);
+    }
+
+    /**
+     * バッファをコピーする
+     */
+    template<typename T>
+    inline static ByteBuffer clone(const unsafe_array<T> &buffer) {
+        ByteBuffer result = create(sizeof(T) * buffer.length);
+        memcpy(result.get(), buffer.ptr, sizeof(T) * buffer.length);
+        return result;
     }
 
     /**

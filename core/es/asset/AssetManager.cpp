@@ -26,6 +26,7 @@ std::shared_ptr<IAsset> AssetManager::load(const std::string &path) {
         }
     }
 
+    eslog("LoadFiled(%s)", path.c_str());
     return std::shared_ptr<IAsset>();
 }
 
