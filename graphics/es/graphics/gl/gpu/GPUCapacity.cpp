@@ -232,8 +232,8 @@ void GPUCapacity::initialize() {
 
         if (getGLVersion() >= toCoreVersion(3, 0)) {
             // Support VAO
-//            extension_flags.enable(GPUExtension_VertexArrayObject);
-//            eslog("supported extension(GPUExtension_VertexArrayObject)");
+            extension_flags.enable(GPUExtension_VertexArrayObject);
+            eslog("supported extension(GPUExtension_VertexArrayObject)");
         }
 
     }

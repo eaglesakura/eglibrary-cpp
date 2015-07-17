@@ -39,7 +39,7 @@ public:
         /**
          * 頂点構造体から実際の属性までのオフセット値 {vec3, vec2}で後半にアクセスする場合はsizeof(vec3)を指定する
          */
-        uint8_t offsetHeader;
+        GLint offsetHeader;
 
         /**
          * attribute loc

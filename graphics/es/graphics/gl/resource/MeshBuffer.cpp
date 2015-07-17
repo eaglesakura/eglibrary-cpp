@@ -40,14 +40,14 @@ void MeshBuffer::bind() {
 
             // VAOをサポートしないので、手動で動作を行う
             glEnableVertexAttribArray(attr.location);
-            glVertexAttribPointer(attr.location, attr.size, attr.type, attr.normalize, attr.strideBytes, reinterpret_cast<const GLvoid *>( attr.offsetHeader));
+            glVertexAttribPointer(attr.location, attr.size, attr.type, attr.normalize, attr.strideBytes, Buffer::offsetBytes(nullptr, attr.offsetHeader));
             assert_gl();
         }
     }
 }
 
 void MeshBuffer::addAttribute(const MeshBuffer::Attribute &attr) {
-    if (!attr.location) {
+    if (attr.location < 0) {
         // ロケーションが無効なので、シェーダーで利用されていない。
         return;
     }
@@ -61,7 +61,7 @@ void MeshBuffer::addAttribute(const MeshBuffer::Attribute &attr) {
         glEnableVertexAttribArray(attr.location);
         assert_gl();
 
-        glVertexAttribPointer(attr.location, attr.size, attr.type, attr.normalize, attr.strideBytes, reinterpret_cast<const GLvoid *>( attr.offsetHeader));
+        glVertexAttribPointer(attr.location, attr.size, attr.type, attr.normalize, attr.strideBytes, Buffer::offsetBytes(nullptr, attr.offsetHeader));
         assert_gl();
     } else {
         glEnableVertexAttribArray(attr.location);
