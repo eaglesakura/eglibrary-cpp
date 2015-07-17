@@ -111,8 +111,8 @@ void Quad::rendering() {
         return;
     }
 //    vertices->rendering(GL_TRIANGLE_FAN, 4);
-    mesh->getVertices()->rendering(GL_TRIANGLE_FAN, 4);
-//    mesh->rendering(primitiveType);
+//    mesh->getVertices()->rendering(GL_TRIANGLE_FAN, 4);
+    mesh->rendering(primitiveType);
 }
 
 

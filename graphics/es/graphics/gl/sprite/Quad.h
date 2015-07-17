@@ -17,16 +17,6 @@ struct QuadVertex {
 };
 
 /**
- * 位置属性
- */
-typedef VertexAttribute<QuadVertex, 2, GL_FLOAT, GL_FALSE, 0> QuadPositionAttribute;
-
-/**
- * UV属性
- */
-typedef VertexAttribute<QuadVertex, 2, GL_FLOAT, GL_FALSE, (GLsizei) sizeof(Vector2f)> QuadCoordAttribute;
-
-/**
  * Quad Resource
  */
 class Quad : public GLObject {
@@ -53,10 +43,6 @@ public:
      * nullptrの場合、デフォルトの頂点情報を利用する。
      */
     void updateVertices(const QuadVertex *vertices, const GLint posAttrLocation, const GLint uvAttrLocation);
-
-    GLenum getPrimitiveType() const {
-        return primitiveType;
-    }
 
     void setPrimitiveType(GLenum primitiveType) {
         Quad::primitiveType = primitiveType;

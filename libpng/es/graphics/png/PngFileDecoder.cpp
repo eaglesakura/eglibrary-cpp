@@ -148,7 +148,7 @@ bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<IImageBuf
 
     if (info.srcPixelFormat != this->pixelConvert) {
         // 変換先の画素を生成する
-        convertBuffer = Pixel::createPixelBuffer(pixelConvert, rowBytes * onceReadLines);
+        convertBuffer = Pixel::createPixelBuffer(pixelConvert, Pixel::getPixelBytes(pixelConvert) * info.width * onceReadLines);
     }
 
     vector<void *> rowHeaders(onceReadLines);
@@ -170,14 +170,14 @@ bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<IImageBuf
         } else {
             eslog("PNG Convert[%d] -> [%d]", info.srcPixelFormat, pixelConvert);
             if (info.srcPixelFormat == PixelFormat_RGB888) {
-                Pixel::copyRGB888Pixels(util::asPointer(readCacheBuffer), pixelConvert, convertBuffer.get(), onceReadLines * info.width);
+                Pixel::copyRGB888Pixels(util::asPointer(readCacheBuffer), pixelConvert, convertBuffer.get(), reading * info.width);
             } else if (info.srcPixelFormat == PixelFormat_RGBA8888) {
-                Pixel::copyRGBA8888Pixels(util::asPointer(readCacheBuffer), pixelConvert, convertBuffer.get(), onceReadLines * info.width);
+                Pixel::copyRGBA8888Pixels(util::asPointer(readCacheBuffer), pixelConvert, convertBuffer.get(), reading * info.width);
             } else {
                 eslog("PNG Convert not support...");
                 return false;
             }
-            listener->onImageLineReceived(&info, unsafe_array<uint8_t>(util::asPointer(readCacheBuffer), reading * rowBytes), reading);
+            listener->onImageLineReceived(&info, unsafe_array<uint8_t>(convertBuffer.get(), reading * rowBytes), reading);
         }
     }
 
