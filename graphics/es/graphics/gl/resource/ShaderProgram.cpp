@@ -14,10 +14,23 @@ ShaderProgram::ShaderProgram(const GLuint program) {
         glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &temp);
         this->maxUniforms = temp;
     }
+    assert_gl();
 }
 
 ShaderProgram::~ShaderProgram() {
     dispose();
+}
+
+GLuint ShaderProgram::getProgramHandle() const {
+    return program;
+}
+
+OpenGLSLVersion_e ShaderProgram::getGLSLVersion() const {
+    return version;
+}
+
+bool ShaderProgram::isES20Program() const {
+    return version == OpenGLSLVersion_100;
 }
 
 /**
@@ -173,23 +186,21 @@ static GLuint buildProgram(const char *vertex_shader_source, const char *fragmen
 
 }
 
+
 /**
  * ビルドを行う
  */
-::std::shared_ptr<ShaderProgram> ShaderProgram::build(const char *vertex_shader, const char *frament_shader, MDeviceContext state) {
-    GLuint program = buildProgram(vertex_shader, frament_shader);
+::std::shared_ptr<ShaderProgram> ShaderProgram::build(const std::string &vertex_shader, const std::string &fragment_shader, const OpenGLSLVersion_e version) {
+    GLuint program = buildProgram(vertex_shader.c_str(), fragment_shader.c_str());
     if (!program) {
-        eslog("error vert shader\n%s", vertex_shader);
-        eslog("error frag shader\n%s", frament_shader);
+        eslog("error vert shader\n%s", vertex_shader.c_str());
+        eslog("error frag shader\n%s", fragment_shader.c_str());
 
         return std::shared_ptr<ShaderProgram>();
     }
 
     std::shared_ptr<ShaderProgram> result(new ShaderProgram(program));
+    result->version = version;
     return result;
-}
-
-GLuint ShaderProgram::getProgramHandle() const {
-    return program;
 }
 }

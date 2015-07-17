@@ -1,7 +1,7 @@
 #pragma once
 
-#include <es/graphics/gl/resource/ShaderProgram.h>
 #include "estest/eglibrary-test.hpp"
+#include <es/graphics/gl/resource/ShaderProgram.h>
 
 namespace es {
 namespace test {
@@ -17,9 +17,12 @@ TEST(OpenGLShaderTest, SpriteShaderCompile) {
     ASSERT_TRUE((bool) vsh);
     ASSERT_TRUE((bool) fsh);
 
-    auto shader = ShaderProgram::build(util::toString(vsh).c_str(), util::toString(fsh).c_str());
+    ::std::shared_ptr<ShaderProgram> shader = ShaderProgram::build(util::toString(vsh), util::toString(fsh), OpenGLSLVersion_100);
 
     ASSERT_TRUE((bool) shader);
+
+    eslog("GLSL Version(%d)", shader->getGLSLVersion());
+    ASSERT_TRUE(shader->isES20Program());
 }
 
 }

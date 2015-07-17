@@ -60,7 +60,7 @@ static void pngReadBuffer(png_structp png, png_bytep result, png_size_t readSize
 }
 
 bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<IImageBufferListener> listener) {
-    ImageInfo info;
+    IImageBufferListener::ImageInfo info;
     info.dstPixelFormat = pixelConvert;
 
     internal::ImageBufferReader reader;
@@ -105,7 +105,7 @@ bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<IImageBuf
     // 読み込みに必要なテンポラリを生成する
     info.width = png_get_image_width(png, pngInfo);
     info.height = png_get_image_height(png, pngInfo);
-    info.imageFormat = ImageInfo::ImageFormat_PNG;
+    info.format = IImageBufferListener::ImageFormat_PNG;
     int depth = png_get_bit_depth(png, pngInfo);
     int rowBytes = png_get_rowbytes(png, pngInfo);
     int perPixelBytes = rowBytes / info.width;

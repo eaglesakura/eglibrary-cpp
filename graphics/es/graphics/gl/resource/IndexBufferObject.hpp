@@ -48,6 +48,13 @@ public:
     }
 
     /**
+     * データの種類を取得する
+     */
+    GLenum getDataType() const {
+        return dataType;
+    }
+
+    /**
      * データを転送する
      * bind()を行なってから呼び出すこと。
      * @param data 転送元のデータ

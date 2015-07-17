@@ -40,8 +40,9 @@ struct TextureLoadOption {
     }
 };
 
-class Texture: public GLObject {
+class Texture : public GLObject {
     friend class GraphicAssets;
+
 protected:
     struct {
         /**
@@ -111,11 +112,14 @@ protected:
     GLuint handle;
 public:
     Texture();
+
     virtual ~Texture();
 
     /**
      * 画像としての幅と高さを指定する。
      *
+     * 例えばPOT変換を行った場合、実際に使用する領域(NPOT)とテクスチャの領域(POT)が異なる場合がある。
+     * その場合、画像サイズとしてデータを残しておくことでSpriteを正常に描画する。
      * この設定はSpriteとして使用する際に重要となるが、実際のテクスチャサイズを超えて生成することは出来ない。
      */
     virtual void setImageSize(uint x, uint y) {
@@ -196,6 +200,10 @@ public:
      */
     virtual void setBindTarget(const GLenum target) {
         this->target = target;
+    }
+
+    GLenum getBindTarget() const {
+        return this->target;
     }
 
     /**

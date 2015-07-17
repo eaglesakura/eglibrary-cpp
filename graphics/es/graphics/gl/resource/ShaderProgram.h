@@ -10,6 +10,7 @@ class ShaderProgram : public GLObject {
     GLuint program;
     uint16_t maxAttributes;
     uint16_t maxUniforms;
+    OpenGLSLVersion_e version;
 
     ShaderProgram(const GLuint program);
 
@@ -20,6 +21,16 @@ public:
      * 管理しているリソースの解放を行う
      */
     virtual void dispose();
+
+    /**
+     * GLバージョンを取得する
+     */
+    OpenGLSLVersion_e getGLSLVersion() const;
+
+    /**
+     * OpenGL ES 2.0相当のプログラム
+     */
+    bool isES20Program() const;
 
     /**
      * シェーダープログラムのハンドラを取得する
@@ -44,7 +55,7 @@ public:
     /**
      * ビルドを行う
      */
-    static ::std::shared_ptr<ShaderProgram> build(const char *vertex_shader, const char *frament_shader, MDeviceContext state = MDeviceContext());
+    static ::std::shared_ptr<ShaderProgram> build(const std::string &vertex_shader, const std::string &frament_shader, const OpenGLSLVersion_e version);
 };
 
 }

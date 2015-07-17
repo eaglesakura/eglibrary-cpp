@@ -15,8 +15,21 @@ enum OpenGLVersion_e {
     OpenGLVersion_ES20 = 30200,
     OpenGLVersion_ES30 = 40300,
     OpenGLVersion_ES31 = 45310,
-    OpenGLVersion_41   = 41301,
+    OpenGLVersion_41 = 41301,
     OpenGLVersion_Unknown = 0,
+};
+
+
+/**
+ * OpenGL Shader Languageのバージョンを示す
+ * GL互換バージョン : XXnnn
+ * ES互換バージョン : nnXXn
+ * 常にゼロ        : nnnn0
+ */
+enum OpenGLSLVersion_e {
+    OpenGLSLVersion_100 = 30200,
+    OpenGLSLVersion_300es = 40300,
+    OpenGLSLVersion_400 = 41300,
 };
 
 /**
@@ -96,6 +109,12 @@ enum GPUExtension_e {
      * 利用ができなかった場合、16bitで確保される
      */
             GPUExtension_Renderbuffer_Depth32,
+
+    /**
+     * VertexArrayObjectをサポートしている。
+     * GLES30 / GL40以降は標準サポート
+     */
+            GPUExtension_VertexArrayObject,
 
     /**
      * num flags
@@ -232,9 +251,7 @@ public:
     /**
      * 実行されているGPUが同一系統のGPUである場合、trueを返す
      */
-    static bool isFamily(const GPUFamily_e family) {
-        return getGPUFamily() == family;
-    }
+    static bool isFamily(const GPUFamily_e family);
 };
 
 }

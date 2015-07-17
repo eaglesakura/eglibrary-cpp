@@ -67,6 +67,11 @@ static OpenGLVersion_e glVersion = OpenGLVersion_Unknown;
 
 }
 
+static int toCoreVersion(int coreMajor, int coreMinor) {
+    return coreMajor * 10000 +
+           coreMinor * 1000;
+}
+
 /**
  * 初期化を行う
  */
@@ -93,11 +98,11 @@ void GPUCapacity::initialize() {
              */
             GPUFamily_e family;
         } gpu_groups[] = {
-                {"PowerVR", GPUFamily_PowerVR},
-                {"Mali",    GPUFamily_Mali},
-                {"Tegra",   GPUFamily_Tegra},
-                {"Adreno",  GPUFamily_Adreno},
-                {"GeForce", GPUFamily_GeForce},
+                {"PowerVR",  GPUFamily_PowerVR},
+                {"Mali",     GPUFamily_Mali},
+                {"Tegra",    GPUFamily_Tegra},
+                {"Adreno",   GPUFamily_Adreno},
+                {"GeForce",  GPUFamily_GeForce},
                 {"Intel HD", GPUFamily_IntelHdGraphics},
         };
 
@@ -225,6 +230,12 @@ void GPUCapacity::initialize() {
         }
 #undef  EXTENSION_NAME
 
+        if (getGLVersion() >= toCoreVersion(3, 0)) {
+            // Support VAO
+//            extension_flags.enable(GPUExtension_VertexArrayObject);
+//            eslog("supported extension(GPUExtension_VertexArrayObject)");
+        }
+
     }
 
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, (GLint *) &maxVertexAttrbs);
@@ -346,5 +357,9 @@ const OpenGLVersion_e GPUCapacity::getGLVersion() {
 
 const bool GPUCapacity::isOpenGLES() {
     return (glVersion % 10) == 0;
+}
+
+bool GPUCapacity::isFamily(const GPUFamily_e family) {
+    return getGPUFamily() == family;
 }
 }

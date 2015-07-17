@@ -40,6 +40,7 @@ DeviceContext::DeviceContext() {
 
 DeviceContext::~DeviceContext() {
     renderState->unbindResources();
+    glFinish();
     eslog("delete ThreadDevice::~ThreadDevice(%x)", this);
 }
 
