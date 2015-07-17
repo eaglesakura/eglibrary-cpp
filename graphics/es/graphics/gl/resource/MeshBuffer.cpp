@@ -22,6 +22,14 @@ MeshBuffer::~MeshBuffer() {
     dispose();
 }
 
+const std::shared_ptr<VertexBufferObject> &MeshBuffer::getVertices() const {
+    return vertices;
+}
+
+const std::shared_ptr<IndexBufferObject> &MeshBuffer::getIndices() const {
+    return indices;
+}
+
 void MeshBuffer::bind() {
     if (vertexArrayObject) {
         glBindVertexArray(vertexArrayObject);
@@ -39,7 +47,7 @@ void MeshBuffer::bind() {
             }
 
             // VAOをサポートしないので、手動で動作を行う
-            glEnableVertexAttribArray(attr.location);
+//            glEnableVertexAttribArray(attr.location);
             glVertexAttribPointer(attr.location, attr.size, attr.type, attr.normalize, attr.strideBytes, Buffer::offsetBytes(nullptr, attr.offsetHeader));
             assert_gl();
         }
@@ -67,7 +75,6 @@ void MeshBuffer::addAttribute(const MeshBuffer::Attribute &attr) {
         glEnableVertexAttribArray(attr.location);
         assert_gl();
     }
-
 }
 
 void MeshBuffer::rendering(const GLenum mode) {

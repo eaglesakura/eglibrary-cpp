@@ -1,6 +1,7 @@
 #pragma once
 
 #include    "es/OpenGL.hpp"
+#include    "es/graphics/gl/resource/MeshBuffer.h"
 
 namespace es {
 
@@ -28,32 +29,13 @@ typedef VertexAttribute<QuadVertex, 2, GL_FLOAT, GL_FALSE, (GLsizei) sizeof(Vect
 /**
  * Quad Resource
  */
-class Quad: public GLObject {
+class Quad : public GLObject {
     /**
-     * Vertices
+     * レンダリング対象メッシュ
      */
-    MVertexBufferObject vertices;
+    std::shared_ptr<MeshBuffer> mesh;
 
-    struct {
-        /**
-         * 位置情報
-         */
-        QuadPositionAttribute pos;
-
-        /**
-         * UV情報
-         */
-        QuadCoordAttribute coord;
-    } attr;
-    /**
-     * 初期化を行う
-     */
-    void initialize();
-
-    /**
-     * レンダリングモード
-     */
-    GLenum primitiveType;
+    GLenum primitiveType = GL_TRIANGLE_FAN;
 public:
     /**
      * 矩形を構築する
@@ -66,27 +48,21 @@ public:
     virtual ~Quad();
 
     /**
-     *
+     * 頂点情報を更新する。
+     * verticesはTRIANGLE_FANで４頂点が必要。
+     * nullptrの場合、デフォルトの頂点情報を利用する。
      */
-    virtual void setPositionAttribute(const QuadPositionAttribute &attr) {
-        this->attr.pos = attr;
+    void updateVertices(const QuadVertex *vertices, const GLint posAttrLocation, const GLint uvAttrLocation);
+
+    GLenum getPrimitiveType() const {
+        return primitiveType;
     }
 
-    /**
-     *
-     */
-    virtual void setCoordAttribute(const QuadCoordAttribute &attr) {
-        this->attr.coord = attr;
+    void setPrimitiveType(GLenum primitiveType) {
+        Quad::primitiveType = primitiveType;
     }
 
-    /**
-     * 描画するプリミティブの種類を変更する
-     */
-    virtual void setPrimitiveType(const GLenum type) {
-        this->primitiveType = type;
-    }
-
-    /**
+/**
      * レンダリングの開始を宣言する
      */
     virtual void bind();
@@ -96,12 +72,6 @@ public:
      * レンダリング環境はバインド元に従う。
      */
     virtual void rendering();
-
-    /**
-     * 頂点情報を更新する。
-     * 4頂点を設定しなければならない。
-     */
-    virtual void updateVertices(const QuadVertex *vertices);
 
     /**
      * 開放処理

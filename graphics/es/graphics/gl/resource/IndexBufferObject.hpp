@@ -125,6 +125,16 @@ public:
         indices = 0;
         length = 0;
     }
+
+    /**
+     * 簡単にメッシュを生成する
+     */
+    static std::shared_ptr<IndexBufferObject> newInstance(const std::vector<uint8_t> &indices) {
+        std::shared_ptr<IndexBufferObject> result(new IndexBufferObject());
+        result->bind();
+        result->bufferData(util::asPointer(indices), 1, indices.size(), GL_STATIC_DRAW);
+        return result;
+    }
 };
 
 /**

@@ -33,10 +33,8 @@ void SpriteManager::setShader(std::shared_ptr<ShaderProgram> shader) {
         }
     }
     // attrを設定する
-    {
-        quad->setPositionAttribute(QuadPositionAttribute(shader, "vPosition"));
-        quad->setCoordAttribute(QuadCoordAttribute(shader, "vTexCoord"));
-    }
+    quad->bind();
+    quad->updateVertices(nullptr, shader->getAttribLocation("vPosition"), shader->getAttribLocation("vTexCoord"));
 }
 
 /**

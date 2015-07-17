@@ -6,54 +6,32 @@ namespace es {
  * 矩形を構築する
  */
 Quad::Quad() {
-    this->vertices.reset(new VertexBufferObject());
-    this->primitiveType = GL_TRIANGLE_FAN;
-    initialize();
 }
 
 /**
  * 解放を行う。
  */
 Quad::~Quad() {
-
+    dispose();
 }
 
-/**
- * レンダリングの開始を宣言する
- */
-void Quad::bind() {
-    if (!attr.pos.valid()) {
-        // 位置属性が存在しないならレンダリングできない
+void Quad::updateVertices(const QuadVertex *vertices, const GLint posAttrLocation, const GLint uvAttrLocation) {
+    if (mesh) {
+        // 古いメッシュを解放する
+        mesh.reset();
+    }
+
+    if (posAttrLocation < 0) {
+        // 位置属性が無いのでレンダリングできない。
         return;
     }
 
-    vertices->bind();
-
-    attr.pos.enable();
-    attr.pos.attributePointer();
-
-    attr.coord.enable();
-    attr.coord.attributePointer();
-}
-
-/**
- * 描画を行う。
- * レンダリング環境はバインド元に従う。
- */
-void Quad::rendering() {
-    vertices->rendering(GL_TRIANGLE_FAN, 4);
-}
-
-/**
- * 初期化を行う
- */
-void Quad::initialize() {
     const float LEFT = -0.5;
     const float TOP = 0.5;
     const float RIGHT = 0.5;
     const float BOTTOM = -0.5;
-    const QuadVertex g_vertices[] = {
-    //
+    const QuadVertex defVertices[] = {
+            //
             /**
              // 位置情報
              left, top, //!< 左上
@@ -68,30 +46,81 @@ void Quad::initialize() {
              1, 1, //!< 右下
              */
             // 左上
-            { LEFT, TOP, 0.0f, 0.0f, },
+            {LEFT,  TOP,    0.0f, 0.0f,},
             // 左下
-            { LEFT, BOTTOM, 0.0f, 1.0f },
+            {LEFT,  BOTTOM, 0.0f, 1.0f},
             // 右下
-            { RIGHT, BOTTOM, 1.0f, 1.0f },
+            {RIGHT, BOTTOM, 1.0f, 1.0f},
             // 右上
-            { RIGHT, TOP, 1.0f, 0.0f },
-    // end
-            };
-    updateVertices(g_vertices);
+            {RIGHT, TOP,    1.0f, 0.0f},
+            // end
+    };
+
+    const QuadVertex *usingVertices = vertices ? vertices : defVertices;
+
+    std::vector<uint8_t> indices = {0, 1, 2, 3};
+    assert(indices.size() == 4);
+    std::shared_ptr<IndexBufferObject> ibo = IndexBufferObject::newInstance(indices);
+    std::shared_ptr<VertexBufferObject> vbo(new VertexBufferObject());
+
+    vbo->bind();
+    vbo->bufferData<QuadVertex>(usingVertices, 4, GL_STATIC_DRAW);
+
+    mesh.reset(new MeshBuffer(vbo, ibo));
+    mesh->bind();
+    {
+        MeshBuffer::Attribute attr;
+        attr.location = posAttrLocation;
+        attr.normalize = false;
+        attr.offsetHeader = 0;
+        attr.size = 2;
+        attr.type = GL_FLOAT;
+        attr.strideBytes = sizeof(QuadVertex);
+        mesh->addAttribute(attr);
+    }
+    {
+        MeshBuffer::Attribute attr;
+        attr.location = uvAttrLocation;
+        attr.normalize = false;
+        attr.offsetHeader = sizeof(vec2);
+        attr.size = 2;
+        attr.type = GL_FLOAT;
+        attr.strideBytes = sizeof(QuadVertex);
+        mesh->addAttribute(attr);
+    }
+
+    glFinish();
 }
+
 /**
- * 頂点情報を更新する。
- * 4頂点を設定しなければならない。
+ * レンダリングの開始を宣言する
  */
-void Quad::updateVertices(const QuadVertex *vertices) {
-    this->vertices->bind();
-    this->vertices->bufferData<QuadVertex>(vertices, 4, GL_STATIC_DRAW);
+void Quad::bind() {
+    if (!mesh) {
+        return;
+    }
+    mesh->bind();
 }
+
+/**
+ * 描画を行う。
+ * レンダリング環境はバインド元に従う。
+ */
+void Quad::rendering() {
+    if (!mesh) {
+        return;
+    }
+//    vertices->rendering(GL_TRIANGLE_FAN, 4);
+    mesh->getVertices()->rendering(GL_TRIANGLE_FAN, 4);
+//    mesh->rendering(primitiveType);
+}
+
 
 /**
  * 開放処理
  */
 void Quad::dispose() {
-    vertices.reset();
+    mesh.reset();
 }
+
 }
