@@ -25,6 +25,14 @@ public:
     static int split(const std::string &origin, const std::string &delim, std::vector<std::string> *result);
 };
 
+namespace util {
+
+std::wstring toWideString(const char *utf8);
+
+std::wstring toWideString(const std::string &utf8);
+
+}
+
 }
 
 #endif /* STRINGUTIL_HPP_ */
