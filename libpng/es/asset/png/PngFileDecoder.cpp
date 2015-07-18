@@ -1,6 +1,7 @@
 #include "PngFileDecoder.h"
 #include <png.h>
 #include "es/internal/eglibrary-internal.hpp"
+#include    "es/asset/image/IImageDecodeListener.hpp"
 
 namespace es {
 
@@ -16,6 +17,7 @@ namespace internal {
 struct ImageBufferReader {
     unsafe_array<uint8_t> preLoad;
     shared_ptr<IAsset> asset;
+    bool readError = false;
 
     /**
      * バッファを読み出す
@@ -38,6 +40,7 @@ struct ImageBufferReader {
             if (buffer.length < length) {
                 // 容量が足りない！
                 memcpy(result, buffer.ptr, buffer.length);
+                readError = true;
                 return false;
             } else {
                 assert(buffer.length == length);
@@ -59,8 +62,8 @@ static void pngReadBuffer(png_structp png, png_bytep result, png_size_t readSize
     }
 }
 
-bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<IImageBufferListener> listener) {
-    IImageBufferListener::ImageInfo info;
+bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<IImageDecodeListener> listener) {
+    IImageDecodeListener::ImageInfo info;
     info.dstPixelFormat = pixelConvert;
 
     internal::ImageBufferReader reader;
@@ -86,32 +89,49 @@ bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<IImageBuf
     }
 #endif
 
-    // PNG初期化
-    png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
-    assert(png);
-    png_infop pngInfo = png_create_info_struct(png);
-    assert(pngInfo);
+    struct PngData {
 
-    if (setjmp(png_jmpbuf(png))) {
+        png_structp png = nullptr;
+
+        png_infop info = nullptr;
+
+        ~PngData() {
+            png_destroy_read_struct(&png, &info, nullptr);
+            assert(!png);
+            assert(!info);
+        }
+    } data;
+
+    // PNG初期化
+    // TODO Error Handleを確定させる
+    // TODO 途中キャンセル時のメモリ管理
+    data.png = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+    assert(data.png);
+    data.info = png_create_info_struct(data.png);
+    assert(data.info);
+
+    if (setjmp(png_jmpbuf(data.png))) {
         eslog("setjmp failed");
+        listener->onImageDecodeFinished(&info, IImageDecodeListener::ImageDecodeResult_FormatError);
         return false;
     }
 
-    png_set_read_fn(png, (void *) (&reader), pngReadBuffer);
+    png_set_read_fn(data.png, (void *) (&reader), pngReadBuffer);
 
     // info
-    png_read_info(png, pngInfo);
+    png_read_info(data.png, data.info);
 
     // 読み込みに必要なテンポラリを生成する
-    info.width = png_get_image_width(png, pngInfo);
-    info.height = png_get_image_height(png, pngInfo);
-    info.format = IImageBufferListener::ImageFormat_PNG;
-    int depth = png_get_bit_depth(png, pngInfo);
-    int rowBytes = png_get_rowbytes(png, pngInfo);
+    info.width = png_get_image_width(data.png, data.info);
+    info.height = png_get_image_height(data.png, data.info);
+    info.format = IImageDecodeListener::ImageFormat_PNG;
+    int depth = png_get_bit_depth(data.png, data.info);
+    int rowBytes = png_get_rowbytes(data.png, data.info);
     int perPixelBytes = rowBytes / info.width;
     {
 
         if (!info.width || !info.height) {
+            listener->onImageDecodeFinished(&info, IImageDecodeListener::ImageDecodeResult_FormatError);
             return false;
         }
 
@@ -133,7 +153,7 @@ bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<IImageBuf
         }
 
         // インフォメーションをコールバックする
-        listener->onImageInfoReceived(&info);
+        listener->onImageInfoDecoded(&info);
     }
 
 
@@ -161,12 +181,19 @@ bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<IImageBuf
     while (lines) {
         uint32_t reading = std::min((uint32_t) lines, (uint32_t) onceReadLines);
         eslog("PNG read[%d] Lines", reading);
-        png_read_rows(png, NULL, (png_bytepp) util::asPointer(rowHeaders), reading);
+        png_read_rows(data.png, NULL, (png_bytepp) util::asPointer(rowHeaders), reading);
         lines -= reading;
+        if (reader.readError) {
+            listener->onImageDecodeFinished(&info, IImageDecodeListener::ImageDecodeResult_IOError);
+            return false;
+        } else if (listener->isImageDecodeCancel()) {
+            listener->onImageDecodeFinished(&info, IImageDecodeListener::ImageDecodeResult_Canceled);
+            return false;
+        }
 
         // バッファをリスナに伝える
         if (convertBuffer.empty()) {
-            listener->onImageLineReceived(&info, unsafe_array<uint8_t>(util::asPointer(readCacheBuffer), reading * rowBytes), reading);
+            listener->onImageLineDecoded(&info, unsafe_array<uint8_t>(util::asPointer(readCacheBuffer), reading * rowBytes), reading);
         } else {
             eslog("PNG Convert[%d] -> [%d]", info.srcPixelFormat, pixelConvert);
             if (info.srcPixelFormat == PixelFormat_RGB888) {
@@ -175,16 +202,14 @@ bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<IImageBuf
                 Pixel::copyRGBA8888Pixels(util::asPointer(readCacheBuffer), pixelConvert, convertBuffer.get(), reading * info.width);
             } else {
                 eslog("PNG Convert not support...");
+                listener->onImageDecodeFinished(&info, IImageDecodeListener::ImageDecodeResult_FormatError);
                 return false;
             }
-            listener->onImageLineReceived(&info, unsafe_array<uint8_t>(convertBuffer.get(), reading * rowBytes), reading);
+            listener->onImageLineDecoded(&info, unsafe_array<uint8_t>(convertBuffer.get(), reading * rowBytes), reading);
         }
     }
 
-//    png_read_end(png, pngInfo);
-    png_destroy_read_struct(&png, &pngInfo, nullptr);
-    assert(!png);
-    assert(!pngInfo);
+    listener->onImageDecodeFinished(&info, IImageDecodeListener::ImageDecodeResult_Success);
     return true;
 }
 

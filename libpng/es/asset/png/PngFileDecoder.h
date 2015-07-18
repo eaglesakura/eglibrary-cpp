@@ -4,9 +4,10 @@
 #include <es/graphics/PixelFormat.hpp>
 #include "es/asset/IAsset.hpp"
 #include "es/memory/Buffer.hpp"
-#include "es/asset/image/IImageBufferListener.hpp"
 
 namespace es {
+
+class IImageDecodeListener;
 
 /**
  * PNGファイルのデコードを行う。
@@ -43,7 +44,7 @@ public:
      *
      * 読み込みに成功したらtrue、それ以外はfalseを返却する。
      */
-    bool load(std::shared_ptr<IAsset> asset, selection_ptr<IImageBufferListener> listener);
+    bool load(std::shared_ptr<IAsset> asset, selection_ptr<IImageDecodeListener> listener);
 
 private:
     ByteBuffer readedBuffer;

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "estest/eglibrary-test.hpp"
-#include "es/graphics/png/PngFileDecoder.h"
+#include "es/asset/png/PngFileDecoder.h"
+#include "es/asset/image/IImageDecodeListener.hpp"
 
 namespace es {
 namespace test {
@@ -9,8 +10,8 @@ namespace test {
 
 namespace internal {
 
-sp<IImageBufferListener> newSimpleImageListener() {
-    class PngImageListener : public IImageBufferListener {
+std::shared_ptr<IImageDecodeListener> newSimpleImageListener() {
+    class PngImageListener : public IImageDecodeListener {
         ImageInfo info;
         bool infoReceived = false;
         int readedLines = 0;
@@ -23,7 +24,7 @@ sp<IImageBufferListener> newSimpleImageListener() {
         /**
          * 画像情報を読み込んだ
          */
-        virtual void onImageInfoReceived(const ImageInfo *info) {
+        virtual void onImageInfoDecoded(const ImageInfo *info) {
             ASSERT_NE(info, nullptr);
             ASSERT_TRUE(info->width);
             ASSERT_TRUE(info->height);
@@ -37,16 +38,30 @@ sp<IImageBufferListener> newSimpleImageListener() {
          *
          * 引数lineは使いまわされる可能性があるため、内部的にテクスチャコピー等を行うこと。
          */
-        virtual void onImageLineReceived(const ImageInfo *info, const unsafe_array<uint8_t> pixels, const uint height) {
+        virtual void onImageLineDecoded(const ImageInfo *info, const unsafe_array<uint8_t> pixels, const uint height) {
             ASSERT_TRUE(pixels.length > 0);
             ASSERT_TRUE(height);
             ASSERT_TRUE(infoReceived);
             readedLines += height;
             ASSERT_TRUE(readedLines <= (int) info->height);
         }
+        /**
+         * 画像のデコードをキャンセルする場合はtrue
+         */
+        virtual bool isImageDecodeCancel() {
+            return false;
+        }
+
+        /**
+         * デコードが完了した
+         */
+        virtual void onImageDecodeFinished(const ImageInfo *info, const ImageDecodeResult_e result) {
+            ASSERT_EQ(result, ImageDecodeResult_Success);
+            ASSERT_EQ(info->height, readedLines);
+        }
     };
 
-    sp<IImageBufferListener> result(new PngImageListener());
+    sp<IImageDecodeListener> result(new PngImageListener());
     return result;
 }
 

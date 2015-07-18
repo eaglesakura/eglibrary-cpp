@@ -1,24 +1,24 @@
-#include "TextureLoadListener.h"
+#include "TextureDecodeListener.h"
 
 namespace es {
 
-TextureLoadListener::TextureLoadListener() {
+TextureDecodeListener::TextureDecodeListener() {
 
 }
 
-const std::shared_ptr<Texture> &TextureLoadListener::getTexture() const {
+const std::shared_ptr<Texture> &TextureDecodeListener::getTexture() const {
     return texture;
 }
 
-void TextureLoadListener::setTexture(const std::shared_ptr<Texture> &texture) {
+void TextureDecodeListener::setTexture(const std::shared_ptr<Texture> &texture) {
     this->texture = texture;
 }
 
-void TextureLoadListener::setConvertNpotToPot(bool convertNpot) {
-    TextureLoadListener::convertNpot = convertNpot;
+void TextureDecodeListener::setConvertNpotToPot(bool convertNpot) {
+    TextureDecodeListener::convertNpot = convertNpot;
 }
 
-void TextureLoadListener::onImageInfoReceived(const IImageBufferListener::ImageInfo *info) {
+void TextureDecodeListener::onImageInfoDecoded(const IImageDecodeListener::ImageInfo *info) {
     this->writePixelsY = 0;
     if (!texture) {
         texture.reset(new Texture());
@@ -52,12 +52,9 @@ void TextureLoadListener::onImageInfoReceived(const IImageBufferListener::ImageI
     texture->allocPixelMemory(info->dstPixelFormat, 0, allocWidth, allocHeight);
     texture->setImageSize(info->width, info->height);
     texture->onAllocated();
-
-    texture->unbind(device);
 }
 
-void TextureLoadListener::onImageLineReceived(const IImageBufferListener::ImageInfo *info, const unsafe_array<uint8_t> pixels, const uint height) {
-    texture->bind(device);
+void TextureDecodeListener::onImageLineDecoded(const IImageDecodeListener::ImageInfo *info, const unsafe_array<uint8_t> pixels, const uint height) {
     // 部分転送 for 2D
     glTexSubImage2D(
             GL_TEXTURE_2D,
@@ -69,11 +66,18 @@ void TextureLoadListener::onImageLineReceived(const IImageBufferListener::ImageI
             (void *) pixels.ptr
     );
     writePixelsY += height;
-    texture->unbind(device);
 }
 
-void TextureLoadListener::setDevice(const std::shared_ptr<DeviceContext> &device) {
+void TextureDecodeListener::setDevice(const std::shared_ptr<DeviceContext> &device) {
     this->device = device;
+}
+
+bool TextureDecodeListener::isImageDecodeCancel() {
+    return false;
+}
+
+void TextureDecodeListener::onImageDecodeFinished(const IImageDecodeListener::ImageInfo *info, const IImageDecodeListener::ImageDecodeResult_e result) {
+    texture->unbind(device);
 }
 
 }

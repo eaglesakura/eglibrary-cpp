@@ -1,12 +1,15 @@
 #pragma once
 
 #include "es/eglibrary.hpp"
-#include "Texture.h"
-#include "es/asset/image/IImageBufferListener.hpp"
+#include "es/graphics/gl/resource/Texture.h"
+#include "es/asset/image/IImageDecodeListener.hpp"
 
 namespace es {
 
-class TextureLoadListener : public Object, public IImageBufferListener {
+/**
+ * デコード結果をテクスチャとして格納する
+ */
+class TextureDecodeListener : public Object, public IImageDecodeListener {
     /**
      * 読み込み対象のテクスチャ
      */
@@ -24,9 +27,9 @@ class TextureLoadListener : public Object, public IImageBufferListener {
 
     std::shared_ptr<DeviceContext> device;
 public:
-    TextureLoadListener();
+    TextureDecodeListener();
 
-    virtual ~TextureLoadListener() = default;
+    virtual ~TextureDecodeListener() = default;
 
     void setDevice(const std::shared_ptr<DeviceContext> &device);
 
@@ -49,14 +52,24 @@ public:
     /**
      * 画像情報を読み込んだ
      */
-    virtual void onImageInfoReceived(const ImageInfo *info);
+    virtual void onImageInfoDecoded(const ImageInfo *info);
 
     /**
      * 画像を指定行読み込んだ
      *
      * 引数lineは使いまわされる可能性があるため、内部的にテクスチャコピー等を行うこと。
      */
-    virtual void onImageLineReceived(const ImageInfo *info, const unsafe_array<uint8_t> pixels, const uint height);
+    virtual void onImageLineDecoded(const ImageInfo *info, const unsafe_array<uint8_t> pixels, const uint height);
+
+    /**
+     * 画像のデコードをキャンセルする場合はtrue
+     */
+    virtual bool isImageDecodeCancel();
+
+    /**
+     * デコードが完了した
+     */
+    virtual void onImageDecodeFinished(const ImageInfo *info, const ImageDecodeResult_e result);
 };
 
 }
