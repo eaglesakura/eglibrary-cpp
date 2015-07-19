@@ -40,3 +40,5 @@ std::string StringUtils::format(const uint workingBufferBytes, const char *fmt, 
     va_end(ap);
     return std::string((char *) buffer.get());
 }
+
+}
