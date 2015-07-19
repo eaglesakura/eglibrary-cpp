@@ -6,6 +6,8 @@ namespace es {
 
 class AssetManager;
 
+class IStringConverter;
+
 /**
  * プロセス情報を管理する
  */
@@ -31,6 +33,11 @@ public:
     virtual std::shared_ptr<AssetManager> getAssetManager() const;
 
     /**
+     * 文字列の変換クラスを取得する
+     */
+    virtual std::shared_ptr<IStringConverter> getStringConverter() const;
+
+    /**
      * 実行されているプラットフォームを取得する
      */
     virtual PlatformType_e getPlatform() = 0;
@@ -44,6 +51,8 @@ protected:
     IProcessContext();
 
     std::shared_ptr<AssetManager> assetManager;
+
+    std::shared_ptr<IStringConverter> stringConverter;
 };
 
 }

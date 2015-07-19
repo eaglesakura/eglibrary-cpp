@@ -4,6 +4,7 @@
 #include "es/asset/AssetManager.h"
 
 #include "es/android/internal/asset/AndroidAssetLoader.h"
+#include "es/system/string/internal/JavaStringConverterImpl.h"
 
 using namespace jc;
 using namespace jc::lang;
@@ -47,6 +48,7 @@ public:
 
     Impl(JavaVM *newVM) : vm(newVM) {
         assert(vm);
+
     }
 
     virtual ~Impl() {
@@ -81,6 +83,7 @@ void AndroidProcessContext::onBootProcess(JavaVM *vm) {
 
     gInstance.reset(new AndroidProcessContext());
     gInstance->impl.reset(new AndroidProcessContext::Impl(vm));
+    gInstance->stringConverter.reset(new internal::JavaStringConverterImpl());
 }
 
 std::shared_ptr<IProcessContext> IProcessContext::getInstance() {

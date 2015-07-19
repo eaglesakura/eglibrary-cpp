@@ -1,15 +1,33 @@
 #pragma once
 
-#if 0
 #include "estest/eglibrary-test.hpp"
 #include "es/util/StringUtil.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#include <codecvt>
+#include "es/system/string/IStringConverter.h"
 
 namespace es {
 namespace test {
 
+TEST(FreetypeTest, UtilWideStringConvert) {
+    const char *jpn_c = "日本語あいうえお";
+    ASSERT_NE(strlen(jpn_c), 8);
+
+    std::wstring wstr = IProcessContext::getInstance()->getStringConverter()->toWideString(std::string(jpn_c));
+
+    int count = 0;
+    for (const wchar_t &w : wstr) {
+        if (w) {
+            ++count;
+        }
+    }
+
+    eslog("count(%d) len(%d)", wstr.c_str(), count, wcslen(wstr.c_str()));
+    ASSERT_TRUE(wstr.length() == 8);
+}
+
+
+#if 0
 TEST(FreetypeTest, WstringCheck) {
 //    setlocale(LC_CTYPE, "JPN");
     eslog("sizeof(wchar_t) = %d bytes", sizeof(wchar_t));
@@ -27,23 +45,6 @@ TEST(FreetypeTest, WstringCheck) {
 
     ASSERT_TRUE(str.length() == 8);
     ASSERT_TRUE(memcmp(str.c_str(), jpn, sizeof(wchar_t) * str.length()) == 0);
-}
-
-TEST(FreetypeTest, UtilWideStringConvert) {
-    const char *jpn_c = "日本語あいうえお";
-    ASSERT_NE(strlen(jpn_c), 8);
-
-    std::wstring wstr = util::toWideString(jpn_c);
-
-    int count = 0;
-    for (const wchar_t &w : wstr) {
-        if (w) {
-            ++count;
-        }
-    }
-
-    ASSERT_TRUE(wstr.length() == 8);
-    eslog("count(%d) len(%d)", wstr.c_str(), count, wcslen(wstr.c_str()));
 }
 
 TEST(FreetypeTest, LoadFont) {
@@ -72,7 +73,7 @@ TEST(FreetypeTest, LoadFont) {
     FT_Done_FreeType(library);
 //    ASSERT_EQ(FT_Set_Char_Size(face, 16, 48, 512, 512), 0);
 }
+#endif
 
 }
 }
-#endif
