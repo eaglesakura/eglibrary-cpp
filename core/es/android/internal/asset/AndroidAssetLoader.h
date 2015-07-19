@@ -7,7 +7,6 @@
 #include    "JointConnector.hpp"
 #include    <jni.h>
 #include    <android/asset_manager.h>
-#include    <android/asset_manager_jni.h>
 
 
 namespace es {
@@ -30,7 +29,7 @@ class AndroidAssetLoader : public IAssetLoader {
 
     std::string basePath;
 public:
-    AndroidAssetLoader(::jc::lang::object_wrapper jContext, const std::string &newBasePath = "");
+    AndroidAssetLoader(::jc::lang::object_wrapper jAssetManager, const std::string &newBasePath = "");
 
     virtual ~AndroidAssetLoader() = default;
 

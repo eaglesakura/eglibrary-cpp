@@ -2,7 +2,7 @@
 #include <iterator>
 #include <sstream>
 #include <es/memory/Buffer.hpp>
-#include <codecvt>
+//#include <codecvt>
 
 namespace es {
 
@@ -43,24 +43,15 @@ std::string StringUtils::format(const uint workingBufferBytes, const char *fmt, 
 
 namespace util {
 
-std::wstring toWideString(const char *utf8) {
-    static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> conversion;
-    return conversion.from_bytes(utf8);
-//    std::vector<wchar_t> wideBuffer(strlen(utf8) + 1);
-//    zeromemory(&wideBuffer);
+//std::wstring toWideString(const char *utf8) {
+//    static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> conversion;
+//    return conversion.from_bytes(utf8);
+//}
 
-//    int status = mbstowcs(asPointer(wideBuffer), utf8, wideBuffer.size());
-//    if (status < 0) {
-//        eslog("Convert Failed(%s)", utf8);
-//        return std::wstring();
-//    } else {
-//        return std::wstring(asPointer(wideBuffer));
-//    }
-}
+//std::wstring toWideString(const std::string &utf8) {
+//    return toWideString(utf8.c_str());
+//}
 
-std::wstring toWideString(const std::string &utf8) {
-    return toWideString(utf8.c_str());
-}
 }
 
 }

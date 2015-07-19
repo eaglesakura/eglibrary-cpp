@@ -12,8 +12,8 @@ namespace test {
 TEST(OpenGLShaderTest, SpriteShaderCompile) {
     ES_OPENGL_UNITTEST();
 
-    auto vsh = AssetManager::load("shader/SpriteShader.vsh");
-    auto fsh = AssetManager::load("shader/SpriteShader.fsh");
+    auto vsh = IProcessContext::getInstance()->getAssetManager()->load("shader/SpriteShader.vsh");
+    auto fsh = IProcessContext::getInstance()->getAssetManager()->load("shader/SpriteShader.fsh");
     ASSERT_TRUE((bool) vsh);
     ASSERT_TRUE((bool) fsh);
 

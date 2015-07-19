@@ -1,34 +1,39 @@
 #pragma once
 
+#include <es/system/Object.hpp>
 #include <memory>
+#include <list>
 
 namespace es {
 class IAsset;
 
 class IAssetLoader;
 
-class AssetManager {
+class AssetManager : public Object {
 public:
+    AssetManager() = default;
+
+    virtual ~AssetManager() = default;
+
     /**
      * カスタムローダーを追加する
      *
      * 後から追加されたものが優先的に利用される。
      */
-    static void addLoader(const std::shared_ptr<IAssetLoader> loader);
+    void addLoader(const std::shared_ptr<IAssetLoader> loader);
 
     /**
      * カスタムローダーを削除する
      */
-    static void removeLoader(const std::shared_ptr<IAssetLoader> loader);
+    void removeLoader(const std::shared_ptr<IAssetLoader> loader);
 
     /**
      * アセットの読み込みを行う
      */
-    static std::shared_ptr<IAsset> load(const std::string &path);
-private:
-    AssetManager() = delete;
+    virtual std::shared_ptr<IAsset> load(const std::string &path);
 
-    ~AssetManager() = delete;
+private:
+    std::list<std::shared_ptr<IAssetLoader> > loaders;
 };
 
 }

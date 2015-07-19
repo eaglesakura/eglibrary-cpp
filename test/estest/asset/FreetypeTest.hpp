@@ -1,10 +1,9 @@
 #pragma once
 
+#if 0
 #include "estest/eglibrary-test.hpp"
 #include "es/util/StringUtil.h"
 #include <ft2build.h>
-#include <codecvt>
-//#include <freetype2/config/ftheader.h>
 #include FT_FREETYPE_H
 #include <codecvt>
 
@@ -51,14 +50,29 @@ TEST(FreetypeTest, LoadFont) {
     FT_Library library = nullptr;
     FT_Face face = nullptr;
 
-    ASSERT_EQ(FT_Init_FreeType(&library), 0);
+    ASSERT_TRUE(FT_Init_FreeType(&library) == 0);
     ASSERT_TRUE(library);
 
-    ASSERT_EQ(FT_New_Face(library, "shared/test-assets/font/font.ttf", 0, &face), 0);
+    ASSERT_TRUE(FT_New_Face(library, "shared/test-assets/font/font-jpn.otf", 0, &face) == 0);
     ASSERT_TRUE(face);
 
-    ASSERT_EQ(FT_Set_Char_Size(face, 32, 32, 512, 512), 0);
+    ASSERT_TRUE(FT_Set_Pixel_Sizes(face, 64, 128) == 0);
+
+    ASSERT_TRUE(FT_Load_Char(face, (L"A")[0], 0) == 0);
+    ASSERT_TRUE(FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL) == 0);
+    eslog("A width(%d) height(%d) left(%d)", face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap.pitch);
+
+//    ASSERT_TRUE(FT_Load_Char(face, (L"あ")[0], FT_LOAD_DEFAULT) == 0);
+    ASSERT_TRUE(FT_Load_Char(face, 0xE38182, FT_LOAD_DEFAULT) == 0);
+//    ASSERT_TRUE(FT_Load_Char(face, 0xE38182, FT_LOAD_DEFAULT) == 0);
+    ASSERT_TRUE(FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL) == 0);
+    eslog("あ width(%d) height(%d) left(%d)", face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap.pitch);
+
+    FT_Done_Face(face);
+    FT_Done_FreeType(library);
+//    ASSERT_EQ(FT_Set_Char_Size(face, 16, 48, 512, 512), 0);
 }
 
 }
 }
+#endif

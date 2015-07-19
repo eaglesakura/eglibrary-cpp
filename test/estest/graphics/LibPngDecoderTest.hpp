@@ -45,6 +45,7 @@ std::shared_ptr<IImageDecodeListener> newSimpleImageListener() {
             readedLines += height;
             ASSERT_TRUE(readedLines <= (int) info->height);
         }
+
         /**
          * 画像のデコードをキャンセルする場合はtrue
          */
@@ -71,7 +72,7 @@ std::shared_ptr<IImageDecodeListener> newSimpleImageListener() {
  * 正方形PowerOfTwo PNG画像を読み込む
  */
 TEST(LibPngDecoderTest, DecodeSquarePot_dstRGB8) {
-    sp<IAsset> asset = AssetManager::load("png/square-pot.png");
+    sp<IAsset> asset = IProcessContext::getInstance()->getAssetManager()->load("png/square-pot.png");
     ASSERT_TRUE((bool) asset);
 
     PngFileDecoder decoder;
@@ -84,7 +85,7 @@ TEST(LibPngDecoderTest, DecodeSquarePot_dstRGB8) {
  * 正方形PowerOfTwo PNG画像を読み込む
  */
 TEST(LibPngDecoderTest, DecodeSquarePot_dstRGBA8) {
-    sp<IAsset> asset = AssetManager::load("png/square-pot.png");
+    sp<IAsset> asset = IProcessContext::getInstance()->getAssetManager()->load("png/square-pot.png");
     ASSERT_TRUE((bool) asset);
 
     PngFileDecoder decoder;

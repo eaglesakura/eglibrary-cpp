@@ -2,20 +2,13 @@
 
 #include    "AndroidAssetLoader.h"
 #include    "AndroidMappedAsset.hpp"
-#include    "es/android/internal/context/AndroidContextUtil.h"
+#include    <android/asset_manager_jni.h>
 
 namespace es {
 namespace internal {
 
-AndroidAssetLoader::AndroidAssetLoader(::jc::lang::object_wrapper jContext, const std::string &newBasePath) :
+AndroidAssetLoader::AndroidAssetLoader(::jc::lang::object_wrapper jAssetManager, const std::string &newBasePath) :
         basePath(newBasePath) {
-
-    // init
-    AndroidContextUtil::initialize(jContext.getEnv(), jContext.getJobject());
-
-    this->jAssetManager = AndroidContextUtil::getAssets();
-    eslog("jAssetManager(%x)", this->jAssetManager.getJobject());
-
     this->assets = AAssetManager_fromJava(jAssetManager.getEnv(), jAssetManager.getJobject());
     assert(this->assets);
 }
