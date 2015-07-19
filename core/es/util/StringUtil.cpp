@@ -2,7 +2,7 @@
 #include <iterator>
 #include <sstream>
 #include <es/memory/Buffer.hpp>
-//#include <codecvt>
+#include <codecvt>
 
 namespace es {
 
@@ -39,19 +39,4 @@ std::string StringUtils::format(const uint workingBufferBytes, const char *fmt, 
     vsprintf((char *) buffer.get(), fmt, ap);
     va_end(ap);
     return std::string((char *) buffer.get());
-}
-
-namespace util {
-
-//std::wstring toWideString(const char *utf8) {
-//    static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> conversion;
-//    return conversion.from_bytes(utf8);
-//}
-
-//std::wstring toWideString(const std::string &utf8) {
-//    return toWideString(utf8.c_str());
-//}
-
-}
-
 }

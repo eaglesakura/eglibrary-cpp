@@ -17,12 +17,12 @@ public:
         /**
          * Androidで実行されている
          */
-                Android,
+                PlatformType_Android,
 
         /**
          * Mac OSXで実行されている
          */
-                OSX,
+                PlatformType_OSX,
     };
 
     virtual ~IProcessContext() = default;

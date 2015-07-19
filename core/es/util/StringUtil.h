@@ -1,5 +1,4 @@
-#ifndef es_util_STRINGUTIL_H_
-#define es_util_STRINGUTIL_H_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 #include    <vector>
@@ -25,14 +24,4 @@ public:
     static int split(const std::string &origin, const std::string &delim, std::vector<std::string> *result);
 };
 
-namespace util {
-
-std::wstring toWideString(const char *utf8);
-
-std::wstring toWideString(const std::string &utf8);
-
 }
-
-}
-
-#endif /* STRINGUTIL_HPP_ */
