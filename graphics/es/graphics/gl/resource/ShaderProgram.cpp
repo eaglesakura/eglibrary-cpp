@@ -202,15 +202,15 @@ static GLuint buildProgram(const char *vertex_shader_source, const char *fragmen
             std::string version_string;
 
             if (version == OpenGLSLVersion_100) {
-                version_string = std::string("#version 100 /* eglibrary OpenGL ES 2.0 compat */\n");
+                version_string = std::string("#version 100\n/* eglibrary OpenGL ES 2.0 compat */\n");
             } else if (GPUCapacity::isOpenGLES()) {
                 if (version == OpenGLSLVersion_310es) {
-                    version_string = std::string("#version 310 es /* eglibrary OpenGL ES 3.1 */\n");
+                    version_string = std::string("#version 310 es\n/* eglibrary OpenGL ES 3.1 */\n");
                 } else {
-                    version_string = std::string("#version 300 es /* eglibrary OpenGL ES 3.0 */\n");
+                    version_string = std::string("#version 300 es\n/* eglibrary OpenGL ES 3.0 */\n");
                 }
             } else {
-                version_string = std::string("#version 410 /* eglibrary OpenGL 4.1 */\n");
+                version_string = std::string("#version 410\n/* eglibrary OpenGL 4.1 */\n");
             }
             source = version_string + source;
         }

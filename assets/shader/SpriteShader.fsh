@@ -6,10 +6,10 @@ varying mediump vec2 fTexCoord;
 uniform sampler2D tex;
 // color
 uniform lowp vec4    blendColor;
-uniform bool	colorOnly;
+uniform lowp float	colorOnly;
 
 void main() {
-    if(colorOnly) {
+    if(colorOnly != 0.0) {
     	gl_FragColor = blendColor;
     }else{
         gl_FragColor = texture2D(tex, fTexCoord) * blendColor;    

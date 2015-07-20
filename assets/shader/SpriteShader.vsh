@@ -12,7 +12,7 @@ uniform mediump float   rotate;
 // ポリゴンのUV情報
 uniform mediump vec4    poly_uv;
 // カラーポリゴンのみで描画する場合はtrue
-uniform bool	colorOnly;
+uniform lowp float	colorOnly;
 
 // アクセス用のショートカットを設定する
 #define poly_x         poly_data.x
@@ -67,7 +67,7 @@ void main() {
    }
    
    // テクスチャ操作
-   if(!colorOnly) {
+   if(colorOnly == 0.0) {
        mat = mat4(1.0);
        {
 		// スケーリング行列を作成する
