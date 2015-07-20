@@ -77,8 +77,8 @@ public:
         }
 
         if (value != set) {
-//            glUniform1i(location, set ? 1 : 0);
-            glUniform1f(location, set ? 1 : 0);
+            glUniform1i(location, set ? 1 : 0);
+//            glUniform1f(location, set ? 1 : 0);
             assert_gl();
             this->value = set;
             return true;

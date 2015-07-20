@@ -64,7 +64,7 @@ protected:
         /**
          * 色描画とテクスチャ描画の切り替え
          */
-        BooleanUniform colorOnly;
+        FloatUniform colorOnly;
     } uniform;
 
     /**
