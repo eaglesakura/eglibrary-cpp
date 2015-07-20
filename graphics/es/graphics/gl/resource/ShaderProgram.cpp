@@ -191,10 +191,36 @@ static GLuint buildProgram(const char *vertex_shader_source, const char *fragmen
  * ビルドを行う
  */
 ::std::shared_ptr<ShaderProgram> ShaderProgram::build(const std::string &vertex_shader, const std::string &fragment_shader, const OpenGLSLVersion_e version) {
-    GLuint program = buildProgram(vertex_shader.c_str(), fragment_shader.c_str());
+
+    std::vector<std::string> shaderText = {
+            vertex_shader,
+            fragment_shader
+    };
+
+    for (std::string &source : shaderText) {
+        if (source.find("#version") == std::string::npos) {
+            std::string version_string;
+
+            if (version == OpenGLSLVersion_100) {
+                version_string = std::string("#version 100 /* eglibrary OpenGL ES 2.0 compat */\n");
+            } else if (GPUCapacity::isOpenGLES()) {
+                if (version == OpenGLSLVersion_310es) {
+                    version_string = std::string("#version 310 es /* eglibrary OpenGL ES 3.1 */\n");
+                } else {
+                    version_string = std::string("#version 300 es /* eglibrary OpenGL ES 3.0 */\n");
+                }
+            } else {
+                version_string = std::string("#version 410 /* eglibrary OpenGL 4.1 */\n");
+            }
+            source = version_string + source;
+        }
+    }
+
+
+    GLuint program = buildProgram(shaderText[0].c_str(), shaderText[1].c_str());
     if (!program) {
-        eslog("error vert shader\n%s", vertex_shader.c_str());
-        eslog("error frag shader\n%s", fragment_shader.c_str());
+        eslog("error vert shader\n%s", shaderText[0].c_str());
+        eslog("error frag shader\n%s", shaderText[1].c_str());
 
         return std::shared_ptr<ShaderProgram>();
     }

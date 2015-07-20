@@ -24,12 +24,14 @@ enum OpenGLVersion_e {
  * OpenGL Shader Languageのバージョンを示す
  * GL互換バージョン : XXnnn
  * ES互換バージョン : nnXXn
- * 常にゼロ        : nnnn0
+ * ES対応ならば1   : nnnnX
  */
 enum OpenGLSLVersion_e {
-    OpenGLSLVersion_100 = 30200,
-    OpenGLSLVersion_300es = 40300,
-    OpenGLSLVersion_400 = 41300,
+    OpenGLSLVersion_100 = 30201,
+    OpenGLSLVersion_300es = 43301,
+    OpenGLSLVersion_310es = 45311,
+    OpenGLSLVersion_400 = 40300,
+    OpenGLSLVersion_410 = 41300,
 };
 
 /**
@@ -200,6 +202,11 @@ public:
      * バージョン名を取得する
      */
     static const std::string &getVersion();
+
+    /**
+     * GLSLのバージョン名を取得する
+     */
+    static const std::string &getGlslVersion();
 
     /**
      * OpenGLのバージョンを取得する

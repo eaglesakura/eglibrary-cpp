@@ -1,5 +1,7 @@
 #pragma once
 
+#include "es/graphics/PixelFormat.hpp"
+
 namespace es {
 
 /**
@@ -15,6 +17,10 @@ public:
          * PNGファイル
          */
                 ImageFormat_PNG,
+        /**
+         * TrueType Font
+         */
+                ImageFormat_TrueType,
         /**
          * 未知のファイル
          */

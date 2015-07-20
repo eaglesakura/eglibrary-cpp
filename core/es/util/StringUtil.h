@@ -6,22 +6,25 @@
 
 namespace es {
 
-class StringUtils {
-public:
-    /**
-     * printf書式のフォーマットを指定して生成する
-     */
-    static std::string format(const char *fmt, ...);
+namespace util {
 
-    /**
-     * printf書式のフォーマットを指定して生成する
-     */
-    static std::string format(const uint workingBufferBytes, const char *fmt, ...);
+/**
+ * printf書式のフォーマットを指定して生成する
+ *
+ * バッファの大きさはstrlen(fmt) + 256を固定とするので、更に大きなバッファが必要な場合はバッファサイズ指定版を利用する必要がある。
+ */
+std::string format(const char *fmt, ...);
 
-    /**
-     * 文字列を適当なseparatorで分割する
-     */
-    static int split(const std::string &origin, const std::string &delim, std::vector<std::string> *result);
-};
+/**
+ * 文字列をフォーマットする
+ */
+std::string format(const uint workingBufferBytes, const char *fmt, ...);
+
+/**
+ * 文字列を指定された分割文字に従って分割する
+ */
+int split(const std::string &origin, const std::string &delim, std::vector<std::string> *result);
+
+}
 
 }

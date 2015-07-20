@@ -28,12 +28,6 @@ void TextureDecodeListener::onImageInfoDecoded(const IImageDecodeListener::Image
     assert(texture);
 
 
-    int allocWidth = info->width;
-    int allocHeight = info->height;
-    if (convertNpot) {
-        allocWidth = toPowerOfTwo(allocWidth);
-        allocHeight = toPowerOfTwo(allocHeight);
-    }
     texture->bind(device);
 
     // デフォルトを修正
@@ -49,9 +43,20 @@ void TextureDecodeListener::onImageInfoDecoded(const IImageDecodeListener::Image
 
 
     // VRAM領域の確保
-    texture->allocPixelMemory(info->dstPixelFormat, 0, allocWidth, allocHeight);
-    texture->setImageSize(info->width, info->height);
-    texture->onAllocated();
+    if (!texture->isAllocated()) {
+        int allocWidth = info->width + offsetY;
+        int allocHeight = info->height + offsetY;
+        if (convertNpot) {
+            allocWidth = toPowerOfTwo(allocWidth);
+            allocHeight = toPowerOfTwo(allocHeight);
+        }
+
+        texture->allocPixelMemory(info->dstPixelFormat, 0, allocWidth, allocHeight);
+        texture->setImageSize(info->width, info->height);
+        texture->onAllocated();
+    }
+    assert_gl();
+
 }
 
 void TextureDecodeListener::onImageLineDecoded(const IImageDecodeListener::ImageInfo *info, const unsafe_array<uint8_t> pixels, const uint height) {
@@ -59,13 +64,14 @@ void TextureDecodeListener::onImageLineDecoded(const IImageDecodeListener::Image
     glTexSubImage2D(
             GL_TEXTURE_2D,
             0,
-            0, writePixelsY,
+            offsetX, offsetY + writePixelsY,
             info->width, height,
             Pixel::toGLPixelFormat(info->dstPixelFormat),
             Pixel::toGLPixelDataType(info->dstPixelFormat),
             (void *) pixels.ptr
     );
     writePixelsY += height;
+    assert_gl();
 }
 
 void TextureDecodeListener::setDevice(const std::shared_ptr<DeviceContext> &device) {
@@ -80,4 +86,10 @@ void TextureDecodeListener::onImageDecodeFinished(const IImageDecodeListener::Im
     texture->unbind(device);
 }
 
+void TextureDecodeListener::setUploadOffset(const int x, const int y) {
+    assert(x >= 0);
+    assert(y >= 0);
+    offsetX = x;
+    offsetY = y;
+}
 }

@@ -24,6 +24,11 @@ static std::string vendor;
 static std::string version;
 
 /**
+ * GLSLのバージョン情報
+ */
+static std::string glslVersion;
+
+/**
  * 保持しているエクステンション
  */
 static std::vector<std::string> extensions;
@@ -122,6 +127,7 @@ void GPUCapacity::initialize() {
 
     vendor = (const char *) glGetString(GL_VENDOR);
     version = (const char *) glGetString(GL_VERSION);
+    glslVersion = (const char *) glGetString(GL_SHADING_LANGUAGE_VERSION);
 
     // バージョンチェック
     {
@@ -168,7 +174,7 @@ void GPUCapacity::initialize() {
 
         } else {
             const char *pExtensions = (const char *) glGetString(GL_EXTENSIONS);
-            StringUtils::split(pExtensions, " ", &extensions);
+            util::split(pExtensions, " ", &extensions);
         }
 
         struct ExtensionFlag {
@@ -256,6 +262,7 @@ void GPUCapacity::initialize() {
     eslog("------------ GPU ------------");
     {
         eslog("GL_VERSION = %s", version.c_str());
+        eslog("GL_SHADING_LANGUAGE_VERSION = %s", glslVersion.c_str());
         eslog("GL_VENDOR = %s", vendor.c_str());
         eslog("GL_RENDERER = %s", renderer.c_str());
 
@@ -361,5 +368,9 @@ const bool GPUCapacity::isOpenGLES() {
 
 bool GPUCapacity::isFamily(const GPUFamily_e family) {
     return getGPUFamily() == family;
+}
+
+const std::string &GPUCapacity::getGlslVersion() {
+    return glslVersion;
 }
 }

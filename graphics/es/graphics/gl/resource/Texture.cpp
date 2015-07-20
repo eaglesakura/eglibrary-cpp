@@ -179,4 +179,7 @@ void Texture::dispose() {
     }
 }
 
+bool Texture::isAllocated() const {
+    return allocated;
+}
 }

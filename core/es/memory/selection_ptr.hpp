@@ -14,7 +14,7 @@ template<typename T, typename T2>
     }
 
     try {
-        return ::std::dynamic_pointer_cast < T > (obj);
+        return ::std::dynamic_pointer_cast<T>(obj);
     } catch (...) {
         eslog("catch downcast error(%0xx)", obj.get());
         return ::std::shared_ptr<T>();
@@ -46,6 +46,13 @@ class selection_ptr {
      */
     std::weak_ptr<T> weak;
 
+    /**
+     * 何も行わないDeleterを用意する
+     */
+    static void raw_deleter(void *p) {
+        // not work!
+    }
+
 public:
     selection_ptr() {
         raw = NULL;
@@ -65,7 +72,7 @@ public:
      */
     template<typename T2>
     selection_ptr(const T2 *p) {
-        this->raw = (T*) p;
+        this->raw = (T *) p;
     }
 
     /**
@@ -94,9 +101,24 @@ public:
     }
 
     /**
+     * ポインタをロックする。
+     *
+     * Rawポインタはロック不可能なので、何も行わないDeleterでラップすることで実装を共通化する。
+     */
+    std::shared_ptr<T> lock() const {
+        if (raw) {
+            return std::shared_ptr<T>(raw, raw_deleter);
+        } else if (shared) {
+            return shared;
+        } else {
+            return weak.lock();
+        }
+    }
+
+    /**
      * 生ポインタを取得する
      */
-    T* get() {
+    T *get() {
         if (raw) {
             return raw;
         } else if (shared) {
@@ -109,7 +131,7 @@ public:
     /**
      * 生ポインタを取得する
      */
-    T* get() const {
+    T *get() const {
         if (raw) {
             return raw;
         } else if (shared) {
@@ -122,8 +144,8 @@ public:
     /**
      * アロー演算子
      */
-    T* operator->() {
-        T* result = get();
+    T *operator->() {
+        T *result = get();
         assert(result != NULL);
         return result;
     }
@@ -131,8 +153,8 @@ public:
     /**
      * アロー演算子
      */
-    const T* operator->() const {
-        T* result = get();
+    const T *operator->() const {
+        T *result = get();
         assert(result != NULL);
         return result;
     }
@@ -192,14 +214,14 @@ public:
      * 同値である場合はtrue
      */
     bool operator==(const selection_ptr &p) const {
-        return get() == dynamic_cast<T*>(p.get());
+        return get() == dynamic_cast<T *>(p.get());
     }
 
     /**
      * 異なる値である場合はtrue
      */
     bool operator!=(const selection_ptr &p) const {
-        return get() != dynamic_cast<T*>(p.get());
+        return get() != dynamic_cast<T *>(p.get());
     }
 
     operator bool() const {
@@ -210,7 +232,7 @@ public:
         return !exist();
     }
 
-    selection_ptr<T>& operator=(const selection_ptr<T> &cpy) {
+    selection_ptr<T> &operator=(const selection_ptr<T> &cpy) {
         this->raw = cpy.raw;
         this->shared = cpy.shared;
         this->weak = cpy.weak;

@@ -25,6 +25,9 @@ class TextureDecodeListener : public Object, public IImageDecodeListener {
      */
     bool convertNpot = false;
 
+    int16_t offsetX = 0;
+    int16_t offsetY = 0;
+
     std::shared_ptr<DeviceContext> device;
 public:
     TextureDecodeListener();
@@ -42,6 +45,11 @@ public:
      * 読み込み対象のテクスチャを指定する。
      */
     void setTexture(const std::shared_ptr<Texture> &texture);
+
+    /**
+     * テクスチャに焼きこむ時のXY座標を調整する
+     */
+    void setUploadOffset(const int x, const int y);
 
 
     /**

@@ -216,6 +216,8 @@ public:
      */
     virtual void onAllocated();
 
+    virtual bool isAllocated() const;
+
     /**
      * バインドされたテクスチャユニットの番号を取得する。
      */

@@ -71,6 +71,11 @@ enum PixelFormat_e {
             PixelFormat_Luminance8,
 
     /**
+     * 単色テクスチャ
+     */
+            PixelFormat_R8,
+
+    /**
      * RGBA各要素を含み、プラットフォームに最適化した状態でロードする
      * 各1byteは保証するが、RGBA並び順は保証しない。
      *
@@ -82,7 +87,7 @@ enum PixelFormat_e {
 #ifdef  BUILD_Android
     PixelFormat_NativeRGBA = PixelFormat_BGRA8888,
 #else
-PixelFormat_NativeRGBA = PixelFormat_RGBA8888,
+    PixelFormat_NativeRGBA = PixelFormat_RGBA8888,
 #endif
 };
 
@@ -356,6 +361,7 @@ public:
                 GL_ALPHA, // A8
                 GL_DEPTH_COMPONENT, // Depth
                 GL_LUMINANCE, // L8
+                GL_RED, // R8
                 //
         };
         return PIXEL_FORMATS[format];
@@ -379,6 +385,7 @@ public:
                 GL_UNSIGNED_BYTE, // A8
                 GL_UNSIGNED_SHORT, // Depth
                 GL_UNSIGNED_BYTE, // Luminance8
+                GL_UNSIGNED_BYTE, // R8
                 //
         };
         return PIXEL_TYPES[format];

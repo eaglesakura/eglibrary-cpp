@@ -5,6 +5,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include "es/system/string/IStringConverter.h"
+#include "es/asset/Freetype.h"
 
 namespace es {
 namespace test {
@@ -50,26 +51,35 @@ TEST(FreetypeTest, LoadFont) {
     ASSERT_TRUE(FT_Init_FreeType(&library) == 0);
     ASSERT_TRUE(library);
 
-    std::shared_ptr<IAsset> font = IProcessContext::getInstance()->getAssetManager()->load("font/font-jpn.otf");
+    std::shared_ptr<IAsset> font = IProcessContext::getInstance()->getAssetManager()->load("font/font-jpn.ttf");
     unsafe_array<uint8_t> fontData = font->read(font->available());
     ASSERT_TRUE(FT_New_Memory_Face(library, fontData.ptr, fontData.length, 0, &face) == 0);
     ASSERT_TRUE(face);
 
-    ASSERT_TRUE(FT_Set_Pixel_Sizes(face, 64, 128) == 0);
+    ASSERT_TRUE(FT_Set_Pixel_Sizes(face, 128, 128) == 0);
 
-    ASSERT_TRUE(FT_Load_Char(face, (L"A")[0], 0) == 0);
-    ASSERT_TRUE(FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL) == 0);
+    ASSERT_TRUE(FT_Load_Char(face, (L"A")[0], FT_LOAD_RENDER) == 0);
     eslog("A width(%d) height(%d) left(%d)", face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap.pitch);
+    ASSERT_TRUE(face->glyph->bitmap.width > 0);
+    ASSERT_TRUE(face->glyph->bitmap.rows > 0);
 
-//    ASSERT_TRUE(FT_Load_Char(face, (L"あ")[0], FT_LOAD_DEFAULT) == 0);
-    ASSERT_TRUE(FT_Load_Char(face, 0xE38182, FT_LOAD_DEFAULT) == 0);
-//    ASSERT_TRUE(FT_Load_Char(face, 0xE38182, FT_LOAD_DEFAULT) == 0);
-    ASSERT_TRUE(FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL) == 0);
+    ASSERT_TRUE(FT_Load_Char(face, (L"あ")[0], FT_LOAD_RENDER) == 0);
     eslog("あ width(%d) height(%d) left(%d)", face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap.pitch);
+    ASSERT_TRUE(face->glyph->bitmap.width > 0);
+    ASSERT_TRUE(face->glyph->bitmap.rows > 0);
 
     FT_Done_Face(face);
     FT_Done_FreeType(library);
 //    ASSERT_EQ(FT_Set_Char_Size(face, 16, 48, 512, 512), 0);
+}
+
+TEST(FreetypeTest, RenderFont) {
+    std::shared_ptr<IAsset> font = IProcessContext::getInstance()->getAssetManager()->load("font/font-jpn.ttf");
+    ASSERT_TRUE((bool) font);
+
+    std::shared_ptr<Freetype> freetype(new Freetype());
+    std::shared_ptr<FontFace> fontFace = freetype->load(font);
+    ASSERT_TRUE((bool) fontFace);
 }
 
 }
