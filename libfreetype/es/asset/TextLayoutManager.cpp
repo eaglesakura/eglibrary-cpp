@@ -18,10 +18,13 @@ std::shared_ptr<TextLayoutManager::TextItem> TextLayoutManager::add(const std::s
     charSize.y = charactor->getBitmapSize().y;
     assert(charSize.x > 0);
     assert(charSize.y > 0);
+    const Vector2i16 bitmapSize = charactor->getBitmapSize();
+    const Vector2i16 bitmapOffset = charactor->getBitmapOffset();
+    const int tempNextBaselinePositionX = nextBaselinePosition.x + (charSize.x - bitmapOffset.x);
 
     if (isLastLine()) {
         // 最終行はフッダを含んで調整
-        if ((charSize.x + nextBaselinePosition.x + fooderWidth) > size.x) {
+        if ((tempNextBaselinePositionX + fooderWidth) > size.x) {
             // 行に収まらないので、フッダを挿入して終了
 
             // TODO フッダを挿入する
@@ -30,13 +33,11 @@ std::shared_ptr<TextLayoutManager::TextItem> TextLayoutManager::add(const std::s
         }
     } else {
         // 最終行以外は通常レイアウト
-        if ((charSize.x + nextBaselinePosition.x) > size.x) {
+        if ((tempNextBaselinePositionX) > size.x) {
             // 行に収まっていないので、改行する
             newLine(option);
         }
     }
-    const Vector2i16 bitmapSize = charactor->getBitmapSize();
-    const Vector2i16 bitmapOffset = charactor->getBitmapOffset();
     RectI16 fontPos;
     RectI16 bitmapPos;
     {
@@ -58,7 +59,7 @@ std::shared_ptr<TextLayoutManager::TextItem> TextLayoutManager::add(const std::s
     }
 
     // 次の文字のベースラインを決定する
-    nextBaselinePosition.x += charSize.x;
+    nextBaselinePosition.x = tempNextBaselinePositionX;
 
     // レイアウトデータを生成する
     std::shared_ptr<TextLayoutManager::TextItem> item(new TextLayoutManager::TextItem());
