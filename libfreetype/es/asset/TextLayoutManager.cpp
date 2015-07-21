@@ -20,20 +20,23 @@ std::shared_ptr<TextLayoutManager::TextItem> TextLayoutManager::add(const std::s
     assert(charSize.y > 0);
     const Vector2i16 bitmapSize = charactor->getBitmapSize();
     const Vector2i16 bitmapOffset = charactor->getBitmapOffset();
-    const int tempNextBaselinePositionX = nextBaselinePosition.x + (charSize.x - bitmapOffset.x);
+    const int charBaselineOffsetX = (charSize.x - bitmapOffset.x);
+
+    const std::shared_ptr<FontCharactor> debugTemp = charactor;
 
     if (isLastLine()) {
         // 最終行はフッダを含んで調整
-        if ((tempNextBaselinePositionX + fooderWidth) > size.x) {
+        if ((nextBaselinePosition.x + charBaselineOffsetX + fooderWidth) > size.x) {
             // 行に収まらないので、フッダを挿入して終了
 
             // TODO フッダを挿入する
+            wchar_t charcode = charactor->getCode();
 
             return std::shared_ptr<TextItem>();
         }
     } else {
         // 最終行以外は通常レイアウト
-        if ((tempNextBaselinePositionX) > size.x) {
+        if ((nextBaselinePosition.x + charBaselineOffsetX) > size.x) {
             // 行に収まっていないので、改行する
             newLine(option);
         }
@@ -59,7 +62,7 @@ std::shared_ptr<TextLayoutManager::TextItem> TextLayoutManager::add(const std::s
     }
 
     // 次の文字のベースラインを決定する
-    nextBaselinePosition.x = tempNextBaselinePositionX;
+    nextBaselinePosition.x = nextBaselinePosition.x + charBaselineOffsetX;
 
     // レイアウトデータを生成する
     std::shared_ptr<TextLayoutManager::TextItem> item(new TextLayoutManager::TextItem());
@@ -81,12 +84,13 @@ bool TextLayoutManager::newLine(const TextLayoutManager::LayoutOption *option) {
 
     nextBaselinePosition.x = 0;
     nextBaselinePosition.y += offsetLineY;
+    ++currentLine;
 
     return true;
 }
 
 bool TextLayoutManager::isLastLine() const {
-    if (currentLine >= maxLines) {
+    if (currentLine >= (maxLines - 1)) {
         return true;
     }
 

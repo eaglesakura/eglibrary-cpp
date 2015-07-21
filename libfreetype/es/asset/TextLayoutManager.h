@@ -143,12 +143,12 @@ private:
      * 0の場合は制限を加えない
      * 指定されている場合、sizeを超えるからmaxLinesを超えるまで配置される
      */
-    uint16_t maxLines = 0;
+    int16_t maxLines = 0;
 
     /**
      * 現在描画しているライン数
      */
-    uint16_t currentLine = 0;
+    int16_t currentLine = 0;
 
     /**
      * 描画対象のテキストリスト
@@ -163,7 +163,7 @@ private:
     /**
      * フッダ領域を事前計算する
      */
-    int16_t fooderWidth;
+    int16_t fooderWidth = 0;
 };
 
 }
