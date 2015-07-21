@@ -23,7 +23,7 @@ Freetype::Freetype() {
     }
 }
 
-std::shared_ptr<FontFace> Freetype::load(std::shared_ptr<IAsset> asset) {
+std::shared_ptr<FontFace> Freetype::load(std::shared_ptr<IAsset> asset, FontLoadOption *option) {
     std::shared_ptr<FontFace> result;
 
     unsafe_array<uint8_t> buffer = asset->read(asset->available());

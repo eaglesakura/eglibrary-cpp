@@ -1,6 +1,7 @@
 #pragma once
 
-#include <es/system/Object.hpp>
+#include "es/eglibrary.hpp"
+#include "es/system/Object.hpp"
 #include <memory>
 #include <list>
 

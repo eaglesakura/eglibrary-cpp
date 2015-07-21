@@ -82,7 +82,8 @@ TEST(FreetypeTest, RenderFont) {
     ASSERT_TRUE((bool) font);
 
     std::shared_ptr<Freetype> freetype(new Freetype());
-    std::shared_ptr<FontFace> fontFace = freetype->load(font);
+    Freetype::FontLoadOption option;
+    std::shared_ptr<FontFace> fontFace = freetype->load(font, &option);
     ASSERT_TRUE((bool) fontFace);
 
     fontFace->setSize(128, 126);
