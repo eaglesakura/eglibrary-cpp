@@ -35,13 +35,15 @@ public:
         stream.read((char *) util::asPointer(buffer), bufferSize);
 
         stream.close();
-#if 0
-        uint8_t buf;
-        while (!stream.eof()) {
-            stream.read((char *) &buf, 1);
-            buffer.push_back(buf);
-        }
-#endif
+    }
+
+    InMemoryAsset(std::shared_ptr<IAsset> origin) {
+        unsafe_array<uint8_t> buffer = origin->read(origin->available());
+        util::valloc(&this->buffer, buffer.length, false);
+
+        assert(this->buffer.size() == buffer.length);
+
+        memcpy(util::asPointer(this->buffer), buffer.ptr, buffer.length);
     }
 
     virtual ~InMemoryAsset() = default;

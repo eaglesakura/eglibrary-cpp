@@ -26,12 +26,17 @@ namespace util {
 /**
  * アセットを文字列として読み込む
  */
-std::string toString(const std::shared_ptr<IAsset> &asset);
+std::string toString(std::shared_ptr<IAsset> &asset);
 
 /**
  * byte配列に変換する
  */
-ByteBuffer toByteArray(const std::shared_ptr<IAsset> &asset);
+ByteBuffer toByteArray(std::shared_ptr<IAsset> &asset);
+
+/**
+ * 入力されたassetをメモリ上に完全コピーして、アセットを廃棄可能にする。
+ */
+std::shared_ptr<IAsset> toOnMemory(std::shared_ptr<IAsset> &asset);
 
 }
 

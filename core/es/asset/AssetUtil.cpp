@@ -1,4 +1,5 @@
 #include "IAsset.hpp"
+#include "es/asset/internal/InMemoryAsset.hpp"
 #include <vector>
 
 namespace es {
@@ -8,7 +9,7 @@ namespace util {
 /**
  * アセットを文字列として読み込む
  */
-std::string toString(const std::shared_ptr<IAsset> &asset) {
+std::string toString(std::shared_ptr<IAsset> &asset) {
     auto buffer = asset->read(asset->available());
 
     assert(!asset->available()); // 末尾まで読み込めている
@@ -24,7 +25,7 @@ std::string toString(const std::shared_ptr<IAsset> &asset) {
 /**
  * byte配列に変換する
  */
-ByteBuffer toByteArray(const std::shared_ptr<IAsset> &asset) {
+ByteBuffer toByteArray(std::shared_ptr<IAsset> &asset) {
     auto buffer = asset->read(asset->available());
     ByteBuffer result = Buffer::create(buffer.length);
     memcpy(result.get(), buffer.ptr, buffer.length);
@@ -32,5 +33,8 @@ ByteBuffer toByteArray(const std::shared_ptr<IAsset> &asset) {
 }
 
 
+std::shared_ptr<IAsset> toOnMemory(std::shared_ptr<IAsset> &asset) {
+    return std::shared_ptr<IAsset>(new internal::InMemoryAsset(asset));
+}
 }
 }

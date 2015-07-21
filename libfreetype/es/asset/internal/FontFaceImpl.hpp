@@ -1,6 +1,7 @@
 #pragma once
 
 #include <es/graphics/PixelFormat.hpp>
+#include "es/asset/IAsset.hpp"
 #include "es/asset/FontFace.h"
 #include "es/asset/internal/FreetypeLibrary.hpp"
 #include "es/asset/internal/FontCharactorImpl.hpp"
@@ -11,12 +12,18 @@ namespace internal {
 class FontFaceImpl : public FontFace {
     std::shared_ptr<FreetypeLibrary> library;
 
+    std::shared_ptr<IAsset> asset;
+
     FT_Face face;
 
 public:
-    FontFaceImpl(std::shared_ptr<FreetypeLibrary> newLibrary, const FT_Face newFrace) : library(newLibrary), face(newFrace) {
+    FontFaceImpl(std::shared_ptr<FreetypeLibrary> newLibrary,
+                 const FT_Face newFrace,
+                 std::shared_ptr<IAsset> newAsset) :
+            library(newLibrary), face(newFrace), asset(newAsset) {
         assert(this->face);
         assert(this->library);
+        assert(this->asset);
         setSize(64, 64);
     }
 

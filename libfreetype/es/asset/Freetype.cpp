@@ -27,6 +27,8 @@ std::shared_ptr<FontFace> Freetype::load(std::shared_ptr<IAsset> asset, FontLoad
     std::shared_ptr<FontFace> result;
 
     unsafe_array<uint8_t> buffer = asset->read(asset->available());
+    std::vector<uint8_t> copyBuffer(buffer.length);
+    memcpy(util::asPointer(copyBuffer), buffer.ptr, buffer.length);
 
     FT_Face face = nullptr;
     int error = 0;
@@ -36,7 +38,7 @@ std::shared_ptr<FontFace> Freetype::load(std::shared_ptr<IAsset> asset, FontLoad
         return result;
     }
 
-    result.reset(new internal::FontFaceImpl(impl->library, face));
+    result.reset(new internal::FontFaceImpl(impl->library, face, asset));
 //    memset(buffer.ptr, 0x00, buffer.length);
 
     return result;
