@@ -37,6 +37,7 @@ std::shared_ptr<FontFace> Freetype::load(std::shared_ptr<IAsset> asset) {
     }
 
     result.reset(new internal::FontFaceImpl(impl->library, face));
+//    memset(buffer.ptr, 0x00, buffer.length);
 
     return result;
 }

@@ -22,15 +22,10 @@ std::shared_ptr<TextLayoutManager::TextItem> TextLayoutManager::add(const std::s
     const Vector2i16 bitmapOffset = charactor->getBitmapOffset();
     const int charBaselineOffsetX = (charSize.x - bitmapOffset.x);
 
-    const std::shared_ptr<FontCharactor> debugTemp = charactor;
-
     if (isLastLine()) {
         // 最終行はフッダを含んで調整
         if ((nextBaselinePosition.x + charBaselineOffsetX + fooderWidth) > size.x) {
             // 行に収まらないので、フッダを挿入して終了
-
-            // TODO フッダを挿入する
-            wchar_t charcode = charactor->getCode();
 
             return std::shared_ptr<TextItem>();
         }
