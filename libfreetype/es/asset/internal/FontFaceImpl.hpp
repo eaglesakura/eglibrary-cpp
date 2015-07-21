@@ -43,6 +43,7 @@ public:
         // ピクセルサイズは多少小さくしておく
         // フォントによってははみ出す場合があるようだ。
         FT_Set_Pixel_Sizes(face, (int) (0.98 * width), (int) (0.98 * height));
+//        FT_Set_Pixel_Sizes(face, 0, (int) (0.98 * height));
     }
 
     /**
@@ -60,7 +61,7 @@ public:
             error = FT_Load_Char(face, FT_Get_Char_Index(face, charactor), FT_LOAD_RENDER);
         }
 
-        result.reset(new FontCharactorImpl(this, face));
+        result.reset(new FontCharactorImpl(this, face, charactor));
 
         auto lockedListener = listener.lock();
         if (lockedListener) {
@@ -69,6 +70,7 @@ public:
             info.dstPixelFormat = PixelFormat_R8;
             info.srcPixelFormat = PixelFormat_R8;
             if (error == 0) {
+
                 // エラーが発生していなければ、外形情報をコピーする
                 info.width = result->getBitmapSize().x;
                 info.height = result->getBitmapSize().y;

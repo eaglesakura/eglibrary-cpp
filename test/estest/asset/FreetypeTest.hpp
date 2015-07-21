@@ -23,7 +23,7 @@ TEST(FreetypeTest, UtilWideStringConvert) {
         }
     }
 
-    eslog("count(%d) len(%d)", wstr.c_str(), count, wcslen(wstr.c_str()));
+    eslog("count(%d) len(%d)", count, wcslen(wstr.c_str()));
     ASSERT_TRUE(wstr.length() == 8);
 }
 
@@ -59,12 +59,16 @@ TEST(FreetypeTest, LoadFont) {
     ASSERT_TRUE(FT_Set_Pixel_Sizes(face, 128, 128) == 0);
 
     ASSERT_TRUE(FT_Load_Char(face, (L"A")[0], FT_LOAD_RENDER) == 0);
-    eslog("A width(%d) height(%d) left(%d)", face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap.pitch);
+    eslog("bitmap W(%d) bitmap H(%d) left(%d) bearingY(%d) height(%d)",
+          face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap.pitch,
+          (int) (face->glyph->metrics.horiBearingY / 64), (int) (face->glyph->metrics.height / 64));
     ASSERT_TRUE(face->glyph->bitmap.width > 0);
     ASSERT_TRUE(face->glyph->bitmap.rows > 0);
 
     ASSERT_TRUE(FT_Load_Char(face, (L"あ")[0], FT_LOAD_RENDER) == 0);
-    eslog("あ width(%d) height(%d) left(%d)", face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap.pitch);
+    eslog("bitmap W(%d) bitmap H(%d) left(%d) bearingY(%d) height(%d)",
+          face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap.pitch,
+          (int) (face->glyph->metrics.horiBearingY / 64), (int) (face->glyph->metrics.height / 64));
     ASSERT_TRUE(face->glyph->bitmap.width > 0);
     ASSERT_TRUE(face->glyph->bitmap.rows > 0);
 
@@ -80,6 +84,17 @@ TEST(FreetypeTest, RenderFont) {
     std::shared_ptr<Freetype> freetype(new Freetype());
     std::shared_ptr<FontFace> fontFace = freetype->load(font);
     ASSERT_TRUE((bool) fontFace);
+
+    fontFace->setSize(128, 126);
+    std::shared_ptr<FontCharactor> charactor = fontFace->rendering(L"g"[0], selection_ptr<IImageDecodeListener>());
+    ASSERT_TRUE((bool) charactor);
+
+    eslog("code(%x) font(%d x %d) bmp(%d x %d) bearing(%d)",
+          charactor->getCode(),
+          charactor->getFontSize().x, charactor->getFontSize().y,
+          charactor->getBitmapSize().x, charactor->getBitmapSize().y,
+          charactor->getBitmapBearingY()
+    );
 }
 
 }

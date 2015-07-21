@@ -3,12 +3,10 @@
 #include "es/eglibrary.hpp"
 #include "es/memory/SafeArray.hpp"
 #include <es/asset/IAsset.hpp>
-#include "FontFace.h"
-#include "FontCharactor.h"
+#include "es/asset/FontFace.h"
+#include "es/asset/FontCharactor.h"
 
 namespace es {
-
-class FontFace;
 
 /**
  * Freetypeのフォントライブラリを管理する
