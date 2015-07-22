@@ -15,7 +15,9 @@ std::string toString(std::shared_ptr<IAsset> &asset) {
     assert(!asset->available()); // 末尾まで読み込めている
 
     std::vector<uint8_t> temp(buffer.length + 1);
-    util::zeromemory(&temp);
+//    util::zeromemory(&temp);
+    // 最後の文字だけ空白埋め
+    temp[temp.size() - 1] = 0;
 
     memcpy(asPointer(temp), buffer.ptr, buffer.length);
 
