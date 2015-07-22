@@ -60,18 +60,25 @@ struct _Vector2 {
     /**
      * スカラー演算を行う
      */
-    _Vector2<T> operator*=(const T scalar) {
-        x *= scalar;
-        y *= scalar;
+    _Vector2<T> &operator*=(const float scalar) {
+        x = (T) (scalar * x);
+        y = (T) (scalar * y);
         return (*this);
+    }
+
+    /**
+     * スカラー積を行う
+     */
+    _Vector2<T> operator*(const float scalar) const {
+        return _Vector2<T>((T) (scalar * x), (T) (scalar * y));
     }
 
     /**
      * 除算を行う
      */
-    _Vector2<T> operator/=(const T div) {
-        x /= div;
-        y /= div;
+    _Vector2<T> &operator/=(const T div) {
+        x = (T) (x / div);
+        y = (T) (y / div);
         return (*this);
     }
 

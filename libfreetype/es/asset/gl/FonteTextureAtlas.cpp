@@ -61,6 +61,7 @@ public:
                 Pixel::toGLPixelDataType(PixelFormat_R8),
                 (void *) buffer.ptr
         );
+        assert_gl();
     }
 
 };
