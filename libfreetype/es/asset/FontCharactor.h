@@ -30,20 +30,6 @@ public:
     const Vector2i16 &getAdvanceSize() const;
 
     /**
-     * 文字全体のサイズを取得する。
-     * レイアウト等に利用する
-     */
-    const Vector2i16 &getFontSize() const;
-
-    /**
-     * レイアウト時に専有する領域を取得する
-     *
-     * @param withLeft 左側の空白領域を計算に含める場合はtrue
-     * @param withRight 右側の空白領域を計算に含める場合はtrue
-     */
-    Vector2i16 getLayoutSize(bool withLeft, bool withRight) const;
-
-    /**
      * BitmapのYオフセット量を取得する
      */
     const int16_t getBitmapBearingY() const;
@@ -79,19 +65,14 @@ protected:
     Vector2i16 advance;
 
     /**
+     * レンダリング時のベースライン位置
+     */
+    Vector2i16 baseline;
+
+    /**
      * ベースラインからのオフセットピクセル数
      */
     int16_t bitmapBearingY = 0;
-
-    /**
-     * フォント自体のサイズ
-     */
-    Vector2i16 fontSize;
-
-    /**
-     * フォント自体の幅ピクセル数
-     */
-    int16_t advanceWidth = 0;
 
     /**
      * 管理されている文字

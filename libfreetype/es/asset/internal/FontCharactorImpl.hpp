@@ -1,5 +1,6 @@
 #pragma once
 
+#include <es/asset/FontCharactor.h>
 #include "es/asset/internal/FreetypeLibrary.hpp"
 #include "es/asset/FontCharactor.h"
 #include "es/asset/FontFace.h"
@@ -28,16 +29,15 @@ public:
             // 正常に読み込めなかった場合は字形を補正して豆腐文字として扱う。
             bitmapSize = parent->getSize();
             tofu = true;
-            advanceWidth = parent->getSize().x;
-            fontSize = parent->getSize();
+            advance = parent->getSize();
         } else {
             // 正常に読み込めた場合
             bitmapBearingY = face->glyph->metrics.horiBearingY / FREETYPE_FIXED;
-            advanceWidth = face->glyph->metrics.horiAdvance / FREETYPE_FIXED;
-            fontSize.y = face->glyph->metrics.height / FREETYPE_FIXED;
-            fontSize.x = face->glyph->metrics.width / FREETYPE_FIXED;
+            advance.x = face->glyph->metrics.horiAdvance / FREETYPE_FIXED;
         }
 
+        baseline.y = (face->height + face->descender) * (face->size->metrics.y_ppem / face->units_per_EM);
+        bitmapOffset.y = baseline.y - bitmapBearingY;
         assert(bitmapSize.x > 0);
         assert(bitmapSize.y > 0);
     }

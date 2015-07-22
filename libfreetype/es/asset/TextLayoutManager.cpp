@@ -1,4 +1,5 @@
 #include "TextLayoutManager.h"
+#include "FontCharactor.h"
 
 namespace es {
 
@@ -6,28 +7,27 @@ namespace es {
 TextLayoutManager::TextLayoutManager(const std::shared_ptr<FontFace> &face) {
     this->baselinePositionY = (int) (0.8 * face->getSize().y);
     this->nextBaselinePosition.y = baselinePositionY;
-    this->offsetLineY = (int) (1.05 * face->getSize().y);
+    this->offsetLineY = (int) (1.015 * face->getSize().y);
     // デフォルトは1行でサイズ制限を実質的にナシにする
     this->size.set(0x6FFF, 0x6FFF);
     this->maxLines = 0x6FFF;
     assert(size.x > 0 && size.y > 0);
 }
 
-std::shared_ptr<TextLayoutManager::TextItem> TextLayoutManager::add(const std::shared_ptr<FontCharactor> &charactor, const float scale, const LayoutOption *option) {
+std::shared_ptr<TextLayoutManager::TextItem> TextLayoutManager::add(const std::shared_ptr<FontCharactor> &charactor, const LayoutOption *option) {
     Vector2i16 charSize = charactor->getAdvanceSize();
+    const Vector2i16 bitmapSize = charactor->getBitmapSize();
+    const Vector2i16 bitmapOffset = charactor->getBitmapOffset();
     charSize.y = charactor->getBitmapSize().y;
-    charSize *= scale;
+    const int charBaselineOffsetX = (charSize.x);
+
     assert(charSize.x > 0);
     assert(charSize.y > 0);
-    const Vector2i16 bitmapSize = charactor->getBitmapSize() * scale;
-    const Vector2i16 bitmapOffset = charactor->getBitmapOffset() * scale;
-    const int charBaselineOffsetX = (charSize.x - bitmapOffset.x);
-    const int16_t bearingY = (int16_t) (scale * charactor->getBitmapBearingY());
 
     const wchar_t newLineCode = L"\n"[0];
     // 改行コードは改行だけして返す
     if (charactor->getCode() == newLineCode) {
-        newLine(scale, option);
+        newLine(option);
         return std::shared_ptr<TextLayoutManager::TextItem>();
     }
 
@@ -42,7 +42,7 @@ std::shared_ptr<TextLayoutManager::TextItem> TextLayoutManager::add(const std::s
         // 最終行以外は通常レイアウト
         if ((nextBaselinePosition.x + charBaselineOffsetX) > size.x) {
             // 行に収まっていないので、改行する
-            newLine(scale, option);
+            newLine(option);
         }
     }
     RectI16 fontPos;
@@ -53,7 +53,7 @@ std::shared_ptr<TextLayoutManager::TextItem> TextLayoutManager::add(const std::s
         fontPos.right = fontPos.left + charSize.x;
 
         // Y位置を確定する
-        fontPos.top = nextBaselinePosition.y + bitmapOffset.x - bearingY;
+        fontPos.top = nextBaselinePosition.y + bitmapOffset.y;
         fontPos.bottom = fontPos.top + bitmapSize.y;
 
         // Bitmap位置を確定する
@@ -78,14 +78,14 @@ std::shared_ptr<TextLayoutManager::TextItem> TextLayoutManager::add(const std::s
     return item;
 }
 
-bool TextLayoutManager::newLine(const float scale, const TextLayoutManager::LayoutOption *option) {
+bool TextLayoutManager::newLine(const TextLayoutManager::LayoutOption *option) {
     if (isLastLine()) {
         // 最終行は改行できない
         return false;
     }
 
     nextBaselinePosition.x = 0;
-    nextBaselinePosition.y += (int16_t) (scale * offsetLineY);
+    nextBaselinePosition.y += offsetLineY;
     ++currentLine;
 
     return true;
@@ -107,7 +107,7 @@ void TextLayoutManager::setFooderText(const std::vector<std::shared_ptr<FontChar
     foodefs = charactors;
     fooderWidth = 0;
     for (const std::shared_ptr<FontCharactor> &font : charactors) {
-        fooderWidth += font->getLayoutSize(true, false).x;
+        fooderWidth += font->getAdvanceSize().x;
     }
 }
 

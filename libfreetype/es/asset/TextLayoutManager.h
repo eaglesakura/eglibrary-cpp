@@ -25,12 +25,12 @@ public:
      * 追加に成功したらTextItemを返却する。
      * 描画領域をはみ出した等の理由で追加できなかったらnullptrを返却して何もしない。
      */
-    std::shared_ptr<TextItem> add(const std::shared_ptr<FontCharactor> &charactor, const float scale = 1.0f, const LayoutOption *option = nullptr);
+    std::shared_ptr<TextItem> add(const std::shared_ptr<FontCharactor> &charactor, const LayoutOption *option = nullptr);
 
     /**
      * 改行を行う
      */
-    bool newLine(const float scale = 1.0f, const LayoutOption *option = nullptr);
+    bool newLine(const LayoutOption *option = nullptr);
 
     /**
      * MaxLinesの最後にFooderとして指定される文字列
