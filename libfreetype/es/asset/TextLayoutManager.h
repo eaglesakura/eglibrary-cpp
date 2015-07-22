@@ -91,7 +91,7 @@ public:
         /**
          * 配置される文字
          */
-        std::shared_ptr<FontCharactor> charactor;
+        sp<FontCharactor> charactor;
 
         /**
          * 配置されている行

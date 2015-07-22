@@ -25,6 +25,8 @@ public:
     virtual std::shared_ptr<Texture> newTexture(sp<DeviceContext> context) {
         sp<Texture> result(new Texture());
         result->bind(context);
+        result->setWrapMode(GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+        result->setFilter(GL_NEAREST, GL_NEAREST);
         result->allocPixelMemory(PixelFormat_R8, 0, size, size);
 
         const uint BUFFER_DIV = 8;
@@ -117,18 +119,22 @@ uint FontTextureAtlas::bake(std::shared_ptr<DeviceContext> context, const std::w
         }
 
         // 新規にAtlasを生成する
+        if (textures.empty()) {
+            auto texture = allocator->newTexture(context);
+            textures.push_back(texture);
+        }
         auto texture = textures[textures.size() - 1];
         auto charactor = font->rendering(code, &tempListener);
         if (charactor && tempListener.result == IImageDecodeListener::ImageDecodeResult_Success) {
             // レンダリングに成功したので、テクスチャに焼きこむ
             Vector2i16 bitmapSize = charactor->getBitmapSize();
-            if ((current.x + bitmapSize.x + 1) > current.x) {
+            if ((current.x + bitmapSize.x + 1) > texture->getWidth()) {
                 // この行をはみ出す場合は改行する
                 current.y += (current.lineHeight + 1);
                 current.x = 0;
                 current.lineHeight = 0;
             }
-            if ((current.y + bitmapSize.y) > current.y) {
+            if ((current.y + bitmapSize.y) > texture->getHeight()) {
                 // テクスチャからはみ出る場合はテクスチャも生成する
                 textures.push_back(allocator->newTexture(context));
                 texture = textures[textures.size() - 1];
@@ -177,6 +183,18 @@ void FontTextureAtlas::setAllocator(std::shared_ptr<TextureAllocator> allocator)
 }
 
 const std::shared_ptr<FontTextureAtlas::FontArea> FontTextureAtlas::pick(const wchar_t charactor) const {
-    return sp<FontTextureAtlas::FontArea>();
+    return find(atlasMap, charactor);
+}
+
+uint16_t FontTextureAtlas::FontArea::getIndex() const {
+    return index;
+}
+
+std::shared_ptr<FontCharactor> FontTextureAtlas::FontArea::getCharactor() const {
+    return charactor;
+}
+
+const RectI16 &FontTextureAtlas::FontArea::getArea() const {
+    return area;
 }
 }

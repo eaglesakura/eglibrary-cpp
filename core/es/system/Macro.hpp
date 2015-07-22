@@ -70,7 +70,7 @@ inline ::std::shared_ptr<valueType> find(const std::map<keyType, ::std::shared_p
     auto itr = objMap.find(key);
     if (itr != objMap.end()) {
         // found
-        return itr.second;
+        return itr->second;
     } else {
         // notfound
         return ::std::shared_ptr<valueType>();
