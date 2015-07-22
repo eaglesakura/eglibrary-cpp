@@ -16,6 +16,18 @@ class FontFaceImpl : public FontFace {
 
     FT_Face face;
 
+    es_mutex mutex;
+
+    bool threadSafe = false;
+
+    std::unique_ptr<es_mutex_lock> lockRequest() {
+        if (threadSafe) {
+            return std::unique_ptr<es_mutex_lock>(new es_mutex_lock(mutex));
+        } else {
+            return std::unique_ptr<es_mutex_lock>();
+        }
+    }
+
 public:
     FontFaceImpl(std::shared_ptr<FreetypeLibrary> newLibrary,
                  const FT_Face newFrace,
@@ -41,6 +53,8 @@ public:
      * レンダリングされる文字はこのwidth/heightに収まるように設定される。
      */
     virtual void setSize(const uint width, const uint height) {
+        auto lock = lockRequest();
+
         size.x = width;
         size.y = height;
         // 文字サイズは常識の範囲内で行える
@@ -60,8 +74,9 @@ public:
      * 外形情報がフォントに含まれていない場合、豆腐文字として扱う。
      */
     virtual std::shared_ptr<FontCharactor> rendering(const wchar_t charactor, selection_ptr<IImageDecodeListener> listener) {
-        std::shared_ptr<FontCharactorImpl> result;
+        auto lock = lockRequest();
 
+        std::shared_ptr<FontCharactorImpl> result;
         int error;
         if ((error = FT_Load_Char(face, charactor, FT_LOAD_RENDER)) != 0) {
             eslog("FT_Load_Char charcode(%x) error(%d)", charactor, error);

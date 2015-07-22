@@ -35,6 +35,14 @@ public:
      */
     virtual std::shared_ptr<FontCharactor> rendering(const wchar_t charactor, selection_ptr<IImageDecodeListener> listener) = 0;
 
+
+    /**
+     * レンダリングをスレッドセーフに動作させる場合はtrue
+     *
+     * mutexを取得するので、多少動作が遅くなる。
+     */
+    void setThreadSafe(bool set);
+
     virtual ~FontFace() = default;
 
 protected:
@@ -45,6 +53,8 @@ protected:
      * 現在のピクセル単位のフォントサイズ
      */
     Vector2i16 size;
+
+    bool threadSafe = false;
 };
 
 }
