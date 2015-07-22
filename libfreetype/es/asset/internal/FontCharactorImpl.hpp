@@ -28,15 +28,18 @@ public:
         if (bitmapSize.x == 0 || bitmapSize.y == 0) {
             // 正常に読み込めなかった場合は字形を補正して豆腐文字として扱う。
             bitmapSize = parent->getSize();
+            if ((char) charactor == ' ') {
+                bitmapSize.x /= 4;
+            }
+            advance = bitmapSize;
             tofu = true;
-            advance = parent->getSize();
         } else {
             // 正常に読み込めた場合
             bitmapBearingY = face->glyph->metrics.horiBearingY / FREETYPE_FIXED;
             advance.x = face->glyph->metrics.horiAdvance / FREETYPE_FIXED;
         }
 
-        baseline.y = (face->height + face->descender) * (face->size->metrics.y_ppem / face->units_per_EM);
+        baseline.y = (int16_t) ((int32_t) (face->height + face->descender) * (int32_t) (face->size->metrics.y_ppem / face->units_per_EM));
         bitmapOffset.y = baseline.y - bitmapBearingY;
         assert(bitmapSize.x > 0);
         assert(bitmapSize.y > 0);

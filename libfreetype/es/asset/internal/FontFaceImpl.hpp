@@ -76,7 +76,7 @@ public:
             info.format = IImageDecodeListener::ImageFormat_TrueType;
             info.dstPixelFormat = PixelFormat_R8;
             info.srcPixelFormat = PixelFormat_R8;
-            if (error == 0) {
+            if (error == 0 && face->glyph->bitmap.buffer) {
 
                 // エラーが発生していなければ、外形情報をコピーする
                 info.width = result->getBitmapSize().x;
