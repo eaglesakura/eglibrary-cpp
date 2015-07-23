@@ -46,6 +46,8 @@ void SpriteRenderer::renderingImage(std::shared_ptr<ITexture2D> texture, const f
         RectF &dstQuad = renderContext->dstQuad;
         const Vector2f leftTop = display->getSpritePositionToDevice(dstX, dstY);
         const Vector2f rightBottom = display->getSpritePositionToDevice(dstX + dstW, dstY + dstH);
+        const Vector2f aspectSrc = display->getSpritePositionToDevice(dstX, dstX);
+        renderContext->surfaceAspect = 1.0f / (aspectSrc.x / aspectSrc.y);
         dstQuad.left = leftTop.x;
         dstQuad.top = leftTop.y;
         dstQuad.right = rightBottom.x;
