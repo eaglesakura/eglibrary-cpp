@@ -5,6 +5,13 @@
 
 namespace es {
 
+enum GraphicsEngine_e {
+    GraphicsEngine_OpenGLES20,
+    GraphicsEngine_OpenGLES30,
+    GraphicsEngine_OpenGL41,
+    GraphicsEngine_Unknown,
+};
+
 /**
  * OpenGLのバージョンを示す
  * GL互換バージョン : XX
@@ -154,13 +161,13 @@ enum GPUFamily_e {
 
     /**
      * GeForce Desktop
-     * Mac Book Pro
+     * MacBook Pro
      */
             GPUFamily_GeForce,
 
     /**
      * Intel Desktop
-     * Mac Book Air
+     * MacBook Air
      */
             GPUFamily_IntelHdGraphics,
 
