@@ -14,8 +14,11 @@ class ITexture2D {
 public:
     /**
      * Spriteの画像として利用可能なエリアを取得する
+     *
+     * @param size VRAM上のテクスチャサイズ
+     * @param existArea 有効なテクスチャのエリアを取得する
      */
-    virtual RectI16 getSpriteArea() const = 0;
+    virtual void getImageArea(Vector2i16 *size, RectI16 *existArea) = 0;
 
     virtual ~ITexture2D() = default;
 };

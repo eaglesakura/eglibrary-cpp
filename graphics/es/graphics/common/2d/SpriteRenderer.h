@@ -21,9 +21,30 @@ public:
 
     void setDisplay(const std::shared_ptr<IDisplayTransfer2D> display);
 
+    /**
+     * 四角形描画を行う
+     */
+    void renderingRect(const float x, const float y, const float w, const float h, const rgba32 rgba);
+
+    /**
+     * 画像を描画する
+     */
+    void renderingImage(std::shared_ptr<ITexture2D> texture, const float srcX, const float srcY, const float srcW, const float srcH, const float dstX, const float dstY, const float dstW, const float dstH, const float degree, const rgba32 rgba);
+
+    /**
+     * レンダリングを開始する
+     */
+    virtual void begin();
+
+    /**
+     * レンダリングを終了する
+     */
+    virtual void end();
+
     virtual ~SpriteRenderer() = default;
 
 protected:
+
     /**
      * レンダリング本体はコールバッククラスに委譲する
      */

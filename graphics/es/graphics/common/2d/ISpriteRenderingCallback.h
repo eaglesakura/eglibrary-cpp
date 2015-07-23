@@ -64,7 +64,7 @@ public:
         /**
          * 回転角が設定される
          */
-        float rotate = 0;
+        float rotateRadian = 0;
 
         /**
          * ブレンドしたい色が指定される
@@ -83,7 +83,7 @@ public:
      *
      * コンテキストは使いまわされるので、必要に応じて1回だけ呼び出される。
      */
-    virtual std::shared_ptr<RenderingContext> newRenderingContext() const = 0;
+    virtual std::shared_ptr<RenderingContext> newRenderingContext(SpriteRenderer *sender) const = 0;
 
     /**
      * レンダリングを開始する
