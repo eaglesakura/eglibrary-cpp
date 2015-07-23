@@ -307,4 +307,27 @@ void RenderState::unbindResources() {
     glUseProgram(0);
 
 }
+
+const glstates &RenderState::getCurrent() const {
+    return states[states.size() - 1];
+}
+
+float RenderState::getViewportAspect() const {
+    const glstates *cur = get();
+    float width = cur->viewport.width();
+    float height = cur->viewport.height();
+    return width / height;
+}
+
+Vector2f RenderState::getSpritePositionToDevice(const int x2D, const int y2D) const {
+    const glstates *cur = get();
+    Vector2f result(
+            (float) x2D / (float) cur->viewport.width(),
+            (float) y2D / (float) cur->viewport.height()
+    );
+    result.x = (result.x * 2.0f) - 1.0f;
+    result.y = -((result.y * 2.0f) - 1.0f);
+    return result;
+}
+
 }

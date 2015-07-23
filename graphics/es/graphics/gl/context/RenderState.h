@@ -4,6 +4,7 @@
 #include    "es/math/Rect.hpp"
 #include    "es/graphics/Color.hpp"
 #include    <vector>
+#include    "es/graphics/common/2d/IDisplayTransfer2D.h"
 
 namespace es {
 
@@ -152,7 +153,7 @@ struct glstates {
     }
 };
 
-class RenderState : public Object {
+class RenderState : public Object, public IDisplayTransfer2D {
 protected:
     std::vector<glstates> states;
 
@@ -190,14 +191,11 @@ public:
     void clearColor(float r, float g, float b, float a);
 
     /**
+     * アスペクト比を取得する
      *
+     * @return width / heightの値を返す
      */
-    float getViewportAspect() const {
-        const glstates *cur = get();
-        float width = cur->viewport.width();
-        float height = cur->viewport.height();
-        return width / height;
-    }
+    float getViewportAspect() const;
 
     /**
      * フレームバッファを使用する
@@ -212,9 +210,7 @@ public:
     /**
      * 現在のステートを取得する
      */
-    const glstates &getCurrent() const {
-        return states[states.size() - 1];
-    }
+    const glstates &getCurrent() const;
 
     /**
      * 現在のステートを保存し、新たなステートで上書きする
@@ -262,6 +258,11 @@ public:
      * 主にIBO/VBOの使用・未使用を切り替える際にクリーンし忘れないようにする
      */
     void unbindMeshBuffers();
+
+    /**
+     * スプライト位置をデバイス座標に変換する
+     */
+    virtual Vector2f getSpritePositionToDevice(const int x2D, const int y2D) const override;
 };
 
 typedef ::std::shared_ptr<RenderState> MRenderState;

@@ -15,7 +15,7 @@ public:
     /**
      * スプライト座標を正規化デバイス座標に変換する
      */
-    virtual Vector2f getSpritePositionToDevice(const int x2D, const int y2D) = 0;
+    virtual Vector2f getSpritePositionToDevice(const int x2D, const int y2D) const = 0;
 
     virtual ~IDisplayTransfer2D() = default;
 };
