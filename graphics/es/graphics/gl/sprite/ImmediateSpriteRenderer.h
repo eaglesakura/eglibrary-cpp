@@ -18,8 +18,10 @@ public:
 
     /**
      * 初期化を行う
+     *
+     * 失敗したらfalseを返す
      */
-    virtual void initialize(std::shared_ptr<DeviceContext> context, std::shared_ptr<AssetManager> assets);
+    virtual bool initialize(std::shared_ptr<DeviceContext> context, std::shared_ptr<AssetManager> assets);
 
     /**
      * レンダリングスレッドのContextと関連付ける
@@ -41,6 +43,43 @@ private:
     sp<DeviceContext> context;
 
     sp<ShaderProgram> shader;
+
+    struct {
+        /**
+         * 回転角
+         */
+        FloatUniform rotate;
+
+        /**
+         * アスペクト比
+         */
+        FloatUniform aspect;
+
+        /**
+         * ポリゴンデータ用
+         */
+        Vector4fUniofrm poly_data;
+
+        /**
+         * ポリゴンUV用
+         */
+        Vector4fUniofrm poly_uv;
+
+        /**
+         * ブレンド色
+         */
+        ColorUniform color;
+
+        /**
+         * テクスチャ
+         */
+        TextureUniform texture;
+
+        /**
+         * 色描画とテクスチャ描画の切り替え
+         */
+        FloatUniform colorOnly;
+    } uniform;
 
     sp<Quad> quad;
 };
