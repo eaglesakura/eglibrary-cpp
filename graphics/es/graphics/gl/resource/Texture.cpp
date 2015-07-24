@@ -61,7 +61,7 @@ void Texture::setFilter(const GLenum min, const GLenum mag) {
 void Texture::genMipmaps() {
     if (!isPowerOfTwoTexture()) {
         // mipmapが生成できなくても表示上は問題ないため、npotログだけ吐き出して終了
-        eslog("texture is non power of two %d x %d", (int )size.tex_width, (int )size.tex_height);
+        eslog("texture is non power of two %d x %d", (int) size.tex_width, (int) size.tex_height);
         return;
     }
     glGenerateMipmap(target);
@@ -181,5 +181,12 @@ void Texture::dispose() {
 
 bool Texture::isAllocated() const {
     return allocated;
+}
+
+Object::QueryResult_e Texture::queryInterface(const int64_t interfaceId, void **resultInterfacePtr) const {
+    if (interfaceId == InterfaceId_OpenGL_Texture) {
+        return query_cast<Texture>(this, resultInterfacePtr);
+    }
+    return QueryResult_Failed;
 }
 }

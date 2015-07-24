@@ -263,6 +263,12 @@ public:
      * スプライト位置をデバイス座標に変換する
      */
     virtual Vector2f getSpritePositionToDevice(const int x2D, const int y2D) const override;
+
+
+    /**
+     * スプライトのサーフェイスアスペクト比を取得する
+     */
+    virtual float getSpriteSurfaceAspect() const override;
 };
 
 typedef ::std::shared_ptr<RenderState> MRenderState;

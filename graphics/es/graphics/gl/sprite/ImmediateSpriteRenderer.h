@@ -28,12 +28,10 @@ public:
      */
     void setDeviceContext(std::shared_ptr<DeviceContext> context);
 
-
-    virtual std::shared_ptr<RenderingContext> newRenderingContext(SpriteRenderer *sender) const override;
-
     virtual void beginRendering(SpriteRenderer *sender) override;
 
-    virtual bool requestRendering(SpriteRenderer *sender, const std::shared_ptr<RenderingContext> &context) override;
+
+    virtual int requestRendering(SpriteRenderer *sender, const RenderingState *state, const uint numInstances, RenderingInstance *instanceArray) override;
 
     virtual void endRendering(SpriteRenderer *sender) override;
 

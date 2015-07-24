@@ -255,7 +255,9 @@ public:
     /**
      * 管理している資源を開放する
      */
-    virtual void dispose();
+    virtual void dispose() override;
+
+    virtual QueryResult_e queryInterface(const int64_t interfaceId, void **resultInterfacePtr) const override;
 };
 
 typedef ::std::shared_ptr<Texture> MTexture;

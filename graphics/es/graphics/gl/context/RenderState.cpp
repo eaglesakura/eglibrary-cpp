@@ -330,4 +330,7 @@ Vector2f RenderState::getSpritePositionToDevice(const int x2D, const int y2D) co
     return result;
 }
 
+float RenderState::getSpriteSurfaceAspect() const {
+    return getViewportAspect();
+}
 }

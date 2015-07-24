@@ -17,6 +17,11 @@ public:
      */
     virtual Vector2f getSpritePositionToDevice(const int x2D, const int y2D) const = 0;
 
+    /**
+     * サーフェイスのアスペクト比を取得する
+     */
+    virtual float getSpriteSurfaceAspect() const = 0;
+
     virtual ~IDisplayTransfer2D() = default;
 };
 

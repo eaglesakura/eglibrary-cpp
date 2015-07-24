@@ -47,22 +47,50 @@ void ImmediateSpriteRenderer::setDeviceContext(std::shared_ptr<DeviceContext> co
     this->context = context;
 }
 
-std::shared_ptr<ISpriteRenderingCallback::RenderingContext> ImmediateSpriteRenderer::newRenderingContext(SpriteRenderer *sender) const {
-    return std::shared_ptr<ISpriteRenderingCallback::RenderingContext>(new ISpriteRenderingCallback::RenderingContext());
-}
 
 void ImmediateSpriteRenderer::beginRendering(SpriteRenderer *sender) {
     assert(sender && context && shader && quad);
 
     auto renderState = context->getRenderState();
-    renderState->push(context->createDefaultState2D());
+    auto state2d = context->createDefaultState2D();
+    state2d.viewport = renderState->getCurrent().viewport;
+    state2d.scissor = renderState->getCurrent().scissor;
+    renderState->push(state2d);
     shader->bind();
     quad->bind();
 }
 
-bool ImmediateSpriteRenderer::requestRendering(SpriteRenderer *sender, const std::shared_ptr<RenderingContext> &context) {
+int ImmediateSpriteRenderer::requestRendering(SpriteRenderer *sender, const ISpriteRenderingCallback::RenderingState *state, const uint numInstances, ISpriteRenderingCallback::RenderingInstance *instanceArray) {
+    int numRendering = 0;
+    if (state->mode == RenderingMode_QuadFill || state->mode == RenderingMode_QuadOutLine) {
+        RenderingQuadInstance *quadInstances = (RenderingQuadInstance *) instanceArray;
+        for (int i = 0; i < numInstances; ++i) {
 
-    return false;
+            if (quadInstances->texture) {
+                // テクスチャにキャストできなければならない
+                auto texture = std::dynamic_pointer_cast<Texture>(quadInstances->texture);
+                assert(texture);
+
+                uniform.texture.upload(texture, context);
+                uniform.poly_uv.upload(quadInstances->srcCoord.left, quadInstances->srcCoord.top,
+                                       quadInstances->srcCoord.width(), quadInstances->srcCoord.height());
+                uniform.colorOnly.upload(0);
+            } else {
+                uniform.colorOnly.upload(1);
+            }
+
+            // ブレンド色を設定する
+            uniform.color.upload(quadInstances->color);
+            // ポリゴン回転を設定する
+            uniform.rotate.upload(quadInstances->rotateRadian);
+            // アスペクト比を転送する
+            uniform.aspect.upload(state->surfaceAspect);
+
+
+            ++quadInstances;
+        }
+    }
+    return numRendering;
 }
 
 void ImmediateSpriteRenderer::endRendering(SpriteRenderer *sender) {

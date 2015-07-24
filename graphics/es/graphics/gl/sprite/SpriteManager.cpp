@@ -141,7 +141,7 @@ void SpriteManager::renderingImage(MTexture image, const float srcX, const float
     }
     else {
         // UV値を0に設定して、テクスチャキャッシュを使わせる
-        uniform.poly_uv.upload(0, 0, 0, 0);
+//        uniform.poly_uv.upload(0, 0, 0, 0);
         uniform.colorOnly.upload(1);
     }
     assert_gl();

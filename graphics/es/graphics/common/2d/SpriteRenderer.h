@@ -51,11 +51,6 @@ protected:
     sp<ISpriteRenderingCallback> callback;
 
     /**
-     * レンダリング用コンテキスト
-     */
-    sp<ISpriteRenderingCallback::RenderingContext> renderContext;
-
-    /**
      * ディスプレイ座標変換は別途クラスに委譲する
      */
     sp<IDisplayTransfer2D> display;

@@ -27,12 +27,35 @@ public:
                 RenderingMode_Line,
     };
 
-    struct RenderingContext {
+    struct RenderingInstance {
         /**
-         * レンダリングモードを指定する
+         * ブレンドしたい色が指定される
          */
-        RenderingMode_e mode = RenderingMode_QuadFill;
+        Color color;
 
+
+        /**
+         * 回転角が設定される
+         */
+        float rotateRadian = 0;
+    };
+
+    struct RenderingLineInstance : public RenderingInstance {
+        /**
+         * ライン描画をする場合の幅を指定する
+         */
+        float lineWidth = 0;
+
+        /**
+         * レンダリング先のディスプレイ座標（線描画）
+         */
+        struct {
+            Vector2f start;
+            Vector2f end;
+        } dstLine;
+    };
+
+    struct RenderingQuadInstance : public RenderingInstance {
         /**
          * レンダリングテクスチャ
          *
@@ -46,49 +69,25 @@ public:
          * textureがnullptrの場合は値は不定となる。
          */
         RectF srcCoord;
-
-        /**
-         * レンダリングサーフェイスのアスペクト比
-         */
-        float surfaceAspect = 1;
-
         /**
          * レンダリング先のディスプレイ座標（四角形描画）
          * ピクセルではなく、正規化座標が入力される
          */
         RectF dstQuad;
-
-        /**
-         * レンダリング先のディスプレイ座標（線描画）
-         */
-        struct {
-            Vector2f start;
-            Vector2f end;
-        } dstLine;
-
-        /**
-         * 回転角が設定される
-         */
-        float rotateRadian = 0;
-
-        /**
-         * ブレンドしたい色が指定される
-         */
-        Color color;
-
-        /**
-         * ライン描画をする場合の幅を指定する
-         */
-        float lineWidth = 0;
     };
 
-    /**
-     * レンダリングコンテキストを生成させる
-     * 必要に応じてカスタマイズクラスを返しても良い。
-     *
-     * コンテキストは使いまわされるので、必要に応じて1回だけ呼び出される。
-     */
-    virtual std::shared_ptr<RenderingContext> newRenderingContext(SpriteRenderer *sender) const = 0;
+    struct RenderingState {
+        /**
+         * レンダリングモードを指定する
+         */
+        RenderingMode_e mode = RenderingMode_QuadFill;
+
+
+        /**
+         * レンダリングサーフェイスのアスペクト比
+         */
+        float surfaceAspect = 1;
+    };
 
     /**
      * レンダリングを開始する
@@ -98,10 +97,12 @@ public:
     /**
      * 現在の状態に応じてレンダリングを行わせる
      *
-     * @result レンダリングを実行できた場合はtrue
+     * 同じオブジェクトを何度も一括でレンダリングする（パーティクル等）場合のオーバーヘッドを少なくするため、バッチレンダリングを行えるようにする。
+     * レンダリングインスタンスはmodeに合わせてRenderingQuadInstance*等にキャストする必要がある
+     *
+     * @result レンダリングしたインスタンス数を返す
      */
-    virtual bool requestRendering(SpriteRenderer *sender, const std::shared_ptr<RenderingContext> &context) = 0;
-
+    virtual int requestRendering(SpriteRenderer *sender, const RenderingState *state, const uint numInstances, RenderingInstance *instanceArray) = 0;
 
     /**
      * レンダリングを終了する

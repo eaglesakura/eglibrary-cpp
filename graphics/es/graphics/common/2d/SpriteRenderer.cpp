@@ -12,7 +12,6 @@ void SpriteRenderer::setCallback(const std::shared_ptr<ISpriteRenderingCallback>
     assert(callback);
 
     this->callback = callback;
-    this->renderContext = callback->newRenderingContext(this);
 }
 
 void SpriteRenderer::setDisplay(const std::shared_ptr<IDisplayTransfer2D> display) {
@@ -22,10 +21,19 @@ void SpriteRenderer::setDisplay(const std::shared_ptr<IDisplayTransfer2D> displa
 }
 
 void SpriteRenderer::renderingImage(std::shared_ptr<ITexture2D> texture, const float srcX, const float srcY, const float srcW, const float srcH, const float dstX, const float dstY, const float dstW, const float dstH, const float degree, const rgba32 rgba) {
-    renderContext->texture = texture;
-    renderContext->mode = ISpriteRenderingCallback::RenderingMode_QuadFill;
-    renderContext->rotateRadian = glm::radians(degree);
-    renderContext->color.rgba = rgba;
+    if (es::equals(dstW, 0.0f) || es::equals(dstH, 0.0f)) {
+        // 幅か高さが0であれば、レンダリングの必要はない
+        return;
+    }
+
+    ISpriteRenderingCallback::RenderingState state;
+    ISpriteRenderingCallback::RenderingQuadInstance instance;
+
+
+    state.mode = ISpriteRenderingCallback::RenderingMode_QuadFill;
+    instance.rotateRadian = glm::radians(degree);
+    instance.texture = texture;
+    instance.color.rgba = rgba;
 
     // coord計算
     if (texture) {
@@ -33,8 +41,7 @@ void SpriteRenderer::renderingImage(std::shared_ptr<ITexture2D> texture, const f
         Vector2i16 size;
         texture->getImageArea(&size, &area);
 
-
-        RectF &srcCoord = renderContext->srcCoord;
+        RectF &srcCoord = instance.srcCoord;
         srcCoord.left = ((float) area.left + srcX) / (float) size.x;
         srcCoord.top = ((float) area.top + srcY) / (float) size.y;
         srcCoord.right = srcCoord.left + (srcW / (float) size.x);
@@ -43,18 +50,17 @@ void SpriteRenderer::renderingImage(std::shared_ptr<ITexture2D> texture, const f
 
     // デバイス座標に変換
     {
-        RectF &dstQuad = renderContext->dstQuad;
+        RectF &dstQuad = instance.dstQuad;
         const Vector2f leftTop = display->getSpritePositionToDevice(dstX, dstY);
         const Vector2f rightBottom = display->getSpritePositionToDevice(dstX + dstW, dstY + dstH);
-        const Vector2f aspectSrc = display->getSpritePositionToDevice(dstX, dstX);
-        renderContext->surfaceAspect = 1.0f / (aspectSrc.x / aspectSrc.y);
+        state.surfaceAspect = display->getSpriteSurfaceAspect();
         dstQuad.left = leftTop.x;
         dstQuad.top = leftTop.y;
         dstQuad.right = rightBottom.x;
         dstQuad.bottom = rightBottom.y;
     }
 
-    callback->requestRendering(this, renderContext);
+    callback->requestRendering(this, &state, 1, &instance);
 }
 
 void SpriteRenderer::renderingRect(const float x, const float y, const float w, const float h, const rgba32 rgba) {

@@ -6,6 +6,7 @@
 #include FT_FREETYPE_H
 #include "es/system/string/IStringConverter.h"
 #include "es/asset/Freetype.h"
+#include "es/asset/FontCharactor.h"
 
 namespace es {
 namespace test {
@@ -92,7 +93,7 @@ TEST(FreetypeTest, RenderFont) {
 
     eslog("code(%x) font(%d x %d) bmp(%d x %d) bearing(%d)",
           charactor->getCode(),
-          charactor->getFontSize().x, charactor->getFontSize().y,
+          charactor->getAdvanceSize().x, charactor->getAdvanceSize().y,
           charactor->getBitmapSize().x, charactor->getBitmapSize().y,
           charactor->getBitmapBearingY()
     );

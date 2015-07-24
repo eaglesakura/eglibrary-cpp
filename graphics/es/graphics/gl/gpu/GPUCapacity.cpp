@@ -69,7 +69,6 @@ static BitFlags<GPUExtension_Num> extension_flags;
 static GPUFamily_e gpuFamily = GPUFamily_Unknown;
 
 static OpenGLVersion_e glVersion = OpenGLVersion_Unknown;
-
 }
 
 static int toCoreVersion(int coreMajor, int coreMinor) {
