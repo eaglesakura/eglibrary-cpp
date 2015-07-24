@@ -189,4 +189,14 @@ Object::QueryResult_e Texture::queryInterface(const int64_t interfaceId, void **
     }
     return QueryResult_Failed;
 }
+
+void Texture::getImageArea(Vector2i16 *size, RectI16 *existArea) {
+    if (size) {
+        size->x = getTextureWidth();
+        size->y = getTextureHeight();
+    }
+    if (existArea) {
+        existArea->setXYWH(0, 0, (int16_t) getWidth(), (int16_t) getHeight());
+    }
+}
 }

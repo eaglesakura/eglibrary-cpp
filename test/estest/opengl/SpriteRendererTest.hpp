@@ -11,7 +11,7 @@ namespace es {
 namespace test {
 
 /**
- * 正常にデバイス座標に対して射影出来るることを確認する
+ * 正常にデバイス座標に対して射影出来ることを確認する
  */
 TEST(SpriteRendererTest, DeviceProjection) {
     ES_OPENGL_UNITTEST();

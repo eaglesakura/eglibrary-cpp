@@ -30,9 +30,11 @@ public:
     /**
      * dynamic_castのオーバーヘッドを避けたい場合にインターフェース変換を行わせることが出来る。
      *
-     * ただし、片安全ではないため、利用箇所には注意をすること。
+     * ただし、型安全ではないため、利用箇所には注意をすること。
      */
-    virtual QueryResult_e queryInterface(const int64_t interfaceId, void **resultInterfacePtr) const { return QueryResult_Failed; }
+    virtual QueryResult_e queryInterface(const int64_t interfaceId, void **resultInterfacePtr) const {
+        return QueryResult_Failed;
+    }
 
 protected:
     template<typename T>
@@ -40,7 +42,6 @@ protected:
         *((T **) resultInterfacePtr) = (T *) self;
         return QueryResult_Success;
     }
-
 };
 
 }

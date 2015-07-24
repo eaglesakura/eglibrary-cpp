@@ -20,7 +20,6 @@ bool ImmediateSpriteRenderer::initialize(std::shared_ptr<DeviceContext> context,
         }
 
         // uniformを設定する
-        shader->bind();
         {
             uniform.poly_data.setLocation(shader, "poly_data");
             uniform.poly_uv.setLocation(shader, "poly_uv");
@@ -79,6 +78,18 @@ int ImmediateSpriteRenderer::requestRendering(SpriteRenderer *sender, const ISpr
                 uniform.colorOnly.upload(1);
             }
 
+            {
+                const float sizeX = quadInstances->dstQuad.width();
+                const float sizeY = quadInstances->dstQuad.height();
+                const float sx = quadInstances->dstQuad.left;
+                const float sy = quadInstances->dstQuad.top;
+                const float translateX = sizeX / 2.0f + sx;
+                const float translateY = -sizeY / 2.0f + sy;
+                // ポリゴン位置の確定
+                uniform.poly_data.upload(translateX, translateY, sizeX, sizeY);
+//                uniform.poly_data.upload(sx, sy, sizeX, sizeY);
+//                uniform.poly_data.upload(0, 0, 1, 1);
+            }
             // ブレンド色を設定する
             uniform.color.upload(quadInstances->color);
             // ポリゴン回転を設定する
@@ -86,6 +97,7 @@ int ImmediateSpriteRenderer::requestRendering(SpriteRenderer *sender, const ISpr
             // アスペクト比を転送する
             uniform.aspect.upload(state->surfaceAspect);
 
+            quad->rendering();
 
             ++quadInstances;
         }

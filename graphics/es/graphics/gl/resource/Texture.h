@@ -6,6 +6,7 @@
 #include    "es/graphics/gl/context/ShaderState.h"
 #include    "es/graphics/gl/context/DeviceContext.h"
 #include    "es/graphics/gl/GLObject.h"
+#include    "es/graphics/common/2d/ITexture2D.h"
 
 namespace es {
 
@@ -40,7 +41,7 @@ struct TextureLoadOption {
     }
 };
 
-class Texture : public GLObject {
+class Texture : public GLObject, public ITexture2D {
     friend class GraphicAssets;
 
 protected:
@@ -258,6 +259,9 @@ public:
     virtual void dispose() override;
 
     virtual QueryResult_e queryInterface(const int64_t interfaceId, void **resultInterfacePtr) const override;
+
+
+    virtual void getImageArea(Vector2i16 *size, RectI16 *existArea) override;
 };
 
 typedef ::std::shared_ptr<Texture> MTexture;
