@@ -3,6 +3,7 @@
 #include    "AndroidAssetLoader.h"
 #include    "AndroidMappedAsset.hpp"
 #include    <android/asset_manager_jni.h>
+#include "es/internal/protoground-internal.hpp"
 
 namespace es {
 namespace internal {

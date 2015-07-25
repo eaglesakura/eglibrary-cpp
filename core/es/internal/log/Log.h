@@ -9,7 +9,7 @@ namespace internal {
 /**
  * __FILE__マクロからファイル名を取得する
  */
-char *pathToFileName(const char *__file__);
+const char *pathToFileName(const char *__file__);
 
 enum LogType_e {
     /* 通常出力 */

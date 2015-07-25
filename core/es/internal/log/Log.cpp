@@ -55,7 +55,7 @@ namespace es {
 
 namespace internal {
 
-char *::es::internal::pathToFileName(const char *__file__) {
+const char *pathToFileName(const char *__file__) {
 #if (defined(BUILD_MacOSX) || defined(BUILD_Android) || defined(BUILD_MacOSX) )
     return strrchr(__file__, '/') + 1;
 #else
