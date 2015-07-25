@@ -1,4 +1,5 @@
 #include    "es/graphics/RawImage.h"
+#include    "es/internal/protoground-internal.hpp"
 
 namespace es {
 
@@ -33,8 +34,8 @@ void RawImage::alloc(const PixelFormat_e format, const uint width, const uint he
 /**
  * ピクセルバッファの格納先を外部から指定する
  */
-void RawImage::setBuffer(const void* buffer, const uint length) {
-    pBuffer.ptr = (uint8_t*) buffer;
+void RawImage::setBuffer(const void *buffer, const uint length) {
+    pBuffer.ptr = (uint8_t *) buffer;
     pBuffer.length = length;
     pixels.clear();
 }

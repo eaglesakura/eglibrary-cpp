@@ -1,4 +1,6 @@
 #include    "Texture.h"
+#include "es/internal/protoground-internal.hpp"
+#include "es/OpenGL.hpp"
 
 namespace es {
 

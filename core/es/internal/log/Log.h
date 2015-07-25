@@ -1,5 +1,4 @@
-#ifndef es_system_LOG_H_
-#define es_system_LOG_H_
+#pragma once
 
 #include    <string.h>
 
@@ -10,13 +9,7 @@ namespace internal {
 /**
  * __FILE__マクロからファイル名を取得する
  */
-inline char *pathToFileName(const char *__file__) {
-#if (defined(BUILD_MacOSX) || defined(BUILD_Android) || defined(BUILD_MacOSX) )
-    return strrchr(__file__, '/') + 1;
-#else
-    return strrchr(__file__, '/') + 1;
-#endif
-}
+char *pathToFileName(const char *__file__);
 
 enum LogType_e {
     /* 通常出力 */
@@ -114,5 +107,3 @@ public:
 #endif
 
 }
-
-#endif /* es_system_LOG_H_ */

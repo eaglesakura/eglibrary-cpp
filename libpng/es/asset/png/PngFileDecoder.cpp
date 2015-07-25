@@ -1,6 +1,6 @@
 #include "PngFileDecoder.h"
 #include <png.h>
-#include "es/internal/eglibrary-internal.hpp"
+#include "es/internal/protoground-internal.hpp"
 #include    "es/asset/image/IImageDecodeListener.hpp"
 
 namespace es {
@@ -16,7 +16,7 @@ PngFileDecoder::~PngFileDecoder() {
 namespace internal {
 struct ImageBufferReader {
     unsafe_array<uint8_t> preLoad;
-    shared_ptr<IAsset> asset;
+    sp<IAsset> asset;
     bool readError = false;
 
     /**
@@ -163,7 +163,7 @@ bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<IImageDec
         onceReadLines = info.height;
     }
 
-    vector<uint8_t> readCacheBuffer(rowBytes * onceReadLines);
+    std::vector<uint8_t> readCacheBuffer(rowBytes * onceReadLines);
     ByteBuffer convertBuffer;
 
     if (info.srcPixelFormat != this->pixelConvert) {
@@ -171,7 +171,7 @@ bool PngFileDecoder::load(std::shared_ptr<IAsset> asset, selection_ptr<IImageDec
         convertBuffer = Pixel::createPixelBuffer(pixelConvert, Pixel::getPixelBytes(pixelConvert) * info.width * onceReadLines);
     }
 
-    vector<void *> rowHeaders(onceReadLines);
+    std::vector<void *> rowHeaders(onceReadLines);
 
     for (int i = 0; i < onceReadLines; ++i) {
         rowHeaders[i] = (void *) util::asPointer(readCacheBuffer, rowBytes * i);

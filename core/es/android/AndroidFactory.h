@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "es/eglibrary.hpp"
+#include "es/protoground.hpp"
 #include "es/asset/IAssetLoader.hpp"
 #include <jni.h>
 

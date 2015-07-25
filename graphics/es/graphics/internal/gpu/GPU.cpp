@@ -2,8 +2,6 @@
 #include    "es/memory/BitFlags.hpp"
 #include    <vector>
 #include    "es/util/StringUtil.h"
-#include    "es/graphics/gl/context/GLContextUtil.hpp"
-
 #include "es/graphics/internal/gpu/GPU_gl.hpp"
 
 namespace es {

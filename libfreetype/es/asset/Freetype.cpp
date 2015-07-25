@@ -1,6 +1,5 @@
 #include <es/asset/internal/FontFaceImpl.hpp>
 #include "Freetype.h"
-
 #include "es/asset/internal/FreetypeLibrary.hpp"
 
 namespace es {

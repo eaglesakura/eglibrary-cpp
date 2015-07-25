@@ -4,7 +4,7 @@
 #error Android Only!!
 #endif
 
-#include    "es/eglibrary.hpp"
+#include    "es/protoground.hpp"
 
 #include    <EGL/egl.h>
 #include    <EGL/eglext.h>

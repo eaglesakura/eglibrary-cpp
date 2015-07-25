@@ -1,7 +1,33 @@
 #pragma once
 
 #include    "es/Graphics.hpp"
-#include    "es/graphics/gl/context/GLContextUtil.hpp"
+
+namespace es {
+
+namespace gl {
+
+namespace internal {
+/**
+ * 関連付けられたスレッドのglGetErrorを取り出す
+ */
+GLenum printError(const char *__file__, const int __line__);
+}
+
+} /* gl */
+} /* es */
+
+/**
+ * 緊急時のデバッグ用
+ */
+//#define NO_GL_ASSERT 1
+
+#if defined(DEBUG) && !defined(NO_GL_ASSERT)
+#define     assert_gl(...)    { assert(::es::gl::internal::printError(__FILE__, __LINE__) == GL_NO_ERROR); }
+#else
+// release
+#define     assert_gl(...)    { }
+#endif
+
 
 // math
 #include    "es/graphics/math/GlmHelper.hpp"
@@ -28,3 +54,4 @@
 #include    "es/graphics/gl/shader/ColorUniform.hpp"
 #include    "es/graphics/gl/shader/TextureUniform.hpp"
 #include    "es/graphics/gl/shader/VertexAttribute.hpp"
+

@@ -1,4 +1,5 @@
-#include    "es/eglibrary.hpp"
+#include    "es/protoground.hpp"
+#include    "Log.h"
 
 #if defined(BUILD_Android)
 #include    "android/log.h"
@@ -45,7 +46,22 @@ void logBasic(const es::internal::LogType_e type, const char *__file, const char
 }
 namespace es {
 internal::Logger::LogFunctionPtr internal::Logger::func = logBasic;
+
 }
 
 #endif
 
+namespace es {
+
+namespace internal {
+
+char *::es::internal::pathToFileName(const char *__file__) {
+#if (defined(BUILD_MacOSX) || defined(BUILD_Android) || defined(BUILD_MacOSX) )
+    return strrchr(__file__, '/') + 1;
+#else
+    return strrchr(__file__, '/') + 1;
+#endif
+}
+
+}
+}

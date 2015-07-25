@@ -1,6 +1,6 @@
 #pragma once
 
-#include "es/eglibrary.hpp"
+#include "es/protoground.hpp"
 #include "es/graphics/resource/ITexture.hpp"
 #include "es/graphics/Color.hpp"
 

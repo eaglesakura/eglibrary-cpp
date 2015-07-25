@@ -1,4 +1,5 @@
 #include "ProcessContext.h"
+#include "es/internal/protoground-internal.hpp"
 
 #if defined(BUILD_MacOSX)
 

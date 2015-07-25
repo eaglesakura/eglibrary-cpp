@@ -1,6 +1,6 @@
 #pragma once
 
-#include    "es/eglibrary.hpp"
+#include    "es/protoground.hpp"
 
 template<int32_t MAX_FLAG_NUM = 32>
 class BitFlags {

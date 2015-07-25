@@ -1,6 +1,6 @@
 #pragma once
 
-#include    "es/eglibrary.hpp"
+#include    "es/protoground.hpp"
 #include    "es/OpenGL.hpp"
 #include    "VertexBufferObject.hpp"
 #include    "IndexBufferObject.hpp"

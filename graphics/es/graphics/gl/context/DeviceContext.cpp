@@ -2,6 +2,9 @@
 #include    <map>
 #include    "es/graphics/GPU.h"
 #include    "es/system/Thread.hpp"
+#include "es/internal/protoground-internal.hpp"
+
+#include "es/OpenGL.hpp"
 
 namespace es {
 

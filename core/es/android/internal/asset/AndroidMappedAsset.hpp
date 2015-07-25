@@ -1,7 +1,7 @@
 #ifdef __ANDROID__
 #pragma once
 
-#include "es/eglibrary.hpp"
+#include "es/protoground.hpp"
 #include "es/asset/IAsset.hpp"
 #include "android/asset_manager.h"
 

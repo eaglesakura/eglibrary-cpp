@@ -1,4 +1,7 @@
 #include    "ShaderState.h"
+#include "es/internal/protoground-internal.hpp"
+
+#include "es/OpenGL.hpp"
 
 namespace es {
 
@@ -50,7 +53,7 @@ bool ShaderState::bindTexture(const GLenum target, const GLuint texture) {
 /**
  * バインドされているテクスチャを一括で解放する
  */
-void ShaderState::unbindTextures(const uint num, const GLuint* textures) {
+void ShaderState::unbindTextures(const uint num, const GLuint *textures) {
     const uint active = toTextureIndex(textureContext.active);
 
     for (int n = 0; n < num; ++n) {
@@ -97,6 +100,19 @@ int ShaderState::getFreeTextureUnitIndex(const bool overrride) {
         // 上書きせずにエラーを返す
         return -1;
     }
+}
+
+bool ShaderState::activeTexture(const uint index) {
+    assert(index < GPU::getMaxTextureUnits());
+    const uint unit = toTextureUnit(index);
+    // 違うユニットがアクティブ化されていたら、アクティブにし直す
+    if (unit != textureContext.active) {
+        textureContext.active = unit;
+        glActiveTexture(unit);
+        assert_gl();
+        return true;
+    }
+    return false;
 }
 
 }

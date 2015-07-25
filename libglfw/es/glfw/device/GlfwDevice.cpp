@@ -1,4 +1,5 @@
 #include "GlfwDevice.h"
+#include "es/internal/protoground-internal.hpp"
 #include <GLFW/glfw3.h>
 
 namespace es {

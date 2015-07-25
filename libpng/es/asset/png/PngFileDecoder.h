@@ -1,6 +1,6 @@
 #pragma once
 
-#include "es/eglibrary.hpp"
+#include "es/protoground.hpp"
 #include <es/graphics/PixelFormat.hpp>
 #include "es/asset/IAsset.hpp"
 #include "es/memory/Buffer.hpp"

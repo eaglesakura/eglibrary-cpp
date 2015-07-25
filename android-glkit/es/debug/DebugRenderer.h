@@ -1,7 +1,7 @@
 #pragma once
 
 #include <es/graphics/Color.hpp>
-#include "es/eglibrary.hpp"
+#include "es/protoground.hpp"
 #include "es_debug_RealtimeDebugWindowBridge.h"
 
 namespace es {

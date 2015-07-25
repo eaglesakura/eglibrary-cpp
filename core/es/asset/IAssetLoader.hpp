@@ -1,7 +1,7 @@
 #pragma once
 
 #include <es/memory/Buffer.hpp>
-#include "es/eglibrary.hpp"
+#include "es/protoground.hpp"
 
 namespace es {
 class IAsset;

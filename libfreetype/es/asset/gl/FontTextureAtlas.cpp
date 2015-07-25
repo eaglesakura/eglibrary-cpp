@@ -1,6 +1,7 @@
 #include "FontTextureAtlas.h"
 #include "es/asset/FontCharactor.h"
 #include "es/util/MapUtil.hpp"
+#include "es/OpenGL.hpp"
 
 namespace es {
 

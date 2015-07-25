@@ -1,7 +1,9 @@
-#include <list>
 #include "AssetManager.h"
+#include "es/internal/protoground-internal.hpp"
+
 #include "es/asset/IAsset.hpp"
 #include "es/asset/IAssetLoader.hpp"
+#include <list>
 
 namespace es {
 

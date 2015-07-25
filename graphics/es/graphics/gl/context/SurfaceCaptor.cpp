@@ -1,7 +1,9 @@
 #include    "es/Graphics.hpp"
+#include "es/OpenGL.hpp"
 #include    "SurfaceCaptor.h"
 
-#include "es/graphics/gl/context/GLContextUtil.hpp"
+#include "es/internal/protoground-internal.hpp"
+
 
 namespace es {
 

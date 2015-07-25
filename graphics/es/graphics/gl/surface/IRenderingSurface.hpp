@@ -41,12 +41,7 @@ static const Vector2i16 DISPLAYSIZE_GoogleGlass(640, 360);
  */
 class IRenderingSurface {
 public:
-    IRenderingSurface() {
-
-    }
-
-    virtual ~IRenderingSurface() {
-    }
+    virtual ~IRenderingSurface() = default;
 
     /**
      * サーフェイス幅を取得する

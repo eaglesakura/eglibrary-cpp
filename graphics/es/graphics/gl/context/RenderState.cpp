@@ -1,7 +1,8 @@
 #include    "es/graphics/GPU.h"
 #include    "es/graphics/gl/context/RenderState.h"
 
-#include    "es/graphics/gl/context/GLContextUtil.hpp"
+#include "es/OpenGL.hpp"
+#include "es/internal/protoground-internal.hpp"
 
 using namespace std;
 

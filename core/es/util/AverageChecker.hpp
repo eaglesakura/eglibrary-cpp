@@ -5,7 +5,7 @@
 #ifndef ASSEMBLE_AVERAGECHECKER_HPP
 #define ASSEMBLE_AVERAGECHECKER_HPP
 
-#include "es/eglibrary.hpp"
+#include "es/protoground.hpp"
 
 namespace es {
 

@@ -1,9 +1,10 @@
 #pragma once
 
+#include "es/OpenGL.hpp"
 #include "es/graphics/GPU.h"
-
 #include "es/graphics/internal/gpu/GPU_Impl.hpp"
 #include "GPU_Impl.hpp"
+#include "es/internal/protoground-internal.hpp"
 
 namespace es {
 

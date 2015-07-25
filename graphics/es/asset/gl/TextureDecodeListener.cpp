@@ -1,3 +1,4 @@
+#include "es/OpenGL.hpp"
 #include "TextureDecodeListener.h"
 
 namespace es {

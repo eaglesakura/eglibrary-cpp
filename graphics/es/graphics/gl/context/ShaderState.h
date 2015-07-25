@@ -3,54 +3,9 @@
 #include    "es/Graphics.hpp"
 #include    "es/graphics/GPU.h"
 
-#include    "es/graphics/gl/context/GLContextUtil.hpp"
-
 namespace es {
 
 class ShaderState : public Object {
-    enum {
-        /**
-         * テクスチャユニットの最大数
-         */
-                MAX_TEXTURE_UNIT = 32,
-    };
-
-    /**
-     * glBindTexture()されているテクスチャ情報
-     */
-    struct {
-        /**
-         * GLESの定数として、index0〜31までは確保されている。
-         * ただし、それがハードウェアとして対応しているかは問わない
-         * GL_TEXTURE0〜GL_TEXTURE31に対応
-         */
-        GLuint textures[MAX_TEXTURE_UNIT];
-
-        /**
-         * GL_TEXTURE0〜GL_TEXTURE31に対応
-         */
-        GLenum targets[MAX_TEXTURE_UNIT];
-
-        /**
-         * アクティブ化されているテクスチャユニットを保持する
-         */
-        uint active;
-    } textureContext;
-
-    /**
-     * テクスチャユニットの定数をテクスチャ番号に変換する
-     */
-    inline static uint toTextureIndex(const GLenum textureUnit) {
-        return textureUnit - GL_TEXTURE0;
-    }
-
-    /**
-     * テクスチャ番号をテクスチャユニット定数に変換する
-     */
-    inline static GLenum toTextureUnit(const uint index) {
-        return index + GL_TEXTURE0;
-    }
-
 public:
     ShaderState();
 
@@ -76,18 +31,7 @@ public:
     /**
      * テクスチャユニットをActiveにする
      */
-    inline bool activeTexture(const uint index) {
-        assert(index < GPU::getMaxTextureUnits());
-        const uint unit = toTextureUnit(index);
-        // 違うユニットがアクティブ化されていたら、アクティブにし直す
-        if (unit != textureContext.active) {
-            textureContext.active = unit;
-            glActiveTexture(unit);
-            assert_gl();
-            return true;
-        }
-        return false;
-    }
+    bool activeTexture(const uint index);
 
     /**
      * 現在アクティブになっているテクスチャの番号を取得する。
@@ -141,6 +85,50 @@ public:
      * @param overrride trueの場合、適当なテクスチャユニットをピックアップして返す。
      */
     int getFreeTextureUnitIndex(const bool overrride);
+
+private:
+    enum {
+        /**
+         * テクスチャユニットの最大数
+         */
+                MAX_TEXTURE_UNIT = 32,
+    };
+
+    /**
+     * glBindTexture()されているテクスチャ情報
+     */
+    struct {
+        /**
+         * GLESの定数として、index0〜31までは確保されている。
+         * ただし、それがハードウェアとして対応しているかは問わない
+         * GL_TEXTURE0〜GL_TEXTURE31に対応
+         */
+        GLuint textures[MAX_TEXTURE_UNIT];
+
+        /**
+         * GL_TEXTURE0〜GL_TEXTURE31に対応
+         */
+        GLenum targets[MAX_TEXTURE_UNIT];
+
+        /**
+         * アクティブ化されているテクスチャユニットを保持する
+         */
+        uint active;
+    } textureContext;
+
+    /**
+     * テクスチャユニットの定数をテクスチャ番号に変換する
+     */
+    inline static uint toTextureIndex(const GLenum textureUnit) {
+        return textureUnit - GL_TEXTURE0;
+    }
+
+    /**
+     * テクスチャ番号をテクスチャユニット定数に変換する
+     */
+    inline static GLenum toTextureUnit(const uint index) {
+        return index + GL_TEXTURE0;
+    }
 };
 
 /**

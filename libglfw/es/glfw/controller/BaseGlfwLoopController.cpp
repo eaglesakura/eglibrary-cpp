@@ -3,6 +3,8 @@
 
 #include "es/system/Thread.hpp"
 
+#include "es/internal/protoground-internal.hpp"
+
 namespace es {
 
 
