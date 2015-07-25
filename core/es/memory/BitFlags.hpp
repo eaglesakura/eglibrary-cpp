@@ -72,13 +72,13 @@ public:
      * flags[0]に対してのみ対応可能なため、注意すること
      */
     bool isAllEnableFlags(const int32_t bits) const {
-        return has_flag_all(flags[0], bits);
+        return (flags[0] & bits) == bits;
     }
 
     /**
      * 全チェック
      */
-    bool isAllEnable(const int32_t indices_num, const int32_t* indices) const {
+    bool isAllEnable(const int32_t indices_num, const int32_t *indices) const {
         for (int32_t i = 0; i < indices_num; ++i) {
             if (isDisable(indices[i])) {
                 // 一つでもdisableがあったら廃棄
@@ -92,7 +92,7 @@ public:
     /**
      * 全チェック
      */
-    bool isAllDisable(const int32_t indices_num, const int32_t* indices) const {
+    bool isAllDisable(const int32_t indices_num, const int32_t *indices) const {
         for (int32_t i = 0; i < indices_num; ++i) {
             if (isEnable(indices[i])) {
                 // 一つでもenableがあったら廃棄

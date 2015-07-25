@@ -7,16 +7,6 @@
 namespace es {
 
 class ByteBuffer {
-
-    /**
-     * 管理しているバッファ
-     */
-    std::shared_ptr<uint8_t> buffer;
-
-    /**
-     * バッファのサイズ
-     */
-    uint _length;
 public:
     ByteBuffer() {
         _length = 0;
@@ -47,6 +37,18 @@ public:
     bool empty() const {
         return _length == 0;
     }
+
+private:
+
+    /**
+     * 管理しているバッファ
+     */
+    std::shared_ptr<uint8_t> buffer;
+
+    /**
+     * バッファのサイズ
+     */
+    uint _length;
 };
 
 class Buffer {

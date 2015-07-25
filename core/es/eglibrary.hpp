@@ -2,11 +2,9 @@
 
 #include    "es/protoground-types.hpp"
 #include    "es/debug/Testing.hpp"
-#include    <stdint.h>
-#include    <string.h>
 #include    <string>
-#include    <mutex>
-#include    <thread>
+//#include    <mutex>
+//#include    <thread>
 #include    <memory>
 #include    <sys/types.h>
 
@@ -23,10 +21,6 @@ using wp = ::std::weak_ptr<T>;
 
 template<typename T>
 using selp  = ::es::selection_ptr<T>;
-
-
-typedef std::recursive_mutex es_mutex;
-typedef std::unique_lock<es_mutex> es_mutex_lock;
 
 typedef std::string string;
 typedef std::wstring wide_string;

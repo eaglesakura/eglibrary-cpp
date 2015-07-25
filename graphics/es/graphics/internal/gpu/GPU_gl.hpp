@@ -197,22 +197,9 @@ void es::GPU::Impl::glInitialize() {
         eslog("GL_VENDOR = %s", vendor.c_str());
         eslog("GL_RENDERER = %s", renderer.c_str());
 
-// エクステンション一覧を出力する
-        {
-            std::vector<std::string>::iterator itr = extensions.begin(), end = extensions.end();
-
-            for (const string &name: extensions) {
-                eslog("GL_EXTENSIONS = %s", (*itr).c_str());
-            }
-            while (itr != end) {
-                if ((*itr).size()) {
-                    eslog("GL_EXTENSIONS = %s", (*itr).c_str());
-                    ++itr;
-                } else {
-                    itr = extensions.erase(itr);
-                    end = extensions.end();
-                }
-            }
+        // エクステンション一覧を出力する
+        for (const string &name: extensions) {
+            eslog("GL_EXTENSIONS = %s", name.c_str());
         }
 
         eslog("GL_MAX_VERTEX_ATTRIBS = %d", gl.maxVertexAttrbs);

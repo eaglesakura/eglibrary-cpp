@@ -1,5 +1,7 @@
-#include <es/system/NanoTimer.hpp>
+#include "es/system/NanoTimer.h"
 #include "BaseGlfwLoopController.h"
+
+#include "es/system/Thread.hpp"
 
 namespace es {
 

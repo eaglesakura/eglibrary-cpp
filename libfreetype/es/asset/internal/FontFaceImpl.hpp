@@ -6,6 +6,8 @@
 #include "es/asset/internal/FreetypeLibrary.hpp"
 #include "es/asset/internal/FontCharactorImpl.hpp"
 
+#include "es/system/OptionalMutex.h"
+
 namespace es {
 namespace internal {
 
@@ -16,17 +18,7 @@ class FontFaceImpl : public FontFace {
 
     FT_Face face;
 
-    es_mutex mutex;
-
-    bool threadSafe = false;
-
-    std::unique_ptr<es_mutex_lock> lockRequest() {
-        if (threadSafe) {
-            return std::unique_ptr<es_mutex_lock>(new es_mutex_lock(mutex));
-        } else {
-            return std::unique_ptr<es_mutex_lock>();
-        }
-    }
+    OptionalMutex mutex;
 
 public:
     FontFaceImpl(std::shared_ptr<FreetypeLibrary> newLibrary,
@@ -53,7 +45,7 @@ public:
      * レンダリングされる文字はこのwidth/heightに収まるように設定される。
      */
     virtual void setSize(const uint width, const uint height) {
-        auto lock = lockRequest();
+        auto lock = mutex.lock();
 
         size.x = width;
         size.y = height;
@@ -74,7 +66,7 @@ public:
      * 外形情報がフォントに含まれていない場合、豆腐文字として扱う。
      */
     virtual std::shared_ptr<FontCharactor> rendering(const wchar_t charactor, selection_ptr<IImageDecodeListener> listener) {
-        auto lock = lockRequest();
+        auto lock = mutex.lock();
 
         std::shared_ptr<FontCharactorImpl> result;
         int error;

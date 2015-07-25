@@ -1,6 +1,7 @@
 #include    "DeviceContext.h"
 #include    <map>
 #include    "es/graphics/GPU.h"
+#include    "es/system/Thread.hpp"
 
 namespace es {
 
@@ -79,7 +80,7 @@ std::map<std::thread::id, MDeviceContext> g_devices;
 /**
  * mutex
  */
-es_mutex g_devicesMutex;
+mutex g_devicesMutex;
 
 }
 
@@ -88,7 +89,7 @@ es_mutex g_devicesMutex;
  */
 ::std::shared_ptr<DeviceContext> DeviceContext::current() {
     // 制御ロックをかける
-    es_mutex_lock lock(g_devicesMutex);
+    mutex_lock lock(g_devicesMutex);
 
     // デバイスがemptyならGPUCapsを初期化する
     if (g_devices.empty()) {
@@ -115,7 +116,7 @@ es_mutex g_devicesMutex;
  */
 void DeviceContext::unuseThisThread() {
     // 制御ロックをかける
-    es_mutex_lock lock(g_devicesMutex);
+    mutex_lock lock(g_devicesMutex);
 
     auto itr = g_devices.find(std::this_thread::get_id());
     if (itr == g_devices.end()) {
@@ -128,7 +129,7 @@ void DeviceContext::unuseThisThread() {
 
 uint DeviceContext::getContextNum() {
     // 制御ロックをかける
-    es_mutex_lock lock(g_devicesMutex);
+    mutex_lock lock(g_devicesMutex);
 
     return (uint) g_devices.size();
 }

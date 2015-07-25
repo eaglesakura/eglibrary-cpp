@@ -1,6 +1,7 @@
 #pragma once
 
 #include    "IApplicationFragment.h"
+#include    "es/system/Thread.hpp"
 #include    <vector>
 
 namespace es {
@@ -11,7 +12,7 @@ namespace es {
 class ApplicationFragmentController : public Object {
     typedef typename std::vector<selection_ptr<IApplicationFragment> > fragment_container;
 
-    mutable es_mutex transactionLock;
+    mutable mutex transactionLock;
 
 //    jcmutex lifecycleLock;
 
@@ -69,7 +70,7 @@ public:
      * フラグメント追加を行う
      */
     virtual void addFragment(selection_ptr<IApplicationFragment> fragment) {
-        es_mutex_lock lock(transactionLock);
+        mutex_lock lock(transactionLock);
 
         requestAddFragment.push_back(fragment);
     }
@@ -78,7 +79,7 @@ public:
      * フラグメントの削除を行う
      */
     virtual void removeFragment(selection_ptr<IApplicationFragment> fragment) {
-        es_mutex_lock lock(transactionLock);
+        mutex_lock lock(transactionLock);
 
         requestRemoveFragment.push_back(fragment);
 
@@ -88,7 +89,7 @@ public:
      * 追加・削除リクエストの処理を行う
      */
     virtual void commit() {
-        es_mutex_lock lock(transactionLock);
+        mutex_lock lock(transactionLock);
 
         // 追加リストを処理する
         if (!requestAddFragment.empty()) {
@@ -182,7 +183,7 @@ public:
      * IDを指定してFragmentを取得する
      */
     virtual selection_ptr<IApplicationFragment> findFragmentById(const uint64_t id) const {
-        es_mutex_lock lock(transactionLock);
+        mutex_lock lock(transactionLock);
 
         auto itr = fragments.begin(), end = fragments.end();
         while (itr != end) {
@@ -198,7 +199,7 @@ public:
      * タグを指定してFragmentを取得する
      */
     virtual selection_ptr<IApplicationFragment> findFragmentByTag(const std::string &tag) {
-        es_mutex_lock lock(transactionLock);
+        mutex_lock lock(transactionLock);
 
         auto itr = fragments.begin(), end = fragments.end();
         while (itr != end) {

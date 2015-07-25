@@ -1,5 +1,4 @@
-#ifndef es_system_NANOTIMER_HPP_
-#define es_system_NANOTIMER_HPP_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 #include    <chrono>
@@ -9,17 +8,13 @@ namespace es {
  * ナノ秒単位の測定を行う高分解能タイマー
  */
 class NanoTimer {
-    std::chrono::high_resolution_clock::time_point startTime;
-    std::chrono::high_resolution_clock::time_point endTime;
-
 public:
     NanoTimer() {
         start();
         end();
     }
 
-    ~NanoTimer() {
-    }
+    ~NanoTimer() = default;
 
     NanoTimer &start() {
         startTime = std::chrono::high_resolution_clock::now();
@@ -52,12 +47,10 @@ public:
         return ((double) std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count()) / 1000.0;
     }
 
-    static void sleepMs(const uint ms) {
-        std::this_thread::sleep_for(
-                std::chrono::milliseconds(ms)
-        );
-    }
+    static void sleepMs(const uint ms);
+
+private:
+    std::chrono::high_resolution_clock::time_point startTime;
+    std::chrono::high_resolution_clock::time_point endTime;
 };
 }
-
-#endif /* NANOTIMER_HPP_ */

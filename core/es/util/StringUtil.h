@@ -23,7 +23,7 @@ std::string format(const uint workingBufferBytes, const char *fmt, ...);
 /**
  * 文字列を指定された分割文字に従って分割する
  */
-int split(const std::string &origin, const std::string &delim, std::vector<std::string> *result);
+int split(const string &origin, const string &delim, std::vector<string> *result);
 
 }
 
