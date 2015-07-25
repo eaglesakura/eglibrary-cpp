@@ -1,7 +1,8 @@
-#include    "GPUCapacity.h"
+#include "es/graphics/GPU.h"
 #include    "es/memory/BitFlags.hpp"
 #include    <vector>
 #include    "es/util/StringUtil.h"
+#include    "es/graphics/gl/context/GLContextUtil.hpp"
 
 namespace es {
 
@@ -79,7 +80,7 @@ static int toCoreVersion(int coreMajor, int coreMinor) {
 /**
  * 初期化を行う
  */
-void GPUCapacity::initialize() {
+void GPU::initialize() {
     if (initialized) {
         return;
     }
@@ -230,7 +231,7 @@ void GPUCapacity::initialize() {
                 extension_flags.enable(EXTENSIONS[i].extension);
                 eslog("supported extension(%s)", EXTENSIONS[i].name);
 
-                assert(GPUCapacity::isSupport(EXTENSIONS[i].extension));
+                assert(GPU::isSupport(EXTENSIONS[i].extension));
             }
         }
 #undef  EXTENSION_NAME
@@ -292,21 +293,21 @@ void GPUCapacity::initialize() {
 /**
  * レンダラー名を取得する
  */
-const std::string &GPUCapacity::getRenderer() {
+const std::string &GPU::getRenderer() {
     return renderer;
 }
 
 /**
  * ベンダー名を取得する
  */
-const std::string &GPUCapacity::getVendor() {
+const std::string &GPU::getVendor() {
     return vendor;
 }
 
 /**
  * 頂点属性の最大数を取得する。
  */
-uint32_t GPUCapacity::getMaxVertexAttributes() {
+uint32_t GPU::getMaxVertexAttributes() {
     return maxVertexAttrbs;
 }
 
@@ -314,62 +315,62 @@ uint32_t GPUCapacity::getMaxVertexAttributes() {
  * テクスチャユニットの最大数を取得する
  * この枚数を超えるテクスチャ処理は行えない。
  */
-uint32_t GPUCapacity::getMaxTextureUnits() {
+uint32_t GPU::getMaxTextureUnits() {
     return maxTextureUnits;
 }
 
 /**
  * テクスチャの一辺のサイズの最大値
  */
-uint32_t GPUCapacity::getMaxTextureSize() {
+uint32_t GPU::getMaxTextureSize() {
     return maxTextureSize;
 }
 
 /**
  * 頂点シェーダのUniformベクトル最大数を取得する
  */
-uint32_t GPUCapacity::getMaxUniformVectorsVs() {
+uint32_t GPU::getMaxUniformVectorsVs() {
     return maxUniformVectorsVs;
 }
 
 /**
  * フラグメントシェーダでのUniformベクトル最大数を取得する
  */
-uint32_t GPUCapacity::getMaxUniformVectorsFs() {
+uint32_t GPU::getMaxUniformVectorsFs() {
     return maxUniformVectorsFs;
 }
 
 /**
  * GPU拡張機能をサポートするかを調べる
  */
-bool GPUCapacity::isSupport(const GPUExtension_e extension) {
+bool GPU::isSupport(const GPUExtension_e extension) {
     return extension_flags.isEnable(extension);
 }
 
 /**
  * GPU系列のチェックを行う
  */
-GPUFamily_e GPUCapacity::getGPUFamily() {
+GPUFamily_e GPU::getGPUFamily() {
     return gpuFamily;
 }
 
-const std::string &GPUCapacity::getVersion() {
+const std::string &GPU::getVersion() {
     return version;
 }
 
-const OpenGLVersion_e GPUCapacity::getGLVersion() {
+const OpenGLVersion_e GPU::getGLVersion() {
     return glVersion;
 }
 
-const bool GPUCapacity::isOpenGLES() {
+const bool GPU::isOpenGLES() {
     return (glVersion % 10) == 0;
 }
 
-bool GPUCapacity::isFamily(const GPUFamily_e family) {
+bool GPU::isFamily(const GPUFamily_e family) {
     return getGPUFamily() == family;
 }
 
-const std::string &GPUCapacity::getGlslVersion() {
+const std::string &GPU::getGlslVersion() {
     return glslVersion;
 }
 }

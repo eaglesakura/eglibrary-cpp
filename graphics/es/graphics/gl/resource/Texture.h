@@ -6,7 +6,7 @@
 #include    "es/graphics/gl/context/ShaderState.h"
 #include    "es/graphics/gl/context/DeviceContext.h"
 #include    "es/graphics/gl/GLObject.h"
-#include    "es/graphics/common/2d/ITexture2D.h"
+#include    "es/graphics/2d/ITexture2D.h"
 
 namespace es {
 

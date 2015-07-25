@@ -1,7 +1,7 @@
 #pragma once
 
 #include "es/eglibrary.hpp"
-#include "es/graphics/common/2d/ITexture2D.h"
+#include "es/graphics/2d/ITexture2D.h"
 #include <es/graphics/Color.hpp>
 
 namespace es {

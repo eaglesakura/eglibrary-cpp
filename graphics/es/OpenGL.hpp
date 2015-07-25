@@ -1,6 +1,7 @@
 #pragma once
 
 #include    "es/Graphics.hpp"
+#include    "es/graphics/gl/context/GLContextUtil.hpp"
 
 // math
 #include    "es/graphics/math/GlmHelper.hpp"
@@ -11,7 +12,6 @@
 #include    "es/graphics/gl/GLObject.h"
 #include    "es/graphics/Color.hpp"
 #include    "es/graphics/PixelFormat.hpp"
-#include    "es/graphics/gl/gpu/GPUCapacity.h"
 #include    "es/graphics/gl/context/DeviceContext.h"
 
 // resources

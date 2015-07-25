@@ -34,4 +34,9 @@ using selp  = ::es::selection_ptr<T>;
 
 typedef std::recursive_mutex es_mutex;
 typedef std::unique_lock<es_mutex> es_mutex_lock;
+
+typedef std::string string;
+typedef std::wstring wide_string;
+typedef int64_t wide_char;
+
 }

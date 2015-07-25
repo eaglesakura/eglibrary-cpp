@@ -44,4 +44,4 @@
 #endif
 
 #include    "es/math/Math.hpp"
-#include    "es/graphics/gl/context/GLContextUtil.hpp"
+#include    "es/graphics/GPU.h"

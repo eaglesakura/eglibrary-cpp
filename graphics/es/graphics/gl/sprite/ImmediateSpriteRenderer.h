@@ -2,7 +2,7 @@
 
 #include <es/asset/AssetManager.h>
 #include "es/eglibrary.hpp"
-#include "es/graphics/common/2d/ISpriteRenderingCallback.h"
+#include "es/graphics/2d/ISpriteRenderingCallback.h"
 #include "es/graphics/gl/context/DeviceContext.h"
 #include "es/graphics/gl/resource/ShaderProgram.h"
 #include "es/graphics/gl/sprite/Quad.h"

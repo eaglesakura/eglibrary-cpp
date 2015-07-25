@@ -62,14 +62,14 @@ class TextureArrayUniform: public UniformBase {
     safe_array<int> bindUnits;
 public:
     TextureArrayUniform() {
-        bindUnits.alloc(GPUCapacity::getMaxTextureUnits());
+        bindUnits.alloc(GPU::getMaxTextureUnits());
         for (int i = 0; i < bindUnits.length; ++i) {
             bindUnits[i] = i;
         }
     }
 
     TextureArrayUniform(std::shared_ptr<ShaderProgram> program, const char *name) {
-        bindUnits.alloc(GPUCapacity::getMaxTextureUnits());
+        bindUnits.alloc(GPU::getMaxTextureUnits());
         for (int i = 0; i < bindUnits.length; ++i) {
             bindUnits[i] = i;
         }

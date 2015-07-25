@@ -1,5 +1,7 @@
 #include "SpriteRenderer.h"
 #include "es/graphics/math/GlmHelper.hpp"
+#include    "es/graphics/gl/context/GLContextUtil.hpp"
+
 
 namespace es {
 

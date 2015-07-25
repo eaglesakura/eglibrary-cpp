@@ -2,9 +2,9 @@
 
 #include "es/eglibrary.hpp"
 
-#include "es/graphics/common/2d/ITexture2D.h"
-#include "es/graphics/common/2d/IDisplayTransfer2D.h"
-#include "es/graphics/common/2d/ISpriteRenderingCallback.h"
+#include "es/graphics/2d/ITexture2D.h"
+#include "es/graphics/2d/IDisplayTransfer2D.h"
+#include "es/graphics/2d/ISpriteRenderingCallback.h"
 
 namespace es {
 

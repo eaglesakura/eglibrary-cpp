@@ -7,7 +7,7 @@ MeshBuffer::MeshBuffer(const std::shared_ptr<VertexBufferObject> &vertices, cons
     assert(this->vertices);
     assert(this->indices);
 
-    if (GPUCapacity::isSupport(GPUExtension_VertexArrayObject)) {
+    if (GPU::isSupport(GPUExtension_VertexArrayObject)) {
         glGenVertexArrays(1, &vertexArrayObject);
         assert(vertexArrayObject);
 

@@ -87,8 +87,6 @@ int ImmediateSpriteRenderer::requestRendering(SpriteRenderer *sender, const ISpr
                 const float translateY = -sizeY / 2.0f + sy;
                 // ポリゴン位置の確定
                 uniform.poly_data.upload(translateX, translateY, sizeX, sizeY);
-//                uniform.poly_data.upload(sx, sy, sizeX, sizeY);
-//                uniform.poly_data.upload(0, 0, 1, 1);
             }
             // ブレンド色を設定する
             uniform.color.upload(quadInstances->color);

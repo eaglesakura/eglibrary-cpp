@@ -84,7 +84,6 @@ protected:
     MShaderState shaderState;
 
     DeviceContext();
-
 };
 
 /**

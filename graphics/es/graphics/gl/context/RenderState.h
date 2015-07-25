@@ -4,7 +4,7 @@
 #include    "es/math/Rect.hpp"
 #include    "es/graphics/Color.hpp"
 #include    <vector>
-#include    "es/graphics/common/2d/IDisplayTransfer2D.h"
+#include    "es/graphics/2d/IDisplayTransfer2D.h"
 
 namespace es {
 

@@ -1,14 +1,13 @@
-#ifndef gl_graphics_gl_GPUCAPACITY_H_
-#define gl_graphics_gl_GPUCAPACITY_H_
+#pragma once
 
 #include    "es/Graphics.hpp"
 
 namespace es {
 
 enum GraphicsEngine_e {
-    GraphicsEngine_OpenGLES20,
-    GraphicsEngine_OpenGLES30,
-    GraphicsEngine_OpenGL41,
+    GraphicsEngine_OpenGL,
+    GraphicsEngine_DirectX,
+    GraphicsEngine_Metal,
     GraphicsEngine_Unknown,
 };
 
@@ -181,39 +180,28 @@ enum GPUFamily_e {
  * GPUのステータスを格納する。
  * 実行環境で変動するステータスを格納する。
  */
-class GPUCapacity {
-    friend class DeviceContext;
-
-    GPUCapacity() = delete;
-
-    ~GPUCapacity() = delete;
-
-    /**
-     * 初期化を行う
-     */
-    static void initialize();
-
+class GPU {
 public:
 
     /**
      * レンダラー名を取得する
      */
-    static const std::string &getRenderer();
+    static const string &getRenderer();
 
     /**
      * ベンダー名を取得する
      */
-    static const std::string &getVendor();
+    static const string &getVendor();
 
     /**
      * バージョン名を取得する
      */
-    static const std::string &getVersion();
+    static const string &getVersion();
 
     /**
      * GLSLのバージョン名を取得する
      */
-    static const std::string &getGlslVersion();
+    static const string &getGlslVersion();
 
     /**
      * OpenGLのバージョンを取得する
@@ -266,8 +254,18 @@ public:
      * 実行されているGPUが同一系統のGPUである場合、trueを返す
      */
     static bool isFamily(const GPUFamily_e family);
+
+private:
+    friend class DeviceContext;
+
+    GPU() = delete;
+
+    ~GPU() = delete;
+
+    /**
+     * 初期化を行う
+     */
+    static void initialize();
 };
 
 }
-
-#endif /* GPUCAPACITY_H_ */

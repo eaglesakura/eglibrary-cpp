@@ -203,7 +203,7 @@ static GLuint buildProgram(const char *vertex_shader_source, const char *fragmen
 
             if (version == OpenGLSLVersion_100) {
                 version_string = std::string("#version 100\n/* eglibrary OpenGL ES 2.0 compat */\n");
-            } else if (GPUCapacity::isOpenGLES()) {
+            } else if (GPU::isOpenGLES()) {
                 if (version == OpenGLSLVersion_310es) {
                     version_string = std::string("#version 310 es\n/* eglibrary OpenGL ES 3.1 */\n");
                 } else {

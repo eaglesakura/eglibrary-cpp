@@ -1,7 +1,7 @@
+#include    "es/graphics/GPU.h"
 #include    "es/graphics/gl/context/RenderState.h"
-#include    <map>
-#include    <thread>
-#include <es/graphics/gl/gpu/GPUCapacity.h>
+
+#include    "es/graphics/gl/context/GLContextUtil.hpp"
 
 using namespace std;
 
@@ -286,7 +286,7 @@ void RenderState::set(const glstates &state) {
 }
 
 void RenderState::unbindMeshBuffers() {
-    if (GPUCapacity::isSupport(GPUExtension_VertexArrayObject)) {
+    if (GPU::isSupport(GPUExtension_VertexArrayObject)) {
         glBindVertexArray(0);
     }
     glBindBuffer(GL_ARRAY_BUFFER, 0);

@@ -1,7 +1,9 @@
 #pragma once
 
 #include    "es/Graphics.hpp"
-#include    "es/graphics/gl/gpu/GPUCapacity.h"
+#include    "es/graphics/GPU.h"
+
+#include    "es/graphics/gl/context/GLContextUtil.hpp"
 
 namespace es {
 
@@ -63,7 +65,7 @@ public:
      * 指定したテクスチャがバインド済みのユニットを取得する
      */
     inline int getBindedTextureUnit(const GLenum target, const GLuint texture) const {
-        for (int i = 0; i < GPUCapacity::getMaxTextureUnits(); ++i) {
+        for (int i = 0; i < GPU::getMaxTextureUnits(); ++i) {
             if (textureContext.textures[i] == texture && textureContext.targets[i] == target) {
                 return i;
             }
@@ -75,7 +77,7 @@ public:
      * テクスチャユニットをActiveにする
      */
     inline bool activeTexture(const uint index) {
-        assert(index < GPUCapacity::getMaxTextureUnits());
+        assert(index < GPU::getMaxTextureUnits());
         const uint unit = toTextureUnit(index);
         // 違うユニットがアクティブ化されていたら、アクティブにし直す
         if (unit != textureContext.active) {
@@ -103,7 +105,7 @@ public:
      * まだバインドされているかをチェックする
      */
     bool isBindedTexture(const uint index, const GLenum target, const GLuint texture) {
-        assert(index < GPUCapacity::getMaxTextureUnits());
+        assert(index < GPU::getMaxTextureUnits());
         return textureContext.textures[index] == texture && textureContext.targets[index] == target;
     }
 

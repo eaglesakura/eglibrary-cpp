@@ -21,8 +21,8 @@ TEST(OpenGLContextTest, InitContext) {
 TEST(OpenGLContextTest, GPUCapacityCheck) {
     ES_OPENGL_UNITTEST();
 
-    ASSERT_NE(GPUCapacity::getGPUFamily(), GPUFamily_Unknown);
-    ASSERT_NE(GPUCapacity::getGLVersion(), OpenGLVersion_Unknown);
+    ASSERT_NE(GPU::getGPUFamily(), GPUFamily_Unknown);
+    ASSERT_NE(GPU::getGLVersion(), OpenGLVersion_Unknown);
 }
 
 }

@@ -216,13 +216,13 @@ public:
      */
     virtual void allocDepthBuffer(const uint depthBits) {
         GLenum internalformat = 0;
-        if (depthBits >= 32 && GPUCapacity::isSupport(GPUExtension_Renderbuffer_Depth32)) {
+        if (depthBits >= 32 && GPU::isSupport(GPUExtension_Renderbuffer_Depth32)) {
             internalformat = GL_DEPTH_COMPONENT32_OES;
             eslog("alloc depth req(%d) -> D(32bit)", depthBits);
-        } else if (depthBits >= 24 && GPUCapacity::isSupport(GPUExtension_Renderbuffer_Depth24)) {
+        } else if (depthBits >= 24 && GPU::isSupport(GPUExtension_Renderbuffer_Depth24)) {
             internalformat = GL_DEPTH_COMPONENT24_OES;
             eslog("alloc depth req(%d) -> D(24bit)", depthBits);
-        } else if (depthBits >= 24 && GPUCapacity::isSupport(GPUExtension_Renderbuffer_PackedDepth24Stencil8)) {
+        } else if (depthBits >= 24 && GPU::isSupport(GPUExtension_Renderbuffer_PackedDepth24Stencil8)) {
             internalformat = GL_DEPTH24_STENCIL8_OES;
             eslog("alloc depth req(%d) -> D(16bit) S(8bit)", depthBits);
         } else {
@@ -246,7 +246,7 @@ public:
      * ただし、未サポート端末（Tegra3系等）があるため、完全な互換性は保証しない。
      */
     virtual bool allocDepthTexture(MDeviceContext context) {
-        if (!GPUCapacity::isSupport(GPUExtension_Texture_Depth)) {
+        if (!GPU::isSupport(GPUExtension_Texture_Depth)) {
             return false;
         }
 

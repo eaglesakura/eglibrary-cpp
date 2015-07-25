@@ -1,5 +1,4 @@
-#ifndef es_grahpics_gl_IRENDERINGSURFACE_HPP_
-#define es_grahpics_gl_IRENDERINGSURFACE_HPP_
+#pragma once
 
 #include    "es/Graphics.hpp"
 #include    <vector>
@@ -175,5 +174,3 @@ public:
 };
 #endif
 }
-
-#endif /* IRENDERINGSURFACE_HPP_ */

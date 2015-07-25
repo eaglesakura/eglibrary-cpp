@@ -1,6 +1,6 @@
 #include    "DeviceContext.h"
 #include    <map>
-#include    "es/graphics/gl/gpu/GPUCapacity.h"
+#include    "es/graphics/GPU.h"
 
 namespace es {
 
@@ -92,7 +92,7 @@ es_mutex g_devicesMutex;
 
     // デバイスがemptyならGPUCapsを初期化する
     if (g_devices.empty()) {
-        GPUCapacity::initialize();
+        GPU::initialize();
     }
 
     const auto currentThreadId = std::this_thread::get_id();
