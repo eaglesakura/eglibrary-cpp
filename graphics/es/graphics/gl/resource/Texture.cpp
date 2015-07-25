@@ -199,4 +199,21 @@ void Texture::getImageArea(Vector2i16 *size, RectI16 *existArea) {
         existArea->setXYWH(0, 0, (int16_t) getWidth(), (int16_t) getHeight());
     }
 }
+
+ITexture::Type_e Texture::geType() const {
+    switch (target) {
+#if defined(GL_TEXTURE_1D)
+        case GL_TEXTURE_1D:
+            return Type_1D;
+#endif
+#if defined(GL_TEXTURE_EXTERNAL_OES)
+        case GL_TEXTURE_EXTERNAL_OES:
+            return Type_AndroidExternalImage;
+#endif
+        case GL_TEXTURE_2D:
+            return Type_2D;
+        default:
+            return Type_Unknown;
+    }
+}
 }

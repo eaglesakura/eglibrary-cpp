@@ -92,7 +92,7 @@ es_mutex g_devicesMutex;
 
     // デバイスがemptyならGPUCapsを初期化する
     if (g_devices.empty()) {
-        GPU::initialize();
+        GPU::getRenderer();
     }
 
     const auto currentThreadId = std::this_thread::get_id();

@@ -184,6 +184,11 @@ class GPU {
 public:
 
     /**
+     * 採用されているレンダリングエンジンを取得する
+     */
+    static const GraphicsEngine_e getEngine();
+
+    /**
      * レンダラー名を取得する
      */
     static const string &getRenderer();
@@ -215,6 +220,8 @@ public:
 
     /**
      * 頂点属性の最大数を取得する。
+     *
+     * OpenGL以外のレンダラの場合は常に0
      */
     static uint32_t getMaxVertexAttributes();
 
@@ -256,16 +263,13 @@ public:
     static bool isFamily(const GPUFamily_e family);
 
 private:
-    friend class DeviceContext;
+    class Impl;
+
+    static sp<Impl> self();
 
     GPU() = delete;
 
     ~GPU() = delete;
-
-    /**
-     * 初期化を行う
-     */
-    static void initialize();
 };
 
 }

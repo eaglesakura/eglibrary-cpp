@@ -1,5 +1,4 @@
-#ifndef es_graphics_PIXELFORMAT_HPP_
-#define es_graphics_PIXELFORMAT_HPP_
+#pragma once
 
 #include    "es/eglibrary.hpp"
 #include    "es/Graphics.hpp"
@@ -393,5 +392,3 @@ public:
 
 };
 }
-
-#endif /* PIXELFORMAT_HPP_ */

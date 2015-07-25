@@ -5,6 +5,7 @@
 #include "es/asset/FontFace.h"
 #include "es/memory/SafeArray.hpp"
 #include <vector>
+#include <map>
 
 namespace es {
 

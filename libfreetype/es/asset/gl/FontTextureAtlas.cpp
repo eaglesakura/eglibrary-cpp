@@ -1,5 +1,6 @@
 #include "FontTextureAtlas.h"
 #include "es/asset/FontCharactor.h"
+#include "es/util/Util.h"
 
 namespace es {
 
@@ -183,7 +184,7 @@ void FontTextureAtlas::setAllocator(std::shared_ptr<TextureAllocator> allocator)
 }
 
 const std::shared_ptr<FontTextureAtlas::FontArea> FontTextureAtlas::pick(const wchar_t charactor) const {
-    return find(atlasMap, charactor);
+    return util::find(atlasMap, charactor);
 }
 
 uint16_t FontTextureAtlas::FontArea::getIndex() const {

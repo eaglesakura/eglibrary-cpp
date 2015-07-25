@@ -10,25 +10,6 @@ namespace es {
  * デコード結果をテクスチャとして格納する
  */
 class TextureDecodeListener : public Object, public IImageDecodeListener {
-    /**
-     * 読み込み対象のテクスチャ
-     */
-    std::shared_ptr<Texture> texture;
-
-    /**
-     * 書き込み先の座標Y
-     */
-    uint writePixelsY = 0;
-
-    /**
-     * NPOTをPOT変換をする場合true
-     */
-    bool convertNpot = false;
-
-    int16_t offsetX = 0;
-    int16_t offsetY = 0;
-
-    std::shared_ptr<DeviceContext> device;
 public:
     TextureDecodeListener();
 
@@ -78,6 +59,27 @@ public:
      * デコードが完了した
      */
     virtual void onImageDecodeFinished(const ImageInfo *info, const ImageDecodeResult_e result);
+
+private:
+    /**
+     * 読み込み対象のテクスチャ
+     */
+    std::shared_ptr<Texture> texture;
+
+    /**
+     * 書き込み先の座標Y
+     */
+    uint writePixelsY = 0;
+
+    /**
+     * NPOTをPOT変換をする場合true
+     */
+    bool convertNpot = false;
+
+    int16_t offsetX = 0;
+    int16_t offsetY = 0;
+
+    std::shared_ptr<DeviceContext> device;
 };
 
 }

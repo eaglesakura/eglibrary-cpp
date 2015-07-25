@@ -6,6 +6,25 @@
 
 namespace es {
 
+namespace util {
+
+template<typename T>
+void safe_delete(T **p) {
+    if (*p) {
+        delete (*p);
+        (*p) = nullptr;
+    }
+}
+
+template<typename T>
+void safe_delete_array(T **p) {
+    if (*p) {
+        delete[] (*p);
+        (*p) = nullptr;
+    }
+}
+}
+
 /**
  * safe_arrayから一部を切り取ったクラス
  * ポインタの削除は行わないため、利用する箇所に注意すること
@@ -142,7 +161,9 @@ public:
     inline void refresh(const int newLength) {
         assert(newLength >= 0);
 
-        SAFE_DELETE_ARRAY(ptr);
+        util::safe_delete_array(&ptr);
+        assert(ptr == nullptr);
+
         if (newLength > 0) {
             ptr = new value_type[newLength];
         } else {
@@ -170,7 +191,9 @@ public:
             memcpy(ptr, pOldValues, sizeof(value_type) * std::min(length, newLength));
 
             // 古い配列を削除する
-            SAFE_DELETE_ARRAY(pOldValues);
+//            SAFE_DELETE_ARRAY(pOldValues);
+            util::safe_delete_array(&pOldValues);
+            assert(pOldValues == nullptr);
         }
 
         // 長さを保存する
@@ -200,7 +223,8 @@ public:
             }
 
             // 古い配列を削除する
-            SAFE_DELETE_ARRAY(pOldValues);
+            util::safe_delete_array(&pOldValues);
+            assert(pOldValues == nullptr);
         }
 
         // 長さを保存する
@@ -250,14 +274,16 @@ public:
     }
 
     ~safe_array() {
-        SAFE_DELETE_ARRAY(ptr);
+        util::safe_delete_array(&ptr);
+        assert(ptr == nullptr);
     }
 
     /**
      * 確保済みの領域を解放する
      */
     inline void clear() {
-        SAFE_DELETE_ARRAY(ptr);
+        util::safe_delete_array(&ptr);
+        assert(ptr == nullptr);
         length = 0;
     }
 

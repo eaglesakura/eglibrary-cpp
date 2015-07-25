@@ -1,22 +1,15 @@
 #pragma once
 
+#include    "es/protoground-types.hpp"
 #include    "es/debug/Testing.hpp"
 #include    <stdint.h>
-#include    <limits.h>
-#include    <stddef.h>
-#include    <stdlib.h>
 #include    <string.h>
 #include    <string>
-
-#include    <cstddef>
-#include    <cstdio>
 #include    <mutex>
 #include    <thread>
-
 #include    <memory>
+#include    <sys/types.h>
 
-
-#include	"es/system/Macro.hpp"
 #include	"es/system/Log.h"
 #include    "es/system/Object.hpp"
 #include    "es/memory/selection_ptr.hpp"

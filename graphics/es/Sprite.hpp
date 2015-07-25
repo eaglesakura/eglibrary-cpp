@@ -3,6 +3,6 @@
 
 #include    "es/graphics/gl/sprite/Quad.h"
 #include    "es/graphics/gl/sprite/SpriteManager.h"
-#include    "es/graphics/gl/sprite/Sprite.hpp"
+#include "Sprite.hpp"
 
 #endif /* SPRITE_HPP_ */

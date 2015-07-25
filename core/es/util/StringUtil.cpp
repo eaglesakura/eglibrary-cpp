@@ -1,7 +1,9 @@
 #include    "StringUtil.h"
-#include <iterator>
 #include <sstream>
 #include <es/memory/Buffer.hpp>
+
+// for Android
+#include <iterator>
 
 namespace es {
 

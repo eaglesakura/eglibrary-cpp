@@ -4,6 +4,8 @@
 
 namespace es {
 
+namespace util {
+
 /*
  * スマートポインタのダウンキャストを行う
  */
@@ -16,9 +18,10 @@ template<typename T, typename T2>
     try {
         return ::std::dynamic_pointer_cast<T>(obj);
     } catch (...) {
-        eslog("catch downcast error(%0xx)", obj.get());
         return ::std::shared_ptr<T>();
     }
+}
+
 }
 
 /**
@@ -202,9 +205,9 @@ public:
         if (raw) {
             result.raw = dynamic_cast<DC>(raw);
         } else if (shared) {
-            result.shared = es::downcast<DC>(shared);
+            result.shared = es::util::downcast<DC>(shared);
         } else {
-            result.weak = es::downcast<DC>(weak.lock());
+            result.weak = es::util::downcast<DC>(weak.lock());
         }
 
         return result;

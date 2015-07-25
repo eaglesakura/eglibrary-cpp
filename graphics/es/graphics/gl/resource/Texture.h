@@ -1,12 +1,11 @@
-#ifndef es_graphics_gl_TEXTURE_H_
-#define es_graphics_gl_TEXTURE_H_
+#pragma once
 
 #include    "es/Graphics.hpp"
 #include    "es/graphics/PixelFormat.hpp"
 #include    "es/graphics/gl/context/ShaderState.h"
 #include    "es/graphics/gl/context/DeviceContext.h"
 #include    "es/graphics/gl/GLObject.h"
-#include    "es/graphics/2d/ITexture2D.h"
+#include "es/graphics/resource/ITexture.hpp"
 
 namespace es {
 
@@ -41,7 +40,7 @@ struct TextureLoadOption {
     }
 };
 
-class Texture : public GLObject, public ITexture2D {
+class Texture : public GLObject, public ITexture {
     friend class GraphicAssets;
 
 protected:
@@ -262,10 +261,11 @@ public:
 
 
     virtual void getImageArea(Vector2i16 *size, RectI16 *existArea) override;
+
+
+    virtual Type_e geType() const override;
 };
 
 typedef ::std::shared_ptr<Texture> MTexture;
 
 }
-
-#endif /* TEXTURE_H_ */

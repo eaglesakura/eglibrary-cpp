@@ -2,7 +2,7 @@
 
 #include "es/eglibrary.hpp"
 
-#include "es/graphics/2d/ITexture2D.h"
+#include "es/graphics/resource/ITexture.hpp"
 #include "es/graphics/2d/IDisplayTransfer2D.h"
 #include "es/graphics/2d/ISpriteRenderingCallback.h"
 
@@ -29,7 +29,7 @@ public:
     /**
      * 画像を描画する
      */
-    void renderingImage(std::shared_ptr<ITexture2D> texture, const float srcX, const float srcY, const float srcW, const float srcH, const float dstX, const float dstY, const float dstW, const float dstH, const float degree, const rgba32 rgba);
+    void renderingImage(std::shared_ptr<ITexture> texture, const float srcX, const float srcY, const float srcW, const float srcH, const float dstX, const float dstY, const float dstW, const float dstH, const float degree, const rgba32 rgba);
 
     /**
      * レンダリングを開始する

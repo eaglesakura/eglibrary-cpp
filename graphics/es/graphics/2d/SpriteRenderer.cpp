@@ -22,7 +22,7 @@ void SpriteRenderer::setDisplay(const std::shared_ptr<IDisplayTransfer2D> displa
     this->display = display;
 }
 
-void SpriteRenderer::renderingImage(std::shared_ptr<ITexture2D> texture, const float srcX, const float srcY, const float srcW, const float srcH, const float dstX, const float dstY, const float dstW, const float dstH, const float degree, const rgba32 rgba) {
+void SpriteRenderer::renderingImage(std::shared_ptr<ITexture> texture, const float srcX, const float srcY, const float srcW, const float srcH, const float dstX, const float dstY, const float dstW, const float dstH, const float degree, const rgba32 rgba) {
     if (es::equals(dstW, 0.0f) || es::equals(dstH, 0.0f)) {
         // 幅か高さが0であれば、レンダリングの必要はない
         return;
@@ -66,7 +66,7 @@ void SpriteRenderer::renderingImage(std::shared_ptr<ITexture2D> texture, const f
 }
 
 void SpriteRenderer::renderingRect(const float x, const float y, const float w, const float h, const rgba32 rgba) {
-    renderingImage(sp<ITexture2D>(), 0, 0, 0, 0, x, y, w, h, 0, rgba);
+    renderingImage(sp<ITexture>(), 0, 0, 0, 0, x, y, w, h, 0, rgba);
 }
 
 void SpriteRenderer::begin() {

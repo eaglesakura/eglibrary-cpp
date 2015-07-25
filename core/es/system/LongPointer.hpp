@@ -48,7 +48,8 @@ public:
         }
 
         ::std::shared_ptr<T> *ptr = reinterpret_cast<::std::shared_ptr<T>*>(lp);
-        SAFE_DELETE(ptr);
+        util::safe_delete(&ptr);
+        assert(ptr == nullptr);
     }
 };
 

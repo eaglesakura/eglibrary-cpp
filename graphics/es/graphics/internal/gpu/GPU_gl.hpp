@@ -1,92 +1,22 @@
+#pragma once
+
 #include "es/graphics/GPU.h"
-#include    "es/memory/BitFlags.hpp"
-#include    <vector>
-#include    "es/util/StringUtil.h"
-#include    "es/graphics/gl/context/GLContextUtil.hpp"
+
+#include "es/graphics/internal/gpu/GPU_Impl.hpp"
+#include "GPU_Impl.hpp"
 
 namespace es {
 
 namespace {
-static bool initialized = false;
 
-/**
- * レンダラー名
- */
-static std::string renderer;
-
-/**
- * ベンダー名
- */
-static std::string vendor;
-
-/**
- * バージョン情報
- */
-static std::string version;
-
-/**
- * GLSLのバージョン情報
- */
-static std::string glslVersion;
-
-/**
- * 保持しているエクステンション
- */
-static std::vector<std::string> extensions;
-
-/**
- * 頂点属性の最大数
- */
-static uint32_t maxVertexAttrbs = 0;
-
-/**
- * テクスチャユニットの最大数
- */
-static uint32_t maxTextureUnits = 0;
-
-/**
- * テクスチャの一辺の最大サイズ
- */
-static uint32_t maxTextureSize = 0;
-
-/**
- * 頂点シェーダでの最大Uniformベクトル数
- */
-static uint32_t maxUniformVectorsVs = 0;
-
-/**
- * フラグメントシェーダでの最大Uniformベクトル数
- */
-static uint32_t maxUniformVectorsFs = 0;
-
-/**
- * 拡張設定
- */
-static BitFlags<GPUExtension_Num> extension_flags;
-
-/**
- * GPUファミリー名
- */
-static GPUFamily_e gpuFamily = GPUFamily_Unknown;
-
-static OpenGLVersion_e glVersion = OpenGLVersion_Unknown;
-}
-
-static int toCoreVersion(int coreMajor, int coreMinor) {
+static int toGLCoreVersion(int coreMajor, int coreMinor) {
     return coreMajor * 10000 +
            coreMinor * 1000;
 }
 
-/**
- * 初期化を行う
- */
-void GPU::initialize() {
-    if (initialized) {
-        return;
-    }
+}
 
-    initialized = true;
-
+void es::GPU::Impl::glInitialize() {
     {
         // レンダラ名と系列機チェック
         const char *pRenderer = (const char *) glGetString(GL_RENDERER);
@@ -127,7 +57,7 @@ void GPU::initialize() {
 
     vendor = (const char *) glGetString(GL_VENDOR);
     version = (const char *) glGetString(GL_VERSION);
-    glslVersion = (const char *) glGetString(GL_SHADING_LANGUAGE_VERSION);
+    shaderVersion = (const char *) glGetString(GL_SHADING_LANGUAGE_VERSION);
 
     // バージョンチェック
     {
@@ -142,23 +72,24 @@ void GPU::initialize() {
             assert(major >= 2);
 
             if (major == 3 && minor == 1) {
-                glVersion = OpenGLVersion_ES31;
+                gl.glVersion = OpenGLVersion_ES31;
             } else if (major == 3 && minor == 0) {
-                glVersion = OpenGLVersion_ES30;
+                gl.glVersion = OpenGLVersion_ES30;
             } else if (major == 2) {
-                glVersion = OpenGLVersion_ES20;
+                gl.glVersion = OpenGLVersion_ES20;
             }
 #else
             if (major == 4 && minor == 1) {
-                glVersion = OpenGLVersion_41;
+                gl.glVersion = OpenGLVersion_41;
             }
 #endif
         }
     }
 // エクステンション一覧を取得する
+    std::vector<string> extensions;
     {
-        std::string extension_names;
-        if (glVersion >= 300) {
+        string extension_names;
+        if (gl.glVersion >= 300) {
             GLint numExtensions = 0;
             glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
             for (int i = 0; i < numExtensions; ++i) {
@@ -236,7 +167,7 @@ void GPU::initialize() {
         }
 #undef  EXTENSION_NAME
 
-        if (getGLVersion() >= toCoreVersion(3, 0)) {
+        if (getGLVersion() >= toGLCoreVersion(3, 0)) {
             // Support VAO
             extension_flags.enable(GPUExtension_VertexArrayObject);
             eslog("supported extension(GPUExtension_VertexArrayObject)");
@@ -244,17 +175,17 @@ void GPU::initialize() {
 
     }
 
-    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, (GLint *) &maxVertexAttrbs);
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, (GLint *) &gl.maxVertexAttrbs);
     glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, (GLint *) &maxTextureUnits);
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint *) &maxTextureSize);
 #ifdef GL_MAX_VERTEX_UNIFORM_VECTORS
-    glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, (GLint *) &maxUniformVectorsVs);
+    glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, (GLint *) &gl.maxUniformVectorsVs);
 #else
     maxUniformVectorsVs = 250;
 #endif
 
 #ifdef GL_MAX_FRAGMENT_UNIFORM_VECTORS
-    glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, (GLint *) &maxUniformVectorsFs);
+    glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, (GLint *) &gl.maxUniformVectorsFs);
 #else
     maxUniformVectorsFs = 250;
 #endif
@@ -262,7 +193,7 @@ void GPU::initialize() {
     eslog("------------ GPU ------------");
     {
         eslog("GL_VERSION = %s", version.c_str());
-        eslog("GL_SHADING_LANGUAGE_VERSION = %s", glslVersion.c_str());
+        eslog("GL_SHADING_LANGUAGE_VERSION = %s", shaderVersion.c_str());
         eslog("GL_VENDOR = %s", vendor.c_str());
         eslog("GL_RENDERER = %s", renderer.c_str());
 
@@ -270,6 +201,9 @@ void GPU::initialize() {
         {
             std::vector<std::string>::iterator itr = extensions.begin(), end = extensions.end();
 
+            for (const string &name: extensions) {
+                eslog("GL_EXTENSIONS = %s", (*itr).c_str());
+            }
             while (itr != end) {
                 if ((*itr).size()) {
                     eslog("GL_EXTENSIONS = %s", (*itr).c_str());
@@ -281,96 +215,13 @@ void GPU::initialize() {
             }
         }
 
-        eslog("GL_MAX_VERTEX_ATTRIBS = %d", maxVertexAttrbs);
+        eslog("GL_MAX_VERTEX_ATTRIBS = %d", gl.maxVertexAttrbs);
         eslog("GL_MAX_TEXTURE_IMAGE_UNITS = %d", maxTextureUnits);
         eslog("GL_MAX_TEXTURE_SIZE = %d", maxTextureSize);
-        eslog("GL_MAX_VERTEX_UNIFORM_VECTORS = %d", maxUniformVectorsVs);
-        eslog("GL_MAX_FRAGMENT_UNIFORM_VECTORS = %d", maxUniformVectorsFs);
+        eslog("GL_MAX_VERTEX_UNIFORM_VECTORS = %d", gl.maxUniformVectorsVs);
+        eslog("GL_MAX_FRAGMENT_UNIFORM_VECTORS = %d", gl.maxUniformVectorsFs);
     }
     eslog("-----------------------------");
 }
 
-/**
- * レンダラー名を取得する
- */
-const std::string &GPU::getRenderer() {
-    return renderer;
-}
-
-/**
- * ベンダー名を取得する
- */
-const std::string &GPU::getVendor() {
-    return vendor;
-}
-
-/**
- * 頂点属性の最大数を取得する。
- */
-uint32_t GPU::getMaxVertexAttributes() {
-    return maxVertexAttrbs;
-}
-
-/**
- * テクスチャユニットの最大数を取得する
- * この枚数を超えるテクスチャ処理は行えない。
- */
-uint32_t GPU::getMaxTextureUnits() {
-    return maxTextureUnits;
-}
-
-/**
- * テクスチャの一辺のサイズの最大値
- */
-uint32_t GPU::getMaxTextureSize() {
-    return maxTextureSize;
-}
-
-/**
- * 頂点シェーダのUniformベクトル最大数を取得する
- */
-uint32_t GPU::getMaxUniformVectorsVs() {
-    return maxUniformVectorsVs;
-}
-
-/**
- * フラグメントシェーダでのUniformベクトル最大数を取得する
- */
-uint32_t GPU::getMaxUniformVectorsFs() {
-    return maxUniformVectorsFs;
-}
-
-/**
- * GPU拡張機能をサポートするかを調べる
- */
-bool GPU::isSupport(const GPUExtension_e extension) {
-    return extension_flags.isEnable(extension);
-}
-
-/**
- * GPU系列のチェックを行う
- */
-GPUFamily_e GPU::getGPUFamily() {
-    return gpuFamily;
-}
-
-const std::string &GPU::getVersion() {
-    return version;
-}
-
-const OpenGLVersion_e GPU::getGLVersion() {
-    return glVersion;
-}
-
-const bool GPU::isOpenGLES() {
-    return (glVersion % 10) == 0;
-}
-
-bool GPU::isFamily(const GPUFamily_e family) {
-    return getGPUFamily() == family;
-}
-
-const std::string &GPU::getGlslVersion() {
-    return glslVersion;
-}
 }

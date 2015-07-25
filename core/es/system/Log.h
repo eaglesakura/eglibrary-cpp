@@ -10,7 +10,7 @@ namespace internal {
 /**
  * __FILE__マクロからファイル名を取得する
  */
-inline char *__getFileName(const char *__file__) {
+inline char *pathToFileName(const char *__file__) {
 #if (defined(BUILD_MacOSX) || defined(BUILD_Android) || defined(BUILD_MacOSX) )
     return strrchr(__file__, '/') + 1;
 #else
@@ -62,7 +62,7 @@ public:
 /**
  * 特定条件下の設定
  */
-#define eslog_from(file, line, ...)       { ::es::internal::Logger::get()(::es::internal::LogType_Debug, ::es::internal::__getFileName(file),  "L " es_num_to_str(__LINE__) " | " __VA_ARGS__); }
+#define eslog_from(file, line, ...)       { ::es::internal::Logger::get()(::es::internal::LogType_Debug, ::es::internal::pathToFileName(file),  "L " es_num_to_str(__LINE__) " | " __VA_ARGS__); }
 
 /**
  * 文字列化用ダミー
@@ -77,17 +77,17 @@ public:
 /**
  * フォーマット付きログ
  */
-#define eslog(...)       ::es::internal::Logger::get()(::es::internal::LogType_Info, ::es::internal::__getFileName(__FILE__), "L " es_num_to_str(__LINE__) " | " __VA_ARGS__)
+#define eslog(...)       ::es::internal::Logger::get()(::es::internal::LogType_Info, ::es::internal::pathToFileName(__FILE__), "L " es_num_to_str(__LINE__) " | " __VA_ARGS__)
 
 /**
  * フォーマット付きログ
  */
-#define esdebug(...)     ::es::internal::Logger::get()(::es::internal::LogType_Debug, ::es::internal::__getFileName(__FILE__), "L " es_num_to_str(__LINE__) " | " __VA_ARGS__)
+#define esdebug(...)     ::es::internal::Logger::get()(::es::internal::LogType_Debug, ::es::internal::pathToFileName(__FILE__), "L " es_num_to_str(__LINE__) " | " __VA_ARGS__)
 
 /**
  * アラート表示
  */
-#define esalert(...)      ::es::internal::Logger::get()(::es::internal::LogType_Alert, ::es::internal::__getFileName(__FILE__), "L %d | " __VA_ARGS__)
+#define esalert(...)      ::es::internal::Logger::get()(::es::internal::LogType_Alert, ::es::internal::pathToFileName(__FILE__), "L %d | " __VA_ARGS__)
 
 #else
 

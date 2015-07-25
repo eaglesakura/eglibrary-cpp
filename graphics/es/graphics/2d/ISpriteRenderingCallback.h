@@ -1,8 +1,8 @@
 #pragma once
 
 #include "es/eglibrary.hpp"
-#include "es/graphics/2d/ITexture2D.h"
-#include <es/graphics/Color.hpp>
+#include "es/graphics/resource/ITexture.hpp"
+#include "es/graphics/Color.hpp"
 
 namespace es {
 
@@ -61,7 +61,7 @@ public:
          *
          * カラーポリゴンのみを描画したい場合はnullptrが設定される
          */
-        std::shared_ptr<ITexture2D> texture;
+        std::shared_ptr<ITexture> texture;
 
         /**
          * テクスチャのUV座標
