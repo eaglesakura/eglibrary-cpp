@@ -3,8 +3,8 @@
 #include "es/protoground.hpp"
 #include "es/memory/SafeArray.hpp"
 #include <es/asset/IAsset.hpp>
-#include "es/asset/FontFace.h"
-#include "es/asset/FontCharactor.h"
+#include "es/asset/font/FontFace.h"
+#include "es/asset/font/FontCharactor.h"
 
 namespace es {
 

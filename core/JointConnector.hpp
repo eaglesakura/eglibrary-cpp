@@ -1,8 +1,29 @@
 /*
- * JointConnector.hpp
- *
- */
 
+ JointConnector.hpp
+The MIT License (MIT)
+
+Copyright (c) 2015 @eaglesakura
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+ */
 #ifndef JOINTCONNECTOR_HPP_
 #define JOINTCONNECTOR_HPP_
 
@@ -16,13 +37,6 @@
 #include    <vector>
 #include    <cstdint>
 #include    <memory> /* shared_ptr */
-
-/**
- * ::std::shared_ptrを認識しないIDE対策
- */
-#ifndef std_shared_ptr
-#define std_shared_ptr  ::std::shared_ptr
-#endif
 
 /**
  * JNIを使用可能なプラットフォーム
@@ -131,8 +145,8 @@ struct JobjectRef {
         this->env = env;
         assert(this->env);
 
-// 必要であれば参照を新たにする。
-// Methodの引数として渡されたLocal参照は全て無視するため。
+        // 必要であれば参照を新たにする。
+        // Methodの引数として渡されたLocal参照は全て無視するため。
         if (newLocalRef) {
             javaobject = env->NewLocalRef(origin);
         } else {
@@ -199,7 +213,7 @@ protected:
     /**
      * 参照
      */
-    std_shared_ptr<JobjectRef> mRef;
+    ::std::shared_ptr<JobjectRef> mRef;
 
 public:
     /**
@@ -213,7 +227,7 @@ public:
 
 // リファレンスを取得する
         if (obj) {
-            this->mRef = std_shared_ptr<JobjectRef>(new JobjectRef(obj, env, newLocalRefFlag));
+            this->mRef = ::std::shared_ptr<JobjectRef>(new JobjectRef(obj, env, newLocalRefFlag));
         }
     }
 
@@ -486,7 +500,7 @@ class JavaStringWrapper : public JavaObjectWrapper {
 // jstring生成
         jstring jstr = env->NewStringUTF(str);
         assert(jstr);
-        mRef = std_shared_ptr<JobjectRef>(new JobjectRef(jstr, env, false));
+        mRef = ::std::shared_ptr<JobjectRef>(new JobjectRef(jstr, env, false));
     }
 
 public:

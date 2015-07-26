@@ -1,8 +1,8 @@
 #pragma once
 
 #include "es/protoground.hpp"
-#include "es/asset/FontCharactor.h"
-#include "es/asset/FontFace.h"
+#include "es/asset/font/FontCharactor.h"
+#include "es/asset/font/FontFace.h"
 
 #include <vector>
 #include <es/math/Rect.hpp>

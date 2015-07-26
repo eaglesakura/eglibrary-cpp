@@ -3,7 +3,7 @@
 #include "es/internal/protoground-internal.hpp"
 #include <es/graphics/PixelFormat.hpp>
 #include "es/asset/IAsset.hpp"
-#include "es/asset/FontFace.h"
+#include "es/asset/font/FontFace.h"
 #include "es/asset/internal/FreetypeLibrary.hpp"
 #include "es/asset/internal/FontCharactorImpl.hpp"
 #include "es/system/OptionalMutex.h"

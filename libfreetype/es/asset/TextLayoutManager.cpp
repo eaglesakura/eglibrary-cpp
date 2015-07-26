@@ -1,5 +1,5 @@
 #include "TextLayoutManager.h"
-#include "FontCharactor.h"
+#include "es/asset/font/FontCharactor.h"
 
 namespace es {
 

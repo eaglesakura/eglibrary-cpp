@@ -2,7 +2,7 @@
 
 #include "es/protoground.hpp"
 #include "es/graphics/gl/resource/Texture.h"
-#include "es/asset/FontFace.h"
+#include "es/asset/font/FontFace.h"
 #include "es/memory/SafeArray.hpp"
 #include <vector>
 #include <map>

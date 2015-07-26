@@ -1,9 +1,9 @@
 #pragma once
 
-#include <es/asset/FontCharactor.h>
+#include <es/asset/font/FontCharactor.h>
 #include "es/asset/internal/FreetypeLibrary.hpp"
-#include "es/asset/FontCharactor.h"
-#include "es/asset/FontFace.h"
+#include "es/asset/font/FontCharactor.h"
+#include "es/asset/font/FontFace.h"
 
 namespace es {
 namespace internal {
